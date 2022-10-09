@@ -1,0 +1,36 @@
+/*Задача
+Написать программу, которая будет выполняться до тех пор, пока не будет введено слово exit.
+Помните, в цикле должно быть условие, которое отвечает за то, когда цикл должен завершиться.
+Это нужно, чтобы любой разработчик взглянув на ваш код, понял четкие границы вашего цикла. */
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Cryptography.X509Certificates;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace CSLight
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            string sayCat;
+            bool begginingButtom = true;
+
+            Console.WriteLine("Кот проснулся - цикл начался.");
+            while (begginingButtom != false)
+            {
+                Console.Write("Кот чешет пузико. \n Скажете ему что-нибудь? ");
+                sayCat = Console.ReadLine();
+
+                if (sayCat == "exit")
+                {
+                    begginingButtom = false;
+                }
+            }
+
+            Console.WriteLine("Кот начесался и допольный пошёл спать дальше. ");
+        }
+    }
+}
