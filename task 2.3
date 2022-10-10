@@ -1,0 +1,27 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Cryptography.X509Certificates;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace CSLight
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            int firstMemberOfRow = 5;
+            int memberOfRow;
+
+            for (int i = 0; i < 15; i++)
+            {
+                memberOfRow = 7 * i + firstMemberOfRow;
+                Console.WriteLine(memberOfRow);
+            }
+            /*Т.к. задана последовательность, то её формула описывается внутри цикла. Это обусловлено тем, что каждый i-й
+            член последовательности является итерацией цикла. Выбор цикла for связан как раз-таки с ограниченностью итераций,
+            исходя из первоначальных данных к задаче*/
+        }
+    }
+}
