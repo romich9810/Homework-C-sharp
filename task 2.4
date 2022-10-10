@@ -1,0 +1,43 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Cryptography.X509Certificates;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace CSLight
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            Random rand = new Random();
+            int number = rand.Next(0, 100);
+            int sumOfNumbers = 0;
+
+            Console.WriteLine($"Великий рандом решил, что это число {number}");
+
+            for (int i = 0; i <= number; i++)
+            {
+                Console.WriteLine(i);
+                Console.Write("\b\bДелится на 3\n");
+
+                if ((i % 3 == 0) || (i % 5 == 0))
+                {       
+                    sumOfNumbers += i;
+
+                    if (i % 3 == 0)
+                    {
+                        Console.Write("\b\bДелится на 3\n");
+                    }
+                    if (i % 5 == 0)
+                    {
+                        Console.Write("\b\bДелится на 5\n");
+                    }                    
+                }
+            }
+
+            Console.WriteLine($"Сумма всех положительных чисел, кратных 3 и 5 = {sumOfNumbers}");
+        }
+    }
+}
