@@ -1,0 +1,136 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Cryptography.X509Certificates;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace CSLight
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            float usdCount, rubCount, cnyCount;
+            float cnyToRubmCourse = 8.59f, usdToRubCourse = 61.25f, usdToCnyCourse = 7.13f;
+            float usdToRub, rubToUsd, cnyToRub, rubToCny, usdToCny, cnyToUsd;
+            int numberOfOperation;
+            bool isNeedRepeat = true;
+
+            Console.WriteLine("Введите количество средств на вашем балансе.");
+            Console.Write("Доллары: ");
+            usdCount = Convert.ToSingle(Console.ReadLine());
+            Console.Write("Рубли: ");
+            rubCount = Convert.ToSingle(Console.ReadLine());
+            Console.Write("Юани: ");
+            cnyCount = Convert.ToSingle(Console.ReadLine());
+
+            while(isNeedRepeat == true)
+            {
+                Console.Write("Какой счёт вам сконвертировать?\n1 - доллар в рубли\n2 - рубль в доллар" +
+                "\n3 - юань в рубль\n4 - рубль в юань\n5 - доллар в юань\n6 - юань в доллар\n7 - выход из программмы.\n");
+                numberOfOperation = Convert.ToInt32(Console.ReadLine());
+                switch (numberOfOperation)
+                {
+                    case 1:
+                        Console.Write("Какое количество долларов сконвертировать в рубли?\n" +
+                            "Введите к-во: ");
+                        usdToRub = Convert.ToSingle(Console.ReadLine());
+                        if (usdToRub > usdCount)
+                        {
+                            Console.WriteLine("Введено некорректное значение для конвертации. Попробуйте снова.");
+                            continue;
+                        }
+                        usdCount -= usdToRub;
+                        rubCount += usdToRub * usdToRubCourse;
+
+                        Console.WriteLine($"Балланс: доллары - {usdCount}, рубли - {rubCount}, юани - {cnyCount}.");
+                        continue;
+
+                    case 2:
+                        Console.Write("Какое количество рублей сконвертировать в доллары?\n" +
+                            "Введите к-во: ");
+                        rubToUsd = Convert.ToSingle(Console.ReadLine());
+                        if (rubToUsd > rubCount)
+                        {
+                            Console.WriteLine("Введено некорректное значение для конвертации. Попробуйте снова.");
+                            continue;
+                        }
+                        rubCount -= rubToUsd;
+                        usdCount += rubToUsd / usdToRubCourse;
+
+                        Console.WriteLine($"Балланс: доллары - {usdCount}, рубли - {rubCount}, юани - {cnyCount}.");
+                        continue;
+
+                    case 3:
+                        Console.Write("Какое количество юаней сконвертировать в рубли?\n" +
+                            "Введите к-во: ");
+                        cnyToRub = Convert.ToSingle(Console.ReadLine());
+                        if (cnyToRub > cnyCount)
+                        {
+                            Console.WriteLine("Введено некорректное значение для конвертации. Попробуйте снова.");
+                            continue;
+                        }
+                        cnyCount -= cnyToRub;
+                        rubCount += cnyToRub * cnyToRubmCourse;
+
+                        Console.WriteLine($"Балланс: доллары - {usdCount}, рубли - {rubCount}, юани - {cnyCount}.");
+                        continue;
+
+                    case 4:
+                        Console.Write("Какое количество рублей сконвертировать в юани?\n" +
+                            "Введите к-во: ");
+                        rubToCny = Convert.ToSingle(Console.ReadLine());
+                        if (rubToCny > rubCount)
+                        {
+                            Console.WriteLine("Введено некорректное значение для конвертации. Попробуйте снова.");
+                            continue;
+                        }
+                        rubCount -= rubToCny;
+                        cnyCount += rubToCny / cnyToRubmCourse;
+
+                        Console.WriteLine($"Балланс: доллары - {usdCount}, рубли - {rubCount}, юани - {cnyCount}.");
+                        continue;
+
+                    case 5:
+                        Console.Write("Какое количество долларов сконвертировать в юани?\n" +
+                            "Введите к-во: ");
+                        usdToCny = Convert.ToSingle(Console.ReadLine());
+                        if (usdToCny > usdCount)
+                        {
+                            Console.WriteLine("Введено некорректное значение для конвертации. Попробуйте снова.");
+                            continue;
+                        }
+                        usdCount -= usdToCny;
+                        cnyCount += usdToCny * usdToCnyCourse;
+
+                        Console.WriteLine($"Балланс: доллары - {usdCount}, рубли - {rubCount}, юани - {cnyCount}.");
+                        continue;
+
+                    case 6:
+                        Console.Write("Какое количество юани сконвертировать в доллары?\n" +
+                            "Введите к-во: ");
+                        cnyToUsd = Convert.ToSingle(Console.ReadLine());
+                        if (cnyToUsd > cnyCount)
+                        {
+                            Console.WriteLine("Введено некорректное значение для конвертации. Попробуйте снова.");
+                            continue;
+                        }
+                        cnyCount -= cnyToUsd;
+                        usdCount += cnyToUsd / usdToCnyCourse;
+
+                        Console.WriteLine($"Балланс: доллары - {usdCount}, рубли - {rubCount}, юани - {cnyCount}.");
+                        continue;
+
+                    case 7:
+                        Console.WriteLine("Завершение программы. Ждём вас снова!");
+                        isNeedRepeat = false;
+                        break;
+                    default:
+                        Console.WriteLine("Введена некорректная команда. Попробуйте снова.");
+                        continue;
+                }
+            }
+        }
+    }
+}
