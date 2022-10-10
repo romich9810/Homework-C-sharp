@@ -11,8 +11,12 @@ namespace CSLight
     {
         static void Main(string[] args)
         {
-            Random rand = new Random();
-            int number = rand.Next(0, 100);
+            Random random = new Random();
+            int minimalNumber = 0;
+            int maximalNumber = 100;
+            int number = random.Next(minimalNumber, maximalNumber);
+            int multipleThree = 3;
+            int multipleFive = 5;
             int sumOfNumbers = 0;
 
             Console.WriteLine($"Великий рандом решил, что это число {number}");
@@ -21,18 +25,18 @@ namespace CSLight
             {
                 Console.WriteLine(i);
 
-                if ((i % 3 == 0) || (i % 5 == 0))
-                {       
+                if ((i % multipleThree == 0) || (i % multipleFive == 0))
+                {
                     sumOfNumbers += i;
 
-                    if (i % 3 == 0)
+                    if (i % multipleThree == 0)
                     {
-                        Console.Write("\b\bДелится на 3\n");
+                        Console.Write("\bДелится на 3\n");
                     }
-                    if (i % 5 == 0)
+                    if (i % multipleFive == 0)
                     {
-                        Console.Write("\b\bДелится на 5\n");
-                    }                    
+                        Console.Write("\bДелится на 5\n");
+                    }
                 }
             }
 
