@@ -11,9 +11,16 @@ namespace CSLight
     {
         static void Main(string[] args)
         {
-            float usdCount, rubCount, cnyCount;
             float cnyToRubmCourse = 8.59f, usdToRubCourse = 61.25f, usdToCnyCourse = 7.13f;
-            float usdToRub, rubToUsd, cnyToRub, rubToCny, usdToCny, cnyToUsd;
+            float usdCount;
+            float rubCount;
+            float cnyCount;           
+            float usdToRub;
+            float rubToUsd;
+            float cnyToRub;
+            float rubToCny;
+            float usdToCny;
+            float cnyToUsd;
             int numberOfOperation;
             bool isNeedRepeat = true;
 
@@ -27,33 +34,42 @@ namespace CSLight
 
             while(isNeedRepeat == true)
             {
+                const string UsdToRubWriteComand = "Какое количество долларов сконвертировать в рубли?\nВведите к-во: ";
+                const string RubToUsdWriteComand = "Какое количество рублей сконвертировать в доллары?\nВведите к-во: ";
+                const string CnyToRubWriteComand = "Какое количество юаней сконвертировать в рубли?\nВведите к-во: ";
+                const string RubToCnyWriteComand = "Какое количество рублей сконвертировать в юани?\nВведите к-во: ";
+                const string UsdToCnyWriteComand = "Какое количество долларов сконвертировать в юани?\nВведите к-во: ";
+                const string CnyToUsdWriteComand = "Какое количество юани сконвертировать в доллары?\nВведите к-во: ";
+                const string UncorrecltyTypeOfConvert = "Введено некорректное значение для конвертации. Попробуйте снова.";
+                const string ExitWriteComand = "Завершение программы. Ждём вас снова!";
+                const string FalseWriteComand = "Введена некорректная команда. Попробуйте снова.";
+
                 Console.Write("Какой счёт вам сконвертировать?\n1 - доллар в рубли\n2 - рубль в доллар" +
                 "\n3 - юань в рубль\n4 - рубль в юань\n5 - доллар в юань\n6 - юань в доллар\n7 - выход из программмы.\n");
                 numberOfOperation = Convert.ToInt32(Console.ReadLine());
                 switch (numberOfOperation)
-                {
+                {   
+                    
                     case 1:
-                        Console.Write("Какое количество долларов сконвертировать в рубли?\n" +
-                            "Введите к-во: ");
+                        Console.Write(UsdToRubWriteComand);
                         usdToRub = Convert.ToSingle(Console.ReadLine());
                         if (usdToRub > usdCount)
                         {
-                            Console.WriteLine("Введено некорректное значение для конвертации. Попробуйте снова.");
+                            Console.WriteLine(UncorrecltyTypeOfConvert);
                             continue;
                         }
                         usdCount -= usdToRub;
                         rubCount += usdToRub * usdToRubCourse;
 
-                        Console.WriteLine($"Балланс: доллары - {usdCount}, рубли - {rubCount}, юани - {cnyCount}.");
+                        Console.WriteLine("Балланс: доллары - " + usdCount + ", рубли - " + rubCount + ", юани - " + cnyCount + ".");
                         continue;
 
                     case 2:
-                        Console.Write("Какое количество рублей сконвертировать в доллары?\n" +
-                            "Введите к-во: ");
+                        Console.Write(RubToUsdWriteComand);
                         rubToUsd = Convert.ToSingle(Console.ReadLine());
                         if (rubToUsd > rubCount)
                         {
-                            Console.WriteLine("Введено некорректное значение для конвертации. Попробуйте снова.");
+                            Console.WriteLine(UncorrecltyTypeOfConvert);
                             continue;
                         }
                         rubCount -= rubToUsd;
@@ -63,12 +79,11 @@ namespace CSLight
                         continue;
 
                     case 3:
-                        Console.Write("Какое количество юаней сконвертировать в рубли?\n" +
-                            "Введите к-во: ");
+                        Console.Write(CnyToRubWriteComand);
                         cnyToRub = Convert.ToSingle(Console.ReadLine());
                         if (cnyToRub > cnyCount)
                         {
-                            Console.WriteLine("Введено некорректное значение для конвертации. Попробуйте снова.");
+                            Console.WriteLine(UncorrecltyTypeOfConvert);
                             continue;
                         }
                         cnyCount -= cnyToRub;
@@ -78,12 +93,11 @@ namespace CSLight
                         continue;
 
                     case 4:
-                        Console.Write("Какое количество рублей сконвертировать в юани?\n" +
-                            "Введите к-во: ");
+                        Console.Write(RubToCnyWriteComand);
                         rubToCny = Convert.ToSingle(Console.ReadLine());
                         if (rubToCny > rubCount)
                         {
-                            Console.WriteLine("Введено некорректное значение для конвертации. Попробуйте снова.");
+                            Console.WriteLine(UncorrecltyTypeOfConvert);
                             continue;
                         }
                         rubCount -= rubToCny;
@@ -93,12 +107,11 @@ namespace CSLight
                         continue;
 
                     case 5:
-                        Console.Write("Какое количество долларов сконвертировать в юани?\n" +
-                            "Введите к-во: ");
+                        Console.Write(UsdToCnyWriteComand);
                         usdToCny = Convert.ToSingle(Console.ReadLine());
                         if (usdToCny > usdCount)
                         {
-                            Console.WriteLine("Введено некорректное значение для конвертации. Попробуйте снова.");
+                            Console.WriteLine(UncorrecltyTypeOfConvert);
                             continue;
                         }
                         usdCount -= usdToCny;
@@ -108,12 +121,11 @@ namespace CSLight
                         continue;
 
                     case 6:
-                        Console.Write("Какое количество юани сконвертировать в доллары?\n" +
-                            "Введите к-во: ");
+                        Console.Write(CnyToUsdWriteComand);
                         cnyToUsd = Convert.ToSingle(Console.ReadLine());
                         if (cnyToUsd > cnyCount)
                         {
-                            Console.WriteLine("Введено некорректное значение для конвертации. Попробуйте снова.");
+                            Console.WriteLine(UncorrecltyTypeOfConvert);
                             continue;
                         }
                         cnyCount -= cnyToUsd;
@@ -123,12 +135,14 @@ namespace CSLight
                         continue;
 
                     case 7:
-                        Console.WriteLine("Завершение программы. Ждём вас снова!");
+                        Console.WriteLine(ExitWriteComand);
                         isNeedRepeat = false;
                         break;
+                        
                     default:
-                        Console.WriteLine("Введена некорректная команда. Попробуйте снова.");
+                        Console.WriteLine(FalseWriteComand);
                         continue;
+                        
                 }
             }
         }
