@@ -12,28 +12,28 @@ namespace CSLight
         static void Main(string[] args)
         {
             Random random = new Random();
-            int minimalNumber = 0;
+            int minimalNumber = 1;
             int maximalNumber = 100;
             int number = random.Next(minimalNumber, maximalNumber);
-            int multipleThree = 3;
-            int multipleFive = 5;
+            int multipleFirstNumber = 3;
+            int multipleSecondNumber = 5;
             int sumOfNumbers = 0;
 
             Console.WriteLine($"Великий рандом решил, что это число {number}");
 
-            for (int i = 0; i <= number; i++)
+            for (int i = 1; i <= number; i++)
             {
                 Console.WriteLine(i);
 
-                if ((i % multipleThree == 0) || (i % multipleFive == 0))
+                if ((i % multipleFirstNumber == 0) || (i % multipleSecondNumber == 0))
                 {
                     sumOfNumbers += i;
 
-                    if (i % multipleThree == 0)
+                    if (i % multipleFirstNumber == 0)
                     {
                         Console.Write("\bДелится на 3\n");
                     }
-                    if (i % multipleFive == 0)
+                    if (i % multipleSecondNumber == 0)
                     {
                         Console.Write("\bДелится на 5\n");
                     }
