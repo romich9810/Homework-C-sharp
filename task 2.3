@@ -16,10 +16,11 @@ namespace CSLight
             string commandFromUser;
             bool isNeedContune = true;
             int scoreOfIteration = 0;
+            int stepOfRow = 7;
 
             while (isNeedContune == true)
             {
-                memberOfRow = 7 * (scoreOfIteration++) + firstMemberOfRow;
+                memberOfRow = stepOfRow * (scoreOfIteration++) + firstMemberOfRow;
                 Console.WriteLine(memberOfRow);
                 Console.WriteLine("Введите \"exit\" для завершения цикла и программы");
                 commandFromUser = Console.ReadLine();
@@ -31,7 +32,7 @@ namespace CSLight
                 else
                 {
                     continue;
-                }     
+                }
             }
         }
     }
