@@ -11,6 +11,14 @@ namespace CSLight
     {
         static void Main(string[] args)
         {
+            const string СommandUsdToRub = "доллар в рубли";
+            const string CommandRubToUsd = "рубль в доллар";
+            const string CommandCnyToRub = "юань в рубль";
+            const string CommandRubToCny = "рубль в юань";
+            const string CommandUsdToCny = "доллар в юань";
+            const string CommandCnyToUsd = "юань в доллар";
+            const string CommandExit = "выход из программы";
+
             float cnyToRubmCourse = 8.59f;
             float usdToRubCourse = 61.25f;
             float usdToCnyCourse = 7.13f;
@@ -25,14 +33,6 @@ namespace CSLight
             float cnyToUsd;
             string nameOfOperation;
             bool isNeedRepeat = true;
-
-            const string СommandUsdToRub = "доллар в рубли";
-            const string CommandRubToUsd = "рубль в доллар";
-            const string CommandCnyToRub = "юань в рубль";
-            const string CommandRubToCny = "рубль в юань";
-            const string CommandUsdToCny = "доллар в юань";
-            const string CommandCnyToUsd = "юань в доллар";
-            const string CommandExit = "выход из программы";
 
             Console.WriteLine("Введите количество средств на вашем балансе.");
             Console.Write("Доллары: ");
