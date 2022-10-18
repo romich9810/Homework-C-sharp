@@ -1,0 +1,40 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace _2_9_ThreeSinghNumber
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            Random random = new Random();
+            int splinterNumber = random.Next(0, 28);
+            int numberForSubstraction;
+            int amountNumberOfSpliterating = 0;
+
+            for (int i = 100; i <= 999; i++ )
+            {
+                numberForSubstraction = i;
+                for (int j = 0; ; j++)
+                {
+                    numberForSubstraction -= splinterNumber;
+
+                    if (numberForSubstraction == 0)
+                    {
+                        amountNumberOfSpliterating++;
+                        Console.WriteLine(i);
+                        break;
+                    }
+                    if (numberForSubstraction < 0)
+                    {
+                        break;
+                    }
+                }
+            }
+            Console.WriteLine($"Количество чисел, кратных {splinterNumber} = {amountNumberOfSpliterating}.");
+        }
+    }
+}
