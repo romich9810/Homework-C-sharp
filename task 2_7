@@ -1,0 +1,39 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace _2_7_lenghOfName
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            int lenghtOfFrame;
+            string nameofUser;
+            string upOfFrame;
+            string middleOfFrame;
+            string downOfFrame;
+            string signOfFrame;
+
+            Console.Write("Введите своё имя: ");          
+            nameofUser = Console.ReadLine();
+            Console.Write("\n");
+            Console.Write("Введите символ для рамки: ");
+            signOfFrame = Console.ReadLine();
+            Console.Write("\n\n");
+            upOfFrame = signOfFrame;
+            downOfFrame = signOfFrame;
+
+            for (int i = 0; i <= nameofUser.Length; i++)
+            {
+                upOfFrame += signOfFrame;
+                downOfFrame += signOfFrame;
+            }
+
+            middleOfFrame = signOfFrame + nameofUser + signOfFrame;
+            Console.WriteLine(upOfFrame + "\n" + middleOfFrame + "\n" + downOfFrame);
+        }
+    }
+}
