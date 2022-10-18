@@ -1,73 +1,75 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CSLight
+namespace ConsoleMenu
 {
     internal class Program
     {
         static void Main(string[] args)
         {
+            const string setNameCommand = "1";
+            const string setLocationCommand = "2";
+            const string consoleTextExchanceCommand = "3";
+            const string showDataAboutUser = "4";
+            const string exitCommand = "5";
+            const string setConsoleColorBlue = "голубой";
+            const string setConsoleColorRed = "красный";
+            const string setConsoleColorGreen = "зеленый";
+
             string userCommand;
             string userName = "кто-то";
             string userLocation = "где-то";
             string textColor;
             bool isNeedToContune = true;
 
-            const string setNameCommand = "задать имя пользователя";
-            const string setLocationCommand = "установить регион";
-            const string consoleTextExchanceCommand = "изменить параметры текста";
-            const string showDataAboutUser = "показать информацию о пользователе";
-            const string exitCommand = "выйти из программы";
-            const string setConsoleColorBlue = "голубой";
-            const string setConsoleColorRed = "красный";
-            const string setConsoleColorGreen = "зеленый";
-
-            while (isNeedToContune = true)
+            while (isNeedToContune == true)
             {
-                Console.WriteLine($"Выберите команду для работы приложения:\n- {setNameCommand}\n- {setLocationCommand}" +
-                    $"\n- {consoleTextExchanceCommand}\n- {showDataAboutUser}\n- {exitCommand}.");
+                Console.WriteLine($"Выберите команду для работы приложения:\n{setNameCommand} - задать имя пользователя\n{setLocationCommand} - установить регион" +
+                    $"\n{consoleTextExchanceCommand} - изменить параметры текста\n{showDataAboutUser} - показать информацию о пользователе\n{exitCommand} - выйти из программы.");
                 userCommand = Console.ReadLine();
 
                 switch (userCommand)
                 {
-                    case "задать имя пользователя":
+                    case setNameCommand:
                         Console.WriteLine("Введите имя пользователя");
                         userName = Console.ReadLine();
                         Console.WriteLine($"Хорошо, {userName}, мы вас запомнили с:\n");
                         break;
-                    case "установить регион":
+                    case setLocationCommand:
                         Console.WriteLine("Введите название региона");
                         userLocation = Console.ReadLine();
                         Console.WriteLine($"Окей, вы живете в {userLocation}\n");
                         break;
-                    case "выйти из программы":
+                    case exitCommand:
                         Console.WriteLine("Завершение работы. Ждём вас снова!");
                         isNeedToContune = false;
                         break;
-                    case "показать информацию о пользователе":
+                    case showDataAboutUser:
                         Console.WriteLine($"Имя - {userName}, локация - {userLocation}.\n");
                         break;
-                    case "изменить параметры текста":
+                    case consoleTextExchanceCommand:
                         Console.Clear();
                         Console.WriteLine($"Выберите цвет текста:\n- {setConsoleColorBlue}\n- {setConsoleColorRed}\n- {setConsoleColorGreen}.");
                         textColor = Console.ReadLine();
 
                         switch (textColor)
                         {
-                            case "голубой":
+                            case setConsoleColorBlue:
                                 Console.ForegroundColor = ConsoleColor.Blue;
+                                Console.Clear();
                                 Console.WriteLine("Так выгрядит ваш текст.");
                                 break;
-                            case "красный":
+                            case setConsoleColorRed:
                                 Console.ForegroundColor = ConsoleColor.Red;
+                                Console.Clear();
                                 Console.WriteLine("Так выгрядит ваш текст.");
                                 break;
-                            case "зеленый":
+                            case setConsoleColorGreen:
                                 Console.ForegroundColor = ConsoleColor.Green;
+                                Console.Clear();
                                 Console.WriteLine("Так выгрядит ваш текст.");
                                 break;
                             default:
@@ -81,7 +83,6 @@ namespace CSLight
                         break;
                 }
             }
-            
         }
     }
 }
