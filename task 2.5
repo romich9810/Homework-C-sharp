@@ -11,26 +11,24 @@ namespace CSLight
     {
         static void Main(string[] args)
         {
-            const string СommandUsdToRub = "доллар в рубли";
-            const string CommandRubToUsd = "рубль в доллар";
-            const string CommandCnyToRub = "юань в рубль";
-            const string CommandRubToCny = "рубль в юань";
-            const string CommandUsdToCny = "доллар в юань";
-            const string CommandCnyToUsd = "юань в доллар";
-            const string CommandExit = "выход из программы";
+            const string СommandUsdToRub = "1";
+            const string CommandRubToUsd = "2";
+            const string CommandCnyToRub = "3";
+            const string CommandRubToCny = "4";
+            const string CommandUsdToCny = "5";
+            const string CommandCnyToUsd = "6";
+            const string CommandExit = "7";
 
-            float cnyToRubmCourse = 8.59f;
+            float cnyToRubCourse = 8.59f;
+            float cnyToUsdCourse = 0.14f;
             float usdToRubCourse = 61.25f;
             float usdToCnyCourse = 7.13f;
+            float rubToUsdCourse = 0.016f;
+            float rubToCnyCourse = 0.116f;
             float usdCount;
             float rubCount;
             float cnyCount;
-            float usdToRub;
-            float rubToUsd;
-            float cnyToRub;
-            float rubToCny;
-            float usdToCny;
-            float cnyToUsd;
+            float amountToConvert;
             string nameOfOperation;
             bool isNeedRepeat = true;
 
@@ -54,103 +52,104 @@ namespace CSLight
                 const string ExitWriteComand = "Завершение программы. Ждём вас снова!";
                 const string FalseWriteComand = "Введена некорректная команда. Попробуйте снова.";
 
-                Console.WriteLine($"Какой счёт вам сконвертировать?\n{СommandUsdToRub}\n{CommandRubToUsd}\n" +
-                    $"{CommandCnyToRub}\n{CommandRubToCny}\n{CommandUsdToCny}\n{CommandCnyToUsd}\n{CommandExit}.\n");
+                Console.WriteLine($"Какой счёт вам сконвертировать?\n{СommandUsdToRub} - доллар в рубли\n{CommandRubToUsd} - рубль в доллар\n" +
+                    $"{CommandCnyToRub} - юань в рубль\n{CommandRubToCny} - рубль в юань\n{CommandUsdToCny} - доллар в юань" +
+                    $"\n{CommandCnyToUsd} - юань в доллар\n{CommandExit} - выход из программы.\n");
                 nameOfOperation = Console.ReadLine();
 
                 switch (nameOfOperation)
                 {
-                    case "доллар в рубли":
+                    case СommandUsdToRub:
                         Console.Write(UsdToRubWriteComand);
-                        usdToRub = Convert.ToSingle(Console.ReadLine());
+                        amountToConvert = Convert.ToSingle(Console.ReadLine());
 
-                        if (usdToRub > usdCount)
+                        if (amountToConvert > usdCount)
                         {
                             Console.WriteLine(UncorrecltyTypeOfConvert);
                             continue;
                         }
 
-                        usdCount -= usdToRub;
-                        rubCount += usdToRub * usdToRubCourse;
+                        usdCount -= amountToConvert;
+                        rubCount += amountToConvert * usdToRubCourse;
 
                         Console.WriteLine("Балланс: доллары - " + usdCount + ", рубли - " + rubCount + ", юани - " + cnyCount + ".");
                         break;
-                    case "рубль в доллар":
+                    case CommandRubToUsd:
                         Console.Write(RubToUsdWriteComand);
-                        rubToUsd = Convert.ToSingle(Console.ReadLine());
+                        amountToConvert = Convert.ToSingle(Console.ReadLine());
 
-                        if (rubToUsd > rubCount)
+                        if (amountToConvert > rubCount)
                         {
                             Console.WriteLine(UncorrecltyTypeOfConvert);
                             continue;
                         }
 
-                        rubCount -= rubToUsd;
-                        usdCount += rubToUsd / usdToRubCourse;
+                        rubCount -= amountToConvert;
+                        usdCount += amountToConvert * rubToUsdCourse;
 
                         Console.WriteLine($"Балланс: доллары - {usdCount}, рубли - {rubCount}, юани - {cnyCount}.");
                         break;
-                    case "юань в рубль":
+                    case CommandCnyToRub:
                         Console.Write(CnyToRubWriteComand);
-                        cnyToRub = Convert.ToSingle(Console.ReadLine());
+                        amountToConvert = Convert.ToSingle(Console.ReadLine());
 
-                        if (cnyToRub > cnyCount)
+                        if (amountToConvert > cnyCount)
                         {
                             Console.WriteLine(UncorrecltyTypeOfConvert);
                             continue;
                         }
 
-                        cnyCount -= cnyToRub;
-                        rubCount += cnyToRub * cnyToRubmCourse;
+                        cnyCount -= amountToConvert;
+                        rubCount += amountToConvert * cnyToRubCourse;
 
                         Console.WriteLine($"Балланс: доллары - {usdCount}, рубли - {rubCount}, юани - {cnyCount}.");
                         break;
-                    case "рубль в юань":
+                    case CommandRubToCny:
                         Console.Write(RubToCnyWriteComand);
-                        rubToCny = Convert.ToSingle(Console.ReadLine());
+                        amountToConvert = Convert.ToSingle(Console.ReadLine());
 
-                        if (rubToCny > rubCount)
+                        if (amountToConvert > rubCount)
                         {
                             Console.WriteLine(UncorrecltyTypeOfConvert);
                             continue;
                         }
 
-                        rubCount -= rubToCny;
-                        cnyCount += rubToCny / cnyToRubmCourse;
+                        rubCount -= amountToConvert;
+                        cnyCount += amountToConvert * rubToCnyCourse;
 
                         Console.WriteLine($"Балланс: доллары - {usdCount}, рубли - {rubCount}, юани - {cnyCount}.");
                         break;
-                    case "доллар в юань":
+                    case CommandUsdToCny:
                         Console.Write(UsdToCnyWriteComand);
-                        usdToCny = Convert.ToSingle(Console.ReadLine());
+                        amountToConvert = Convert.ToSingle(Console.ReadLine());
 
-                        if (usdToCny > usdCount)
+                        if (amountToConvert > usdCount)
                         {
                             Console.WriteLine(UncorrecltyTypeOfConvert);
                             continue;
                         }
 
-                        usdCount -= usdToCny;
-                        cnyCount += usdToCny * usdToCnyCourse;
+                        usdCount -= amountToConvert;
+                        cnyCount += amountToConvert * usdToCnyCourse;
 
                         Console.WriteLine($"Балланс: доллары - {usdCount}, рубли - {rubCount}, юани - {cnyCount}.");
                         break;
-                    case "юань в доллар":
+                    case CommandCnyToUsd:
                         Console.Write(CnyToUsdWriteComand);
-                        cnyToUsd = Convert.ToSingle(Console.ReadLine());
+                        amountToConvert = Convert.ToSingle(Console.ReadLine());
 
-                        if (cnyToUsd > cnyCount)
+                        if (amountToConvert > cnyCount)
                         {
                             Console.WriteLine(UncorrecltyTypeOfConvert);
                             continue;
                         }
 
-                        cnyCount -= cnyToUsd;
-                        usdCount += cnyToUsd / usdToCnyCourse;
+                        cnyCount -= amountToConvert;
+                        usdCount += amountToConvert * cnyToUsdCourse;
 
                         Console.WriteLine($"Балланс: доллары - {usdCount}, рубли - {rubCount}, юани - {cnyCount}.");
                         break;
-                    case "выход из программы":
+                    case CommandExit:
                         Console.WriteLine(ExitWriteComand);
                         isNeedRepeat = false;
                         break;
