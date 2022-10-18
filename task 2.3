@@ -13,26 +13,13 @@ namespace CSLight
         {
             int firstMemberOfRow = 5;
             int memberOfRow;
-            string commandFromUser;
-            bool isNeedContune = true;
-            int scoreOfIteration = 0;
+            int stepOfIteration = 0;
             int stepOfRow = 7;
 
-            while (isNeedContune == true)
+            for (memberOfRow = 0; memberOfRow < 96 ; stepOfIteration++)
             {
-                memberOfRow = stepOfRow * (scoreOfIteration++) + firstMemberOfRow;
+                memberOfRow = stepOfRow * stepOfIteration + firstMemberOfRow;
                 Console.WriteLine(memberOfRow);
-                Console.WriteLine("Введите \"exit\" для завершения цикла и программы");
-                commandFromUser = Console.ReadLine();
-
-                if (commandFromUser == "exit")
-                {
-                    isNeedContune = false;
-                }
-                else
-                {
-                    continue;
-                }
             }
         }
     }
