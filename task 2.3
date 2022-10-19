@@ -13,12 +13,18 @@ namespace CSLight
         {
             int firstMemberOfRow = 5;
             int memberOfRow;
-            int stepOfIteration = 0;
             int stepOfRow = 7;
+            int lastMemberOfRow = 96;
 
-            for (memberOfRow = 0; memberOfRow < 96 ; stepOfIteration++)
+            for (int i = 0;; i++)
             {
-                memberOfRow = stepOfRow * stepOfIteration + firstMemberOfRow;
+                memberOfRow = stepOfRow * i + firstMemberOfRow;
+                
+                if (memberOfRow > lastMemberOfRow)
+                {
+                    break;
+                }
+
                 Console.WriteLine(memberOfRow);
             }
         }
