@@ -1,0 +1,30 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace _2_10_degreeOfTwo
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            Random random = new Random(); 
+            int minimalNumberGenerate = 0;
+            int maximalNumberGenerate = 101;
+            int numberForComparing = random.Next(minimalNumberGenerate, maximalNumberGenerate);
+            int degreeOfTwo = 1;
+            int numberInDegreeByTwo = 2;
+            int stepOfRaising = 2;
+
+            while (numberInDegreeByTwo < numberForComparing)
+            {    
+                numberInDegreeByTwo *= stepOfRaising;
+                degreeOfTwo++;
+            }
+
+            Console.WriteLine($"Число {numberForComparing} меньше чем {numberInDegreeByTwo}, что является 2 в степени {degreeOfTwo}.");            
+        }
+    }
+}
