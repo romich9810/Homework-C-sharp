@@ -11,21 +11,13 @@ namespace CSLight
     {
         static void Main(string[] args)
         {
-            int firstMemberOfRow = 5;
-            int memberOfRow;
-            int stepOfRow = 7;
-            int lastMemberOfRow = 96;
+            int startNumber = 5;
+            int endNumber = 96;
+            int step = 7;
 
-            for (int i = 0;; i++)
+            for (int i = startNumber; i <= endNumber; i += step)
             {
-                memberOfRow = stepOfRow * i + firstMemberOfRow;
-                
-                if (memberOfRow > lastMemberOfRow)
-                {
-                    break;
-                }
-
-                Console.WriteLine(memberOfRow);
+                Console.Write($"{i} ");
             }
         }
     }
