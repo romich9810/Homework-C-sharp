@@ -10,24 +10,22 @@ namespace _2_7_lenghOfName
     {
         static void Main(string[] args)
         {
-            int lenghtOfFrame;
             string nameofUser;
-            string upDownOfFrame;
+            string upDownOfFrame = null;
             string middleOfFrame;
-            char signOfFrame;
+            char frameSymbol;
 
-            Console.Write("Введите своё имя: ");          
+            Console.Write("Введите своё имя: ");
             nameofUser = Console.ReadLine();
-            Console.Write("\n");
-            Console.Write("Введите символ для рамки: ");
-            signOfFrame = Convert.ToChar(Console.ReadLine());
-            Console.Write("\n\n");
-            upDownOfFrame = Convert.ToString(signOfFrame);
-            middleOfFrame = signOfFrame + nameofUser + signOfFrame;
 
-            for (int i = 0; i < middleOfFrame.Length - 1; i++)
+            Console.Write("Введите символ для рамки: ");
+            frameSymbol = Convert.ToChar(Console.Read());
+
+            middleOfFrame = frameSymbol + nameofUser + frameSymbol;
+
+            for (int i = 0; i < middleOfFrame.Length ; i++)
             {
-                upDownOfFrame += signOfFrame;
+                upDownOfFrame += frameSymbol;
             }
 
             Console.WriteLine(upDownOfFrame + "\n" + middleOfFrame + "\n" + upDownOfFrame);
