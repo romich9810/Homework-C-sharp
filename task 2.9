@@ -11,28 +11,42 @@ namespace _2_9_ThreeSinghNumber
         static void Main(string[] args)
         {
             Random random = new Random();
-            int splinterNumber = random.Next(0, 28);
+            int highLimitOfSplinter = 28;
+            int lowLimitOfSplinter = 0;
+            int splinterNumber = random.Next(lowLimitOfSplinter, highLimitOfSplinter);
             int numberForSubstraction;
             int amountNumberOfSpliterating = 0;
+            int maxTripleDigit = 999;
+            int minTripleDigit = 100;
+            bool isNeedSubstraction;
 
-            for (int i = 100; i <= 999; i++ )
+
+            for (int i = 0; i <= maxTripleDigit; i += splinterNumber )
             {
-                numberForSubstraction = i;
-                for (int j = 0; ; j++)
-                {
-                    numberForSubstraction -= splinterNumber;
+                isNeedSubstraction = true;
 
-                    if (numberForSubstraction == 0)
+                if (i >= minTripleDigit)
+                {
+                    numberForSubstraction = i;
+
+                    while (isNeedSubstraction == true)
                     {
-                        amountNumberOfSpliterating++;
-                        break;
-                    }
-                    if (numberForSubstraction < 0)
-                    {
-                        break;
+                        numberForSubstraction -= splinterNumber;
+
+                        if (numberForSubstraction == 0)
+                        {
+                            amountNumberOfSpliterating++;
+                            isNeedSubstraction = false;
+                            
+                        }
+                        if (numberForSubstraction < 0)
+                        {
+                            isNeedSubstraction = false;
+                        }
                     }
                 }
             }
+
             Console.WriteLine($"Количество чисел, кратных {splinterNumber} = {amountNumberOfSpliterating}.");
         }
     }
