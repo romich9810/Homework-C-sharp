@@ -33,10 +33,9 @@ namespace _2_8_SecretMessage
                     Console.WriteLine($"Неправильный пароль. Осталось {showCountOfTry} попыток.");
                 }
 
-                if (i - 1 == 0)
+                if (i == 0)
                 {
                     Console.WriteLine("У вас закончились попытки. Завершение программы.");
-                    break;
                 }
             }
         }
