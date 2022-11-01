@@ -15,20 +15,21 @@ namespace _2_9_ThreeSinghNumber
             int lowLimitOfSplinter = 0;
             int splinterNumber = random.Next(lowLimitOfSplinter, highLimitOfSplinter);
             int amountNumberOfSpliterating = 0;
-            int maxTripleDigit = 999;
-            int minTripleDigit = 100;
+            int maxNumber = 999;
+            int minNumber = 100;
 
 
-            for (int i = 0; i <= maxTripleDigit; i += splinterNumber)
+            for (int i = 0; i <= maxNumber; i += splinterNumber)
             {
 
-                if (i >= minTripleDigit)
+                if (i >= minNumber)
                 {
                     amountNumberOfSpliterating++;
                 }
+
             }
 
             Console.WriteLine($"Количество чисел, кратных {splinterNumber} = {amountNumberOfSpliterating}.");
         }
     }
-}      
+}    
