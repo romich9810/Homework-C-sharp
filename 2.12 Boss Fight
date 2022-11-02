@@ -1,0 +1,185 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace _2_12_BossFight
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            const string nameSpellGeneral = "\"Луч света\"";
+            const string nameSpellCombo = "\"Пространственную кару\"";
+            const string nameSpellDefense = "\"Жизнесосальщик\"";
+            const string nameSpellUltraDamage = "\"Выход Смерти\"";
+            const string commandSpellGeneral = "1";
+            const string commandSpellCombo = "2";
+            const string commandSpellDefense = "3";
+            const string commandSpellUltraDamage = "4";
+            const string commandInfoOfSpells = "5";
+
+            Random random = new Random();
+            string nameUser;
+            string userComand;
+            string nameBoss = "Диадункис";
+            int maxHealthPointsBoss = 4000;
+            int minHealthPointsBoss = 2000;
+            int maxHealthPointsPlayer = 1000;
+            int minHealthPointsPlayer = 200;
+
+            int playerHealth = random.Next(minHealthPointsPlayer, maxHealthPointsPlayer + 1);
+            int bossHealth = random.Next(minHealthPointsBoss, maxHealthPointsBoss + 1);
+            int previousBossHealth = bossHealth;
+            int beginningHealthPlayer = playerHealth;
+
+            int maxPersentDamageBoss = 66;
+            int minPersentDamageBoss = 20;
+            int damageBoss = playerHealth - (playerHealth * random.Next(minPersentDamageBoss, maxPersentDamageBoss + 1)) % 100;
+            int defaultPlayerDamage = 150;
+            int realPlayerDamage;
+
+            int maxPersentSpellGeneral = 15;
+            int minPersentSpellGeneral = 1;
+
+            int persentOfDamageForCombo = 10;
+            int lessThemPersentOfDamageCust = 3;
+            int moreThemPersentOfDamageCust = 5;
+
+            int minHealingSpellDefense;
+            int maxHealingSpellDefense;
+            int sumOfHealingSpellDefense;
+
+            int sumOfMoveBeforeUsingUltraDamage;
+            int countForUsingUltraDamage = 4;
+
+            int scoreOfMove = 0;
+
+            bool isSpellGeneralUsed = false;
+
+            Console.WriteLine("Добро пожаловать в дандж! Пожалйста, представьтесь: ");
+            nameUser = Console.ReadLine();
+
+            Console.WriteLine($"Привет, {nameUser}, мы тебя ждали! \nВот уже 100 лет как наша деревня из поколения в поколение" +
+                $" борется с ужасным {nameBoss}. Настала пора нам одержать верх!.");
+
+            while ((bossHealth > 0) || (playerHealth > 0))
+            {
+                Console.WriteLine($"ХП босса = {bossHealth}, ваши хп = {playerHealth}.\nПеред вами босс! Выберите заклинание:\n" +
+                    $"{commandSpellGeneral} - использовать {nameSpellGeneral}.\n{commandSpellCombo} - использовать {nameSpellCombo}\n" +
+                    $"{commandSpellDefense} - использовать {nameSpellDefense}\n{commandSpellUltraDamage} - использовать {nameSpellUltraDamage} \n" +
+                    $"{commandInfoOfSpells} - узнать подробности про заклинания.");
+                userComand = Console.ReadLine();
+
+                switch (userComand)
+                {
+                    case commandSpellGeneral:
+                        Console.WriteLine("Испытай излучение!!!");
+                        realPlayerDamage = defaultPlayerDamage + (defaultPlayerDamage * random.Next(minPersentSpellGeneral, maxPersentSpellGeneral + 1) % 100);/*Рассчитать урон*/
+                        previousBossHealth = bossHealth;
+                        bossHealth -= realPlayerDamage;
+                        playerHealth -= damageBoss;
+                        isSpellGeneralUsed = true;
+                        scoreOfMove++;
+                        break;
+                    case commandSpellCombo:
+                        
+                        if (isSpellGeneralUsed == false)
+                        {
+                            Console.WriteLine($"Вы не использовали {nameSpellGeneral}!");
+                            break;
+                        }
+
+                        else
+                        {
+                            Console.WriteLine("Да познай мощь пространства!!!");
+
+                            if ((previousBossHealth - bossHealth) > (previousBossHealth / persentOfDamageForCombo)) 
+                            {
+                                realPlayerDamage = defaultPlayerDamage * moreThemPersentOfDamageCust;
+                                bossHealth -= realPlayerDamage;
+                                playerHealth -= damageBoss;
+                            }
+
+                            else
+                            {
+                                realPlayerDamage = defaultPlayerDamage * lessThemPersentOfDamageCust; 
+                                bossHealth -= realPlayerDamage;
+                                playerHealth -= damageBoss;
+                            }
+                            
+                            isSpellGeneralUsed = false;
+                            scoreOfMove++;
+                            break;
+                        }
+                    case commandSpellDefense:
+                        Console.WriteLine("Всасываю твою жизнь, защищаю свою...");
+                        minHealingSpellDefense = (beginningHealthPlayer - playerHealth) / 2;
+                        maxHealingSpellDefense = beginningHealthPlayer - playerHealth;
+                        sumOfHealingSpellDefense = random.Next(minHealingSpellDefense, maxHealingSpellDefense + 1);
+                        playerHealth += sumOfHealingSpellDefense;
+                        bossHealth -= sumOfHealingSpellDefense;
+                        scoreOfMove++;
+                        break;
+                    case commandSpellUltraDamage:
+
+                        if ((scoreOfMove % countForUsingUltraDamage == 0) && (scoreOfMove != 0)) 
+                        {
+                            Console.WriteLine("УЗРИ КОДЗИМОВСКУЮ СИЛУ!");
+                            realPlayerDamage = defaultPlayerDamage * 10;
+                            bossHealth -= realPlayerDamage;
+                            playerHealth -= damageBoss;
+                            scoreOfMove++;
+                            break;
+                        }
+
+                        else
+                        {
+                            sumOfMoveBeforeUsingUltraDamage = countForUsingUltraDamage - (scoreOfMove % 4);
+                            Console.WriteLine($"Вы пока что не можете использовать {nameSpellUltraDamage} ещё {sumOfMoveBeforeUsingUltraDamage} ходов!");
+                            break;
+                        }
+                    case commandInfoOfSpells:
+                        Console.Clear();
+                        Console.WriteLine($"{nameSpellGeneral} - наносит урон по врагу в размере от 100 до 115% от вашего" +
+                            $" стандартного урона в {defaultPlayerDamage} единиц.");
+                        Console.WriteLine($"{nameSpellCombo} - Можно использовать только после {nameSpellGeneral}!" +
+                            $" Если на предыдущем ходе было нанесено урона боссу больше 10% от его хп - кастует х5 от вашего стандартного" +
+                            $" урона в {defaultPlayerDamage} единиц. \nЕсли было нанесено меньше 10% - х3.");
+                        Console.WriteLine($"{nameSpellDefense} - Добавляет к вашему здоровью рандомное количество" +
+                            $" здоровья. Количество здоровья не может быть больше, чем было изначально, в {beginningHealthPlayer} ед.");
+                        Console.WriteLine($"{nameSpellUltraDamage} - Ультиматив. Наносит х10 от вашего стандартного" +
+                            $" урона. Может быть применен только каждый 4-й ход.");
+                        break;
+                    default:
+                        Console.WriteLine("Неправильная команда! Попробуйте ещё раз.");
+                        break;
+                }
+
+                if ((bossHealth <=0) && (playerHealth > 0)) 
+                {
+                    bossHealth = 0;
+                    Console.WriteLine($"Ваши HP = {playerHealth}, HP босса = {bossHealth}.\nПоздравляем! Великий {nameBoss} повержен!");
+                    break;
+                }
+
+                if ((bossHealth > 0) && (playerHealth <=0))
+                {
+                    playerHealth = 0;
+                    Console.WriteLine($"Ваши HP = {playerHealth}, HP босса = {bossHealth}.\nВам не удалось сразить {nameBoss}. Игра окончена!");
+                    break;
+                }
+
+                if ((bossHealth <=0) && (playerHealth <=0))
+                {
+                    bossHealth = 0;
+                    playerHealth = 0;
+                    Console.WriteLine($"Ваши HP = {playerHealth}, HP босса = {bossHealth}.\nПоследнее заклинание для {nameBoss} было смертельным, однако ему удалось вас парализовать своим ядом" +
+                        $" с его когтей. Вы чувствуете, как задыхаетесь... Что ж, вы погибли не напрасно! Теперь деревня сможет жить в гармонии долгие годы.");
+                    break;
+                }
+            }
+        }
+    }
+}
