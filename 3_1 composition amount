@@ -15,28 +15,18 @@ namespace _3_1_compozition_amount
             int stringNumber = 1;
             int composition = 1;
             int amount = 0;
-            
+
             for (int i = 0; i < massive.GetLength(0); i++)
             {
-                if (i == stringNumber)
-                {
-                    for (int j = 0; j < massive.GetLength(1); j++)
-                    {
-                        amount += massive[i, j];
-                    }
-
-                    Console.WriteLine("Сумма " + (stringNumber + 1) + " строки = " + amount);
-                }
-
-                for (int j = 0; j < massive.GetLength(1); j++)
-                {
-                    if (j == columnNumber)
-                    {
-                        composition *= massive[i, j];
-                    }
-                }
+                composition *= massive[i, columnNumber];
             }
 
+            for (int j = 0; j < massive.GetLength(1); j++)
+            {
+                amount += massive[stringNumber, j];
+            }    
+
+            Console.WriteLine("Сумма " + (stringNumber + 1) + " строки = " + amount);
             Console.WriteLine("Произведение " + (columnNumber + 1) + " столбца = " + composition);
         }
     }
