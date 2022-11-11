@@ -15,8 +15,6 @@ namespace _3_2_matrix_max
             int maxValueMatrix = 99;
             int minValueMatrix = 10;
             int maxElement = int.MinValue;
-            int xIndexMaxElement = 0;
-            int yIndexMaxElement = 0;
 
             Console.WriteLine("Матрица до: \n");
 
@@ -30,21 +28,23 @@ namespace _3_2_matrix_max
                     if (matrix[i, j] > maxElement)
                     {
                         maxElement = matrix[i, j];
-                        xIndexMaxElement = i;
-                        yIndexMaxElement = j;
                     }
                 }
 
                 Console.WriteLine();
             }
 
-            matrix[xIndexMaxElement, yIndexMaxElement] = 0;
             Console.WriteLine("\nМатрица после: \n");
 
             for (int i = 0; i < matrix.GetLength(0); i++)
             {
                 for (int j = 0; j < matrix.GetLength(1); j++)
                 {
+                    if (matrix[i, j] == maxElement)
+                    {
+                        matrix[i, j] = 0; 
+                    }
+
                     Console.Write(matrix[i, j] + " ");
                 }
 
