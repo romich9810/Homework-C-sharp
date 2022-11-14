@@ -11,7 +11,10 @@ namespace _3_2_matrix_max
         static void Main(string[] args)
         {
             Random random = new Random();
-            int[,] matrix = new int[10, 10];
+            int lengthMatrix = 10;
+            int widthMatrix = 10;
+            int exchangeValue = 0;
+            int[,] matrix = new int[lengthMatrix, widthMatrix];
             int maxValueMatrix = 99;
             int minValueMatrix = 10;
             int maxElement = int.MinValue;
@@ -42,7 +45,7 @@ namespace _3_2_matrix_max
                 {
                     if (matrix[i, j] == maxElement)
                     {
-                        matrix[i, j] = 0; 
+                        matrix[i, j] = exchangeValue; 
                     }
 
                     Console.Write(matrix[i, j] + " ");
