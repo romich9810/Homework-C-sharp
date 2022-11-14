@@ -16,7 +16,6 @@ namespace _3_3_localMax
             int minValueMassive = -999;
 
             int[] massive = new int[sizeOfMassive];
-            int preLastElement = massive.Length - 2;
             int lastElement = massive.Length - 1;
 
             for (int i = 0; i < massive.Length; i++)
@@ -32,11 +31,6 @@ namespace _3_3_localMax
                 Console.Write(massive[0] + " ");
             }
 
-            if (massive[lastElement] > massive[preLastElement])
-            {
-                Console.Write(massive[lastElement] + " ");
-            }
-
             for (int i = 1; i < lastElement; i++)
             {
                 if ((massive[i] > massive[i + 1]) && (massive[i] > massive[i - 1]))
@@ -44,6 +38,11 @@ namespace _3_3_localMax
                     Console.Write(massive[i] + " ");
                     i++;
                 }
+            }
+
+            if (massive[lastElement] > massive[lastElement - 1])
+            {
+                Console.Write(massive[lastElement] + " ");
             }
         }
     }
