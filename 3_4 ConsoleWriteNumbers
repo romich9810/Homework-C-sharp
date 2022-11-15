@@ -1,0 +1,69 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace _3_4_ConsoleWriteNumber
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            const string sumCommand = "sum";
+            const string exitCommand = "exit";
+
+            int firstSize = 1;
+            string[] numbers = new string[firstSize];
+            string commandFromUser;
+            float summOfNumbers = 0;
+
+            bool isNeedComplete = true;
+
+            while(isNeedComplete)
+            {
+                Console.WriteLine("Введённые числа:");
+                for (int i = firstSize; i < numbers.Length; i++)
+                {
+                    Console.Write(numbers[i] + " ");
+                }
+
+                Console.SetCursorPosition(0,8);
+                Console.Write($"{sumCommand} - сумма введённых чисел, {exitCommand} - выход из программы.\nВведите число или команду: ");
+                commandFromUser = Console.ReadLine();
+
+                switch (commandFromUser)
+                {
+                    case sumCommand:
+                        foreach (string number in numbers)
+                        {
+                            summOfNumbers += Convert.ToSingle(number);
+                        }
+
+                        Console.WriteLine($"Сумма всех чисел, введённых пользователем, равна {summOfNumbers}");
+                        Console.ReadKey();
+                        summOfNumbers = 0;
+                        break;
+
+                    case exitCommand:
+                        isNeedComplete = false;
+                        Console.WriteLine("Завершение программы.");
+                        break;
+                    default:
+                        string[] tempNumbers = new string[numbers.Length + 1];
+
+                        for (int i = 0; i < numbers.Length; i++)
+                        {
+                            tempNumbers[i] = numbers[i];
+                        }
+
+                        tempNumbers[tempNumbers.Length - 1] = commandFromUser;
+                        numbers = tempNumbers;
+                        break;
+                }
+
+                Console.Clear();
+            }
+        }
+    }
+}
