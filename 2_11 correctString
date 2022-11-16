@@ -16,7 +16,7 @@ namespace _2_11_StringOfSymbols
             int sumOfDeeping = 0;
             int maxSumOfDeeping = 0;
 
-            Console.WriteLine("Введите текст из '(' и ')':");
+            Console.WriteLine($"Введите текст из '{openBrace}' и '{closeBrace}':");
             textOfBraces = Console.ReadLine();
 
             for (int i = 0; i < textOfBraces.Length; i++)
