@@ -1,0 +1,55 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace _2_11_StringOfSymbols
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            char openBrace = '(';
+            char closeBrace = ')';
+            string textOfBraces;
+            int sumOfDeeping = 0;
+            int maxSumOfDeeping = 0;
+
+            Console.WriteLine("Введите текст из '(' и ')':");
+            textOfBraces = Console.ReadLine();
+
+            for (int i = 0; i < textOfBraces.Length; i++)
+            {
+                if ((textOfBraces[i] == openBrace))
+                {
+                    sumOfDeeping++;
+                }
+                else if (textOfBraces[i] == closeBrace)
+                {
+                    sumOfDeeping--;
+                }
+
+                if (sumOfDeeping < 0)
+                {
+                    break;
+                }
+
+                if (sumOfDeeping > maxSumOfDeeping)
+                {
+                    maxSumOfDeeping = sumOfDeeping;
+                }
+            }
+
+            if (sumOfDeeping == 0)
+            {
+                Console.WriteLine("Строка корректна");
+                Console.WriteLine($"Максимальная вложенность = {maxSumOfDeeping}");
+            }
+            else if (sumOfDeeping != 0)
+            {
+                Console.WriteLine("Строка неорректна");
+            }
+        }
+    }
+}
