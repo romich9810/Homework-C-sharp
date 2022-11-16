@@ -13,18 +13,15 @@ namespace _3_4_ConsoleWriteNumber
             const string sumCommand = "sum";
             const string exitCommand = "exit";
 
-            int firstSize = 1;
-            float[] numbers = new float[firstSize];
+            float[] numbers = new float[0];
             string commandFromUser;
-            float summOfNumbers = 0;
-
             bool isNeedComplete = true;
 
             while(isNeedComplete)
             {
                 Console.WriteLine("Введённые числа:");
 
-                for (int i = firstSize; i < numbers.Length; i++)
+                for (int i = 0; i < numbers.Length; i++)
                 {
                     Console.Write(numbers[i] + " ");
                 }
@@ -36,6 +33,7 @@ namespace _3_4_ConsoleWriteNumber
                 switch (commandFromUser)
                 {
                     case sumCommand:
+                        float summOfNumbers = 0;
 
                         foreach (float number in numbers)
                         {
@@ -44,7 +42,6 @@ namespace _3_4_ConsoleWriteNumber
 
                         Console.WriteLine($"Сумма всех чисел, введённых пользователем, равна {summOfNumbers}");
                         Console.ReadKey();
-                        summOfNumbers = 0;
                         break;
 
                     case exitCommand:
