@@ -1,0 +1,51 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace _3_5_mostOftenNumber
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            Random random = new Random();
+            int maxValue = 10;
+            int minValue = 1;
+            int size = 30;
+            int[] numbers = new int[size];
+            int maxVolumeOfRepeat = 0;
+            int mostOftenNumber = 0;
+
+            Console.WriteLine($"Массив из {size} целых чисел: ");
+
+            for (int i = 0; i < numbers.Length; i++)
+            {
+                numbers[i] = random.Next(minValue, maxValue + 1);
+            }
+
+            for (int i = 0; i < numbers.Length; i++)
+            {
+                Console.Write(numbers[i] + " ");
+                int volumeOfRepeat = 0;
+
+                for (int j = 0; j < numbers.Length; j++)
+                {
+                    if (numbers[i] == numbers[j])
+                    {
+                        volumeOfRepeat++;
+                    }
+                }
+
+                if (maxVolumeOfRepeat < volumeOfRepeat)
+                {
+                    maxVolumeOfRepeat = volumeOfRepeat;
+                    mostOftenNumber = numbers[i];
+                }
+            }
+
+            Console.WriteLine($"\nЧисло {mostOftenNumber} повторяется {maxVolumeOfRepeat} раз");
+        }
+    }
+}
