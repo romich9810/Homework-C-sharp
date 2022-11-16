@@ -17,31 +17,36 @@ namespace _3_5_mostOftenNumber
             int[] numbers = new int[size];
             int maxVolumeOfRepeat = 0;
             int mostOftenNumber = 0;
+            int perhapsMostOftenNumber = 0;
 
             Console.WriteLine($"Массив из {size} целых чисел: ");
 
             for (int i = 0; i < numbers.Length; i++)
             {
                 numbers[i] = random.Next(minValue, maxValue + 1);
+                Console.Write(numbers[i] + " ");
             }
 
-            for (int i = 0; i < numbers.Length; i++)
+            for (int i = 0; i < numbers.Length - 1; i++)
             {
-                Console.Write(numbers[i] + " ");
                 int volumeOfRepeat = 0;
-
-                for (int j = 0; j < numbers.Length; j++)
+                
+                if (numbers[i] == numbers[i + 1])
                 {
-                    if (numbers[i] == numbers[j])
+                    perhapsMostOftenNumber = numbers[i];
+                    volumeOfRepeat++; // костыль?
+
+                    while ((numbers[i] == numbers[i + 1]) && (numbers[i] != numbers[numbers.Length - 1]))
                     {
                         volumeOfRepeat++;
+                        i++;
                     }
                 }
 
                 if (maxVolumeOfRepeat < volumeOfRepeat)
                 {
                     maxVolumeOfRepeat = volumeOfRepeat;
-                    mostOftenNumber = numbers[i];
+                    mostOftenNumber = perhapsMostOftenNumber;
                 }
             }
 
