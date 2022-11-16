@@ -14,7 +14,7 @@ namespace _3_4_ConsoleWriteNumber
             const string exitCommand = "exit";
 
             int firstSize = 1;
-            string[] numbers = new string[firstSize];
+            float[] numbers = new float[firstSize];
             string commandFromUser;
             float summOfNumbers = 0;
 
@@ -23,6 +23,7 @@ namespace _3_4_ConsoleWriteNumber
             while(isNeedComplete)
             {
                 Console.WriteLine("Введённые числа:");
+
                 for (int i = firstSize; i < numbers.Length; i++)
                 {
                     Console.Write(numbers[i] + " ");
@@ -35,9 +36,10 @@ namespace _3_4_ConsoleWriteNumber
                 switch (commandFromUser)
                 {
                     case sumCommand:
-                        foreach (string number in numbers)
+
+                        foreach (float number in numbers)
                         {
-                            summOfNumbers += Convert.ToSingle(number);
+                            summOfNumbers += number;
                         }
 
                         Console.WriteLine($"Сумма всех чисел, введённых пользователем, равна {summOfNumbers}");
@@ -47,17 +49,16 @@ namespace _3_4_ConsoleWriteNumber
 
                     case exitCommand:
                         isNeedComplete = false;
-                        Console.WriteLine("Завершение программы.");
                         break;
                     default:
-                        string[] tempNumbers = new string[numbers.Length + 1];
+                        float[] tempNumbers = new float[numbers.Length + 1];
 
                         for (int i = 0; i < numbers.Length; i++)
                         {
                             tempNumbers[i] = numbers[i];
                         }
 
-                        tempNumbers[tempNumbers.Length - 1] = commandFromUser;
+                        tempNumbers[tempNumbers.Length - 1] = Convert.ToSingle(commandFromUser);
                         numbers = tempNumbers;
                         break;
                 }
