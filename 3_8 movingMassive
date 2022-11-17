@@ -1,0 +1,55 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace _3_8_moveToMassive
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            Random random = new Random();
+            int minValue = -99;
+            int maxValue = 100;
+            int size = 30;
+            int[] numbers = new int[size];
+            int valueOfPositionForMoving;
+            int countMoving = 0;
+            int memberForMoving;
+            int lastMemberOfMassive = numbers.Length - 1;
+
+            Console.WriteLine("Имеющийся массив: ");
+
+            for (int i = 0; i < numbers.Length; i++)
+            {
+                numbers[i] = random.Next(minValue, maxValue);
+                Console.Write(numbers[i] + " ");
+            }
+
+            Console.Write("\nНа какое количество позиций сдвинуть массив влево?\nВведите количество: ");
+            valueOfPositionForMoving = Convert.ToInt32(Console.ReadLine());
+
+            while(countMoving != valueOfPositionForMoving)
+            {
+                memberForMoving = numbers[0];
+
+                for (int i = 0; i < lastMemberOfMassive; i++)
+                {
+                    numbers[i] = numbers[i + 1];
+                }
+
+                numbers[lastMemberOfMassive] = memberForMoving;
+                countMoving++;
+            }
+
+            Console.WriteLine($"Массив по итогу сдвига на {valueOfPositionForMoving}: ");
+
+            for (int i = 0; i < numbers.Length; i++)
+            {
+                Console.Write(numbers[i] + " ");
+            }
+        }
+    }
+}
