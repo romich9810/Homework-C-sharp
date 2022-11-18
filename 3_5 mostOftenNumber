@@ -11,7 +11,7 @@ namespace _3_5_mostOftenNumber
         static void Main(string[] args)
         {
             Random random = new Random();
-            int maxValue = 10;
+            int maxValue = 4;
             int minValue = 1;
             int size = 30;
             int[] numbers = new int[size];
@@ -29,23 +29,17 @@ namespace _3_5_mostOftenNumber
 
             for (int i = 0; i < numbers.Length - 1; i++)
             {
-                int volumeOfRepeat = 0;
+                int volumeOfMeetingNumber = 1;
                 
                 if (numbers[i] == numbers[i + 1])
                 {
                     perhapsMostOftenNumber = numbers[i];
-                    volumeOfRepeat++; // костыль?
-
-                    while ((numbers[i] == numbers[i + 1]) && (numbers[i] != numbers[numbers.Length - 1]))
-                    {
-                        volumeOfRepeat++;
-                        i++;
-                    }
+                    volumeOfMeetingNumber++;
                 }
 
-                if (maxVolumeOfRepeat < volumeOfRepeat)
+                if (maxVolumeOfRepeat < volumeOfMeetingNumber)
                 {
-                    maxVolumeOfRepeat = volumeOfRepeat;
+                    maxVolumeOfRepeat = volumeOfMeetingNumber;
                     mostOftenNumber = perhapsMostOftenNumber;
                 }
             }
