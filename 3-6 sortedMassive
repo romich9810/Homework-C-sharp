@@ -14,10 +14,9 @@ namespace _3_6_sortedMassive
             int maxValue = 100;
             int minValue = -100;
             int size = 10;
-            int[] numbers = new int[size];
-            int begin = 0;
-            int end = numbers.Length - 1;
-            int rezolutionForFinish = 1;
+            int[] numbers = new int[size];        
+            int index;
+            int currentNumber;
 
             Console.WriteLine("Массив до: ");
 
@@ -29,40 +28,25 @@ namespace _3_6_sortedMassive
 
             Console.WriteLine();
 
-            while (end - begin != rezolutionForFinish)
+            for (int i = 0; i < numbers.Length; i++)
             {
-                for (int i = 0; i < end; i++)
+                index = i;
+                currentNumber = numbers[i];
+                while(index > 0 && currentNumber < numbers[index - 1])
                 {
-                    if (numbers[i] > numbers[i + 1])
-                    {
-                        int tempNumber;
-                        tempNumber = numbers[i];
-                        numbers[i] = numbers[i + 1];
-                        numbers[i + 1] = tempNumber;
-                    }
+                    numbers[index] = numbers[index - 1];
+                    index--;
                 }
 
-                end--;
+                numbers[index] = currentNumber;
 
-                for (int i = end; i > begin; i--)
-                {
-                    if (numbers[i] < numbers[i - 1])
-                    {
-                        int tempNumber;
-                        tempNumber = numbers[i];
-                        numbers[i] = numbers[i - 1];
-                        numbers[i - 1] = tempNumber;
-                    }
-                }
-
-                begin++;
             }
 
             Console.WriteLine("Массив после: ");
 
-            for (int i = 0; i < numbers.Length; i++)
+            foreach (int number in numbers)
             {
-                Console.Write(numbers[i] + " ");
+                Console.Write(number + " ");
             }
         }
     }
