@@ -1,0 +1,266 @@
+using System;
+using System.Collections.Generic;
+using System.Diagnostics.Eventing.Reader;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace _4_1_dossier
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            const string AddDossier = "добавить досье";
+            const string ShowAllDossiers = "вывести все досье";
+            const string DeleteDossier = "удалить досье";
+            const string SearchingBySurname = "поиск по фамилии";
+            const string Exit = "выход";
+            const string NumberAddDossier = "1";
+            const string NumberShowAllDossiers = "2";
+            const string NumberDeleteDossier = "3";
+            const string NumberSearchingBySurname = "4";
+            const string NumberExit = "5";
+
+            bool isWorking = true;
+
+            string[] nameSurname = new string[1];
+            string[] post = new string[1];
+            string commandFromUser;
+
+            Console.WriteLine("***Добро пожаловать в редактор досье!***\n\nВыберите команду: ");
+
+            while (isWorking)
+            {
+                Console.Write($"{NumberAddDossier} - {AddDossier}\n{NumberShowAllDossiers} - {ShowAllDossiers}\n" +
+                    $"{NumberDeleteDossier} - {DeleteDossier}\n{NumberSearchingBySurname} - {SearchingBySurname}\n{NumberExit} - {Exit}\n");
+                commandFromUser = Console.ReadLine();
+                switch (commandFromUser)
+                {
+                    case NumberAddDossier:
+                        Console.Clear();
+                        Console.WriteLine("***ФИО cотрудников***\n");
+
+                        AddingDossier(ref nameSurname,ref post);
+
+                        Console.Clear();
+                        Console.WriteLine("Данные успешно внесены.");
+                        break;
+                    case NumberShowAllDossiers:
+                        Console.WriteLine("Все имеющиеся досье:\n");
+
+                        ShowingDossiers(ref nameSurname, ref post);
+
+                        Console.WriteLine("Для возвращения нажмите любую клавишу.");
+                        Console.ReadKey();
+                        Console.Clear();
+                        break;
+                    case NumberDeleteDossier:
+
+                        DeletingDossier(ref nameSurname, ref post);
+
+                        Console.Clear();
+                        break;
+                    case NumberSearchingBySurname:
+
+                        FindingBySurname(ref nameSurname, ref post);
+
+                        Console.ReadKey();
+                        Console.Clear();
+                        break;
+                    case NumberExit:
+                        isWorking = false;
+                        Console.Write("Завершение работы программы.");
+                        break;
+                    default:
+                        Console.WriteLine("Неверная команда. Попробуйте ещё раз.");
+                        break;
+                }
+            }
+        }
+
+        static void AddingDossier (ref string[] massiveNames, ref string[] massivePosts)
+        {
+
+            int countAdding;           
+
+            Console.Write("Введите количество досъе для добавления: ");
+            countAdding = Convert.ToInt32(Console.ReadLine());
+
+            for (int i = 0; i < countAdding; i++)
+            {
+                if (i == 0)
+                {
+                    Console.WriteLine("Введите ФИО:");
+                    massiveNames[i] = Console.ReadLine();
+                    Console.WriteLine("Введите должность:");
+                    massivePosts[i] = Console.ReadLine();
+                }
+
+                else
+                {
+                    string[] temporaryMassiveNames = new string[massiveNames.Length + 1];
+                    string[] temporaryMassivePosts = new string[massivePosts.Length + 1];
+
+                    for (int j = 0; j < massiveNames.Length; j++)
+                    {
+                        temporaryMassiveNames[j] = massiveNames[j];
+                        temporaryMassivePosts[j] = massivePosts[j];
+                    }
+
+                    Console.WriteLine("Введите ФИО:");
+                    temporaryMassiveNames[temporaryMassiveNames.Length - 1] = Console.ReadLine();
+                    massiveNames = temporaryMassiveNames;
+                    Console.WriteLine("Введите должность:");
+                    temporaryMassivePosts[temporaryMassivePosts.Length - 1] = Console.ReadLine();
+                    massivePosts = temporaryMassivePosts;
+                }
+            }       
+        }
+
+        static void ShowingDossiers (ref string[] massiveNames, ref string[] massivePosts)
+        {
+            int numberOfWorker = 0;
+
+            for (int i = 0; i < massiveNames.Length; i++)
+            {
+                numberOfWorker++;
+                Console.WriteLine($"{numberOfWorker}) {massiveNames[i]} - {massivePosts[i]}");
+            }
+        }
+
+        static void DeletingDossier (ref string[] massiveNames, ref string[] massivePosts)
+        {
+            string nameForDeleting;
+            string postForDeleting;
+            int indexForDeleting;
+
+            ShowingDossiers (ref massiveNames, ref massivePosts);
+
+            Console.WriteLine("Введите ФИО для удаления досье: ");
+            nameForDeleting = Console.ReadLine();
+
+            if (massiveNames[0] == nameForDeleting)
+            {
+                string[] temporaryMassiveNames = new string[massiveNames.Length - 1];
+                string[] temporaryMassivePosts = new string[massivePosts.Length - 1];
+
+                for (int i = 0; i < temporaryMassiveNames.Length; i++)
+                {
+                    temporaryMassiveNames[i] = massiveNames[i + 1];
+                    temporaryMassivePosts[i] = massivePosts[i + 1];
+                }
+
+                massiveNames = temporaryMassiveNames;
+                massivePosts = temporaryMassivePosts;
+                Console.WriteLine("\nПосле удаления:");
+
+                ShowingDossiers(ref massiveNames, ref massivePosts);
+            }
+            else if (massiveNames[massiveNames.Length - 1] == nameForDeleting)
+            {
+                string[] temporaryMassiveNames = new string[massiveNames.Length - 1];
+                string[] temporaryMassivePosts = new string[massiveNames.Length - 1];
+
+                for (int i = 0; i < temporaryMassiveNames.Length; i++)
+                {
+                    temporaryMassiveNames[i] = massiveNames[i];
+                    temporaryMassivePosts[i] = massivePosts[i];
+                }
+
+                massiveNames = temporaryMassiveNames;
+                massivePosts = temporaryMassivePosts;
+                Console.WriteLine("\nПосле удаления:");
+
+                ShowingDossiers(ref massiveNames, ref massivePosts);
+            }
+
+            else
+            {
+                string temporaryName;
+                string temporaryPost;
+                bool isThereDeleteName = true;
+
+                for (int i = 0; i < massiveNames.Length - 1; i++) //зависит от длины массива ФИО
+                {
+                    if (massiveNames[i] == nameForDeleting)
+                    {
+                        temporaryName = massiveNames[i + 1];
+                        temporaryPost = massivePosts[i + 1];
+                        massiveNames[i + 1] = massiveNames[i];
+                        massivePosts[i + 1] = massivePosts[i];
+                        massiveNames[i] = temporaryName;
+                        massivePosts[i] = temporaryPost;
+                    }
+                    
+                    else
+                    {
+                        Console.WriteLine("Такого ФИО не найдено!");
+                        isThereDeleteName = false;
+                        break;                       
+                    }
+                }
+
+                if (isThereDeleteName)
+                {
+                    string[] temporaryMassiveNames = new string[massiveNames.Length - 1];
+                    string[] temporaryMassivePosts = new string[massiveNames.Length - 1];
+
+                    for (int i = 0; i < temporaryMassiveNames.Length; i++)
+                    {
+                        temporaryMassiveNames[i] = massiveNames[i];
+                        temporaryMassivePosts[i] = massivePosts[i];
+                    }
+
+                    massiveNames = temporaryMassiveNames;
+                    massivePosts = temporaryMassivePosts;
+                    Console.WriteLine("\nПосле удаления:");
+
+                    ShowingDossiers(ref massiveNames, ref massivePosts);
+                }
+            }
+        }
+
+        static void FindingBySurname (ref string[] massiveNames, ref string[] massivePosts)
+        {
+            string surname;
+            bool isThereSurnameInMassive = true;//Костыль с плохой реализацией?
+
+            Console.WriteLine("Введите фамилию для поиска");
+            surname = Console.ReadLine();
+
+            for (int i = 0; i < massiveNames.Length; i++) 
+            {
+                bool isThereSurnameInString = true;
+                int j = 0;               
+                
+                while (massiveNames[i][j] != ' ') //massiveNames[i].Contains(surname) - тоже можно
+                {
+                    if (massiveNames[i][j] != surname[j])
+                    {
+                        isThereSurnameInString = false;
+                        isThereSurnameInMassive = false;
+                        break;
+                    }
+
+                    j++;
+                }
+
+                if (isThereSurnameInString)
+                {
+                    isThereSurnameInMassive = true;
+                    Console.WriteLine("Такое досье есть!Вот оно:");
+                    Console.WriteLine($"{massiveNames[i]} - {massivePosts[i]}");
+                    Console.WriteLine("Нажмите любую клавишу, чтобы продолжить.");
+                    break;
+                }
+            }
+            
+            if (isThereSurnameInMassive == false)
+            {
+                Console.WriteLine("Такой фамилии не найдено! Нажмите любую клавишу, чтобы продолжить.");
+                Console.ReadKey();
+            }
+        }
+    }
+}
