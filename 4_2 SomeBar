@@ -1,0 +1,56 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace _4_2_SomeBar
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            int positionX = 0;
+            int positionY = 0;
+            int maxValueBar = 10;
+            int percentOfBarByUser;
+
+            Console.Write("Введите процент заполнения бара:");
+            percentOfBarByUser = Convert.ToInt32(Console.ReadLine());
+            Console.Clear();
+            Console.SetCursorPosition(0, 5);
+
+            DrawBar(maxValueBar, percentOfBarByUser, positionX, positionY, ConsoleColor.Red);
+        }
+
+        static void DrawBar (int maxValueBar, int percent,  int positionX,  int positionY, ConsoleColor color, char symbol = ' ')
+        {
+            int valueBar;
+
+            ConsoleColor defaultColor = Console.BackgroundColor;
+            string bar = "";
+
+            valueBar = Convert.ToInt32(Convert.ToSingle(maxValueBar) / 100 * Convert.ToSingle(percent));
+
+            for (int i = 0; i < valueBar; i++)
+            {
+                bar += symbol;
+            }
+
+            Console.SetCursorPosition(positionX, positionY);
+            Console.Write('{');
+            Console.BackgroundColor = color;
+            Console.Write(bar);
+            Console.BackgroundColor = defaultColor;
+
+            bar = "";
+
+            for (int i = valueBar; i < maxValueBar; i++)
+            {
+                bar += symbol;
+            }
+
+            Console.Write(bar + '}' + $" - {percent} % заполнено\n");;
+        }
+    }
+}
