@@ -27,10 +27,15 @@ namespace _3_5_mostOftenNumber
                 Console.Write(numbers[i] + " ");
             }
 
+            int volumeOfMeetingNumber = 0;
+
             for (int i = 0; i < numbers.Length - 1; i++)
             {
-                int volumeOfMeetingNumber = 1;
-                
+                if (numbers[i] != numbers[i + 1])
+                {
+                    volumeOfMeetingNumber = 1;
+                }
+
                 if (numbers[i] == numbers[i + 1])
                 {
                     perhapsMostOftenNumber = numbers[i];
