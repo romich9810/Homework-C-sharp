@@ -1,0 +1,45 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace _4_3_UserNumberTryParse
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            string numberOfUser;
+            int number;
+
+            number = ConvertNumber();
+        }
+
+        static int ConvertNumber()
+        {
+            bool isSuccesfully = false;
+            string numberOfUser;
+            int number = 0;
+
+            while (!isSuccesfully)
+            {
+                Console.WriteLine("Введите число: ");
+                numberOfUser = Console.ReadLine();
+
+                if (int.TryParse(numberOfUser, out number))
+                {
+                    Console.WriteLine($"Конвертация числа \"{number}\" прошла успешно.");
+                    isSuccesfully = true;
+                }
+
+                else
+                {
+                    Console.WriteLine("Неверный формат числа. Попробуйте ещё раз.");
+                }
+            }
+
+            return number;
+        }
+    }
+}
