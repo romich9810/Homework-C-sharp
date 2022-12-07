@@ -20,17 +20,34 @@ namespace _4_2_SomeBar
             Console.Clear();
             Console.SetCursorPosition(0, 5);
 
-            DrawBar(maxValueBar, percentOfBarByUser, positionX, positionY, ConsoleColor.Red);
+            DrawBar(maxValueBar, ref percentOfBarByUser, positionX, positionY, ConsoleColor.Red);
         }
 
-        static void DrawBar (int maxValueBar, int percent,  int positionX,  int positionY, ConsoleColor color, char symbol = ' ')
+        static void DrawBar (int maxValueBar, ref int percent,  int positionX,  int positionY, ConsoleColor color, char symbol = ' ')
         {
             int valueBar;
+            bool isUncorrectPercent = true;
 
             ConsoleColor defaultColor = Console.BackgroundColor;
             string bar = "";
 
-            valueBar = Convert.ToInt32(Convert.ToSingle(maxValueBar) / 100 * Convert.ToSingle(percent));
+            valueBar = maxValueBar * percent / 100;
+            // valueBar = Convert.ToInt32(Convert.ToSingle(maxValueBar) / 100 * Convert.ToSingle(percent)); - при данной конвертации идёт наиболее плавное 
+            // заполнение бара
+
+            while (isUncorrectPercent)
+            {
+                if (valueBar < 0 || valueBar > maxValueBar)
+                {
+                    Console.WriteLine("Неверное значение процента. Попробуйте ещё раз.");
+                    Console.Write("Введите процент заполнения бара:");
+                    percent = Convert.ToInt32(Console.ReadLine());
+                }
+                else
+                {
+                    isUncorrectPercent = false;
+                }
+            }
 
             for (int i = 0; i < valueBar; i++)
             {
