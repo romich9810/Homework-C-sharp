@@ -10,12 +10,10 @@ namespace _4_3_UserNumberTryParse
     {
         static void Main(string[] args)
         {
-            int number;
-
-            number = ConvertNumber();
+            int number = TakeNumber();  
         }
 
-        static int ConvertNumber()
+        static int TakeNumber()
         {
             bool isSuccesfully = false;
             string numberOfUser;
