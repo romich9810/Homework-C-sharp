@@ -10,7 +10,6 @@ namespace _4_3_UserNumberTryParse
     {
         static void Main(string[] args)
         {
-            string numberOfUser;
             int number;
 
             number = ConvertNumber();
@@ -22,7 +21,7 @@ namespace _4_3_UserNumberTryParse
             string numberOfUser;
             int number = 0;
 
-            while (!isSuccesfully)
+            while (isSuccesfully == false)
             {
                 Console.WriteLine("Введите число: ");
                 numberOfUser = Console.ReadLine();
@@ -32,7 +31,6 @@ namespace _4_3_UserNumberTryParse
                     Console.WriteLine($"Конвертация числа \"{number}\" прошла успешно.");
                     isSuccesfully = true;
                 }
-
                 else
                 {
                     Console.WriteLine("Неверный формат числа. Попробуйте ещё раз.");
