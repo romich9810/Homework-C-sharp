@@ -1,0 +1,290 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace _4_4_UserMap
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            string[] mapFirstly = new string[]
+            {"##########################################################",
+            "##      Л                                                ##",
+            "##   ##    ###      ###  ###    ###  ###      ###   ##   ##",
+            "##   ##    ###      ########    ########      ###   ##   ##",
+            "##   ##    ###      ###  ###    ###  ###      ###   ##   ##",
+            "##                                                       ##",
+            "##                         ######                        ##",
+            "##      ###########        ######        ##########      ##",
+            "##      ###########                      ##########      ##",
+            "##                                                       ##",
+            "##                  ### ###     ###  ###                 ##",
+            "##                  #######     ########                 ##",
+            "##                  ### ###     ###  ###                 ##",
+            "##                                                       ##",
+            "##          P              #####                         ##",
+            "##                       #########                       ##",
+            "##                       #########                       ##",
+            "##                       #########              Ы        ##",
+            "###########################################################",
+            };
+
+            bool isPlaying = true;
+
+            int userX = 0;
+            int userY = 0;
+            char userSymbol = 'Ы';
+            bool areUPowerfull = false;
+
+            bool areUserAndEnemyMeeting = false;
+
+            Random randomEnemyMove = new Random();
+            int enemyX = 0;
+            int enemyY = 0;
+            char enemySymbol = 'Л';
+
+            Console.CursorVisible = false;
+
+            char[,] map = ConvertToCharMassive(mapFirstly, userSymbol, ref userX, ref userY, 
+                enemySymbol, ref enemyX, ref enemyY);
+
+            DrawMap(map);
+
+            while (isPlaying)
+            {
+                if (Console.KeyAvailable)
+                {
+                    ConsoleKeyInfo key = Console.ReadKey(true);
+                    MovePlayer(map, ref userX, ref userY, userSymbol, key, ref areUPowerfull);
+                    MoveEnemy(map, ref enemyX, ref enemyY,enemySymbol,userSymbol,ref areUserAndEnemyMeeting,areUPowerfull, randomEnemyMove);
+
+                    if (areUPowerfull)
+                    {
+                        Console.SetCursorPosition(0, 25);
+                        Console.WriteLine($"Теперь вы можете съесть {enemySymbol}!");
+                    }
+
+                    if (areUserAndEnemyMeeting)
+                    {
+                        if (areUPowerfull)
+                        {
+                            isPlaying = false;
+                            Console.SetCursorPosition(0, 26);
+                            Console.WriteLine($"\"{enemySymbol}\" повержен! Победа!");
+                        }
+                        else
+                        {
+                            isPlaying = false;
+                            Console.SetCursorPosition(0, 26);
+                            Console.WriteLine($"\"{enemySymbol}\" вас съел. Игра окончена.");
+                        }
+                    }
+                }
+
+                System.Threading.Thread.Sleep(200);
+            }
+        }
+
+        static void DrawMap(char[,] map)
+        {
+            for (int i = 0; i < map.GetLength(0); i++)
+            {
+                for (int j = 0; j < map.GetLength(1); j++)
+                {
+                    Console.Write(map[i,j]);
+                }
+
+                Console.WriteLine();
+            }
+        }
+
+        static char[,] ConvertToCharMassive (string[] massive, char symbolOfPlayer, ref int playerX, ref int playerY, char symbolOfEnemy, ref int enemyX, ref int enemyY)
+        {
+            char[,] resultMassive = new char[massive.Length, massive[0].Length];
+
+            for (int i = 0; i < resultMassive.GetLength(0); i++)
+            {
+                for (int j = 0; j < resultMassive.GetLength(1); j++)
+                {
+                    resultMassive[i, j] = massive[i][j];
+
+                    if (resultMassive[i, j] == symbolOfPlayer)
+                    {
+                        playerX = i;
+                        playerY = j;
+                    }
+                    
+                    else if (resultMassive[i, j] == symbolOfEnemy)
+                    {
+                        enemyX = i;
+                        enemyY = j;
+                    }
+                }
+            }
+
+            return resultMassive;
+        }
+
+        static void MovePlayer (char[,] massive, ref int X, ref int Y, char symbolOfUser, ConsoleKeyInfo key, ref bool areUPowerfull, char symbolOfChange = ' ')
+        {
+            switch (key.Key)
+            {
+                case ConsoleKey.UpArrow:
+                    if (massive[X - 1, Y] == '#')
+                    {
+                        break;
+                    }
+
+                    if (massive[X - 1, Y] == 'P')
+                    {
+                        areUPowerfull = true;
+                    }
+
+                    DrawSymbolAfterStep(ref massive,  ref X, ref Y);
+                    X += -1;
+                    massive[X, Y] = symbolOfUser;
+                    break;
+
+                case ConsoleKey.DownArrow:
+                    if (massive[X + 1, Y] == '#')
+                    {
+                        break;
+                    }
+
+                    if (massive[X + 1, Y] == 'P')
+                    {
+                        areUPowerfull = true;
+                    }
+
+                    DrawSymbolAfterStep(ref massive, ref X, ref Y);
+                    X += 1;
+                    massive[X, Y] = symbolOfUser;
+                    break;
+
+                case ConsoleKey.LeftArrow:
+                    if (massive[X, Y - 1] == '#')
+                    {
+                        break;
+                    }
+
+                    if (massive[X, Y - 1] == 'P')
+                    {
+                        areUPowerfull = true;
+                    }
+
+                    DrawSymbolAfterStep(ref massive,  ref X, ref Y);
+                    Y -= 1;
+                    massive[X, Y] = symbolOfUser;
+                    break;
+
+                case ConsoleKey.RightArrow:
+                    if (massive[X, Y + 1] == '#')
+                    {
+                        break;
+                    }
+
+                    if (massive[X, Y + 1] == 'P')
+                    {
+                        areUPowerfull = true;
+                    }
+
+                    DrawSymbolAfterStep(ref massive, ref X, ref Y);
+                    Y += 1;
+                    massive[X, Y] = symbolOfUser;
+                    break;
+            }
+
+            Console.SetCursorPosition(Y, X);
+            Console.Write(symbolOfUser);
+        }
+
+        static void DrawSymbolAfterStep (ref char[,] massive, ref int X, ref int Y, char symbolOfChange = ' ')
+        {
+            massive[X, Y] = symbolOfChange;
+            Console.SetCursorPosition(Y, X);
+            Console.Write(symbolOfChange);
+        }
+
+        static void MoveEnemy(char[,] massive, ref int X, ref int Y, char symbolEnemy,char symbolUser, ref bool areUserAndEnemyMeet,bool areUPowerfull, Random random)
+        {
+            int enemyMove = random.Next(1, 5);
+
+            switch (enemyMove)
+            {
+                case 1:
+                   
+                    while (massive[X - 1, Y] != '#')
+                    {
+                        if (massive[X - 1, Y] == symbolUser)
+                        {
+                            areUserAndEnemyMeet = true;
+                        }
+
+                        DrawSymbolAfterStep(ref massive, ref X, ref Y);
+                        X += -1;
+                    }
+
+                    break;
+
+                case 2:
+
+                    while (massive[X + 1, Y] != '#')
+                    {
+                        if (massive[X + 1, Y] == symbolUser)
+                        {
+                            areUserAndEnemyMeet = true;
+                        }
+
+                        DrawSymbolAfterStep(ref massive, ref X, ref Y);
+                        X += 1; 
+                    }
+
+                    break;
+
+                case 3:
+
+                    while (massive[X, Y - 1] != '#')
+                    {
+                        if (massive[X, Y - 1] == symbolUser)
+                        {
+                            areUserAndEnemyMeet = true;
+                        }
+
+                        DrawSymbolAfterStep(ref massive, ref X, ref Y);
+                        Y -= 1; 
+                    }
+
+                    break;
+
+                case 4:
+
+                    while (massive[X, Y + 1] != '#')
+                    {
+                        if (massive[X, Y + 1] == symbolUser)
+                        {
+                            areUserAndEnemyMeet = true;
+                        }
+
+                        DrawSymbolAfterStep(ref massive, ref X, ref Y);
+                        Y += 1; 
+                    }
+
+                    break;
+            }
+
+            if (areUPowerfull && areUserAndEnemyMeet)
+            {
+                Console.SetCursorPosition(Y, X);
+                Console.Write(symbolUser);
+            }
+            else
+            {
+                Console.SetCursorPosition(Y, X);
+                Console.Write(symbolEnemy);
+            }
+        }        
+    }
+}
