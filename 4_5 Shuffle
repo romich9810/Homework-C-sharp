@@ -1,0 +1,89 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace _4_5_Shuffle
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            Random random = new Random();
+            int minValueMasiveNumbers = -100;
+            int maxValueMasiveNumbers = 101;
+            int sizeMassiveNumbers = 10;
+            int[] massiveNumbers = new int[sizeMassiveNumbers];
+
+            for (int i = 0; i < massiveNumbers.Length; i++)
+            {
+                massiveNumbers[i] = random.Next(minValueMasiveNumbers, maxValueMasiveNumbers);
+
+                Console.Write(massiveNumbers[i] + " ");
+            }
+
+            Shuffle(ref massiveNumbers);
+            Console.WriteLine("\nПосле перемешивания: ");
+
+            for (int i = 0; i < massiveNumbers.Length; i++)
+            {
+                Console.Write(massiveNumbers[i] + " ");
+            }
+        }
+
+        static void Shuffle(ref int[] massiveNumbers)
+        {
+            RandomFirstPartMassive(ref massiveNumbers);
+            RandomSecondPartMassive(ref massiveNumbers);
+            RandomToBeginningMassive(ref massiveNumbers);
+        }
+
+        static void RandomFirstPartMassive (ref int[] massiveNumbers)
+        {
+            Random random = new Random();
+            int halfOfMassive = massiveNumbers.Length / 2;
+
+            for (int i = 0; i < massiveNumbers.Length / halfOfMassive; i++)
+            {
+                int indexRandomMember = random.Next(i, halfOfMassive + 1);
+                int temporaryElement = massiveNumbers[i];
+                massiveNumbers[i] = massiveNumbers[indexRandomMember];
+                massiveNumbers[indexRandomMember] = temporaryElement;
+            }
+        }
+
+        static void RandomSecondPartMassive (ref int[] massiveNumbers)
+        {
+            Random random = new Random();
+            int halfOfMassive = massiveNumbers.Length / 2;
+            int endOfMassive = massiveNumbers.Length;
+
+            for (int i = halfOfMassive; i < endOfMassive; i++)
+            {
+                int indexRandomMember = random.Next(halfOfMassive, endOfMassive);
+                int temporaryElement = massiveNumbers[i];
+                massiveNumbers[i] = massiveNumbers[indexRandomMember];
+                massiveNumbers[indexRandomMember] = temporaryElement;
+            }
+        }
+
+        static void RandomToBeginningMassive(ref int[] massiveNumbers)
+        {
+            Random random = new Random();
+            int minValueRandom = 1;
+            int maxValueRandom = massiveNumbers.Length;
+            int scoreOfMemberForMove = random.Next(minValueRandom, maxValueRandom);
+
+            for (int i = scoreOfMemberForMove; i > 0; i--)
+            {
+                for (int j = 0; j < i; j++)
+                {
+                    int temporaryElement = massiveNumbers[i];
+                    massiveNumbers[i] = massiveNumbers[i - 1];
+                    massiveNumbers[i - 1] = temporaryElement;
+                }
+            }
+        }
+    }
+}
