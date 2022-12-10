@@ -11,9 +11,9 @@ namespace _4_1_dossier
     {
         static void Main(string[] args)
         {
-            const string AddDossier = "добавить досье";
+            const string AddToDossier = "добавить досье";
             const string ShowAllDossiers = "вывести все досье";
-            const string DeleteDossier = "удалить досье";
+            const string DeleteToDossier = "удалить досье";
             const string SearchingBySurname = "поиск по фамилии";
             const string Exit = "выход";
             const string NumberAddDossier = "1";
@@ -24,42 +24,43 @@ namespace _4_1_dossier
 
             bool isWorking = true;
 
-            string[] nameSurname = new string[0];
-            string[] post = new string[0];
+            string[] nameSurnames = new string[0];
+            string[] posts = new string[0];
             string commandFromUser;
 
             while (isWorking)
             {
                 Console.WriteLine("***Добро пожаловать в редактор досье!***\n\nВыберите команду: ");
-                Console.Write($"{NumberAddDossier} - {AddDossier}\n{NumberShowAllDossiers} - {ShowAllDossiers}\n" +
-                    $"{NumberDeleteDossier} - {DeleteDossier}\n{NumberSearchingBySurname} - {SearchingBySurname}\n{NumberExit} - {Exit}\n");
+                Console.Write($"{NumberAddDossier} - {AddToDossier}\n{NumberShowAllDossiers} - {ShowAllDossiers}\n" +
+                    $"{NumberDeleteDossier} - {DeleteToDossier}\n{NumberSearchingBySurname} - {SearchingBySurname}\n{NumberExit} - {Exit}\n");
                 commandFromUser = Console.ReadLine();
+
                 switch (commandFromUser)
                 {
                     case NumberAddDossier:
 
-                        ToAddDossier(ref nameSurname,ref post);
-                        
+                        AddDossier(ref nameSurnames, ref posts);
                         break;
+
                     case NumberShowAllDossiers:
 
-                        ToShowDossiers(ref nameSurname, ref post);
-
+                        ShowDossiers(nameSurnames, posts);
                         break;
                     case NumberDeleteDossier:
 
-                        ToDeleteDossier(ref nameSurname, ref post);
-
+                        DeleteDossier(ref nameSurnames, ref posts);
                         break;
+
                     case NumberSearchingBySurname:
 
-                        ToFindBySurname(ref nameSurname, ref post);
-
+                        FindBySurname(nameSurnames, posts);
                         break;
+
                     case NumberExit:
                         isWorking = false;
                         Console.Write("Завершение работы программы.");
                         break;
+
                     default:
                         Console.WriteLine("Неверная команда. Попробуйте ещё раз.");
                         break;
@@ -67,50 +68,77 @@ namespace _4_1_dossier
             }
         }
 
-        static void ToAddDossier (ref string[] massiveNames, ref string[] massivePosts)
+        static void AddDossier(ref string[] massiveNames, ref string[] massivePosts)
         {
+            const string numberAddAgain = "1";
+            const string commandAddAgain = "добавить ещё";
+            const string commandBack = "любая клавиша - к главному меню";
 
-            int countAdding;
+            string command;
+            bool isNeedContune = true;
 
-            Console.Clear();
-            Console.WriteLine("***ФИО cотрудников***\n");
-
-            Console.Write("Введите количество досъе для добавления: ");
-            countAdding = Convert.ToInt32(Console.ReadLine());
-
-            for (int i = 0; i < countAdding; i++)
+            while (isNeedContune == true)
             {
-                string[] temporaryMassiveNames = new string[massiveNames.Length + 1];
-                string[] temporaryMassivePosts = new string[massivePosts.Length + 1];
+                Console.Clear();
+                Console.WriteLine("***ФИО cотрудников***\n");
 
-                for (int j = 0; j < massiveNames.Length; j++)
+                Console.Write("ФИО сотрудника. ");
+                ExpandMassive(ref massiveNames);
+
+                Console.Write("Должность сотрудника. ");
+                ExpandMassive(ref massivePosts);
+
+                Console.Clear();
+                Console.WriteLine($"Данные успешно внесены.\n{commandBack}\n{numberAddAgain} - {commandAddAgain}");
+                command = Console.ReadLine();
+
+                switch (command)
                 {
-                    temporaryMassiveNames[j] = massiveNames[j];
-                    temporaryMassivePosts[j] = massivePosts[j];
+                    case numberAddAgain:
+                        break;
+
+                    default:
+                        Console.Clear();
+                        isNeedContune = false;
+                        break;
                 }
-
-                Console.WriteLine("Введите ФИО:");
-                temporaryMassiveNames[temporaryMassiveNames.Length - 1] = Console.ReadLine();
-                massiveNames = temporaryMassiveNames;
-                Console.WriteLine("Введите должность:");
-                temporaryMassivePosts[temporaryMassivePosts.Length - 1] = Console.ReadLine();
-                massivePosts = temporaryMassivePosts;
             }
-
-            Console.Clear();
-            Console.WriteLine("Данные успешно внесены.");
         }
 
-        static void ToShowDossiers (ref string[] massiveNames, ref string[] massivePosts)
+        static void ExpandMassive(ref string[] massive)
         {
-            int numberOfWorker = 0;
+            string[] temporaryMassive = new string[massive.Length + 1];
 
+            for (int j = 0; j < massive.Length; j++)
+            {
+                temporaryMassive[j] = massive[j];
+            }
+
+            Console.Write("Введите данные:");
+            temporaryMassive[temporaryMassive.Length - 1] = Console.ReadLine();
+            massive = temporaryMassive;
+        }
+
+        static void ExpandMassive(ref string[] massive, string addingElement)
+        {
+            string[] temporaryMassive = new string[massive.Length + 1];
+
+            for (int j = 0; j < massive.Length; j++)
+            {
+                temporaryMassive[j] = massive[j];
+            }
+
+            temporaryMassive[temporaryMassive.Length - 1] = addingElement;
+            massive = temporaryMassive;
+        }
+
+        static void ShowDossiers(string[] massiveNames, string[] massivePosts)
+        {
             Console.WriteLine("Все имеющиеся досье:\n");
 
             for (int i = 0; i < massiveNames.Length; i++)
             {
-                numberOfWorker++;
-                Console.WriteLine($"{numberOfWorker}) {massiveNames[i]} - {massivePosts[i]}");
+                Console.WriteLine($"{i + 1}) {massiveNames[i]} - {massivePosts[i]}");
             }
 
             Console.WriteLine("Для возвращения нажмите любую клавишу.");
@@ -118,140 +146,103 @@ namespace _4_1_dossier
             Console.Clear();
         }
 
-        static void ToDeleteDossier(ref string[] massiveNames, ref string[] massivePosts)
+        static void DeleteDossier(ref string[] massiveNames, ref string[] massivePosts)
         {
-            string nameForDeleting;
-            string postForDeleting;
             int indexFromUserForDeleting;
             int indexForDeleting;
-            string temporaryName;
-            string temporaryPost;
 
-            ToShowDossiers(ref massiveNames, ref massivePosts);
+            ShowDossiers(massiveNames, massivePosts);
 
             Console.WriteLine("Введите индекс для удаления досье: ");
             indexFromUserForDeleting = Convert.ToInt32(Console.ReadLine());
 
             indexForDeleting = indexFromUserForDeleting - 1;
 
-            for (int i = indexForDeleting; i < massiveNames.Length - 1; i++) //зависит от длины массива ФИО
-            {
-                temporaryName = massiveNames[i + 1];
-                temporaryPost = massivePosts[i + 1];
-                massiveNames[i + 1] = massiveNames[i];
-                massivePosts[i + 1] = massivePosts[i];
-                massiveNames[i] = temporaryName;
-                massivePosts[i] = temporaryPost;
-            }
+            MoveElemetToEndMassive(ref massiveNames, indexForDeleting);
+            MoveElemetToEndMassive(ref massivePosts, indexForDeleting);
 
-            string[] temporaryMassiveNames = new string[massiveNames.Length - 1];
-            string[] temporaryMassivePosts = new string[massiveNames.Length - 1];
+            DeleteLastElementFromMassive(ref massiveNames);
+            DeleteLastElementFromMassive(ref massivePosts);
 
-            for (int i = 0; i < temporaryMassiveNames.Length; i++)
-            {
-                temporaryMassiveNames[i] = massiveNames[i];
-                temporaryMassivePosts[i] = massivePosts[i];
-            }
-
-            massiveNames = temporaryMassiveNames;
-            massivePosts = temporaryMassivePosts;
             Console.WriteLine("\nПосле удаления:");
-
-            ToShowDossiers(ref massiveNames, ref massivePosts);
-
+            ShowDossiers(massiveNames, massivePosts);
             Console.Clear();
         }
 
-        static void ToFindBySurname (ref string[] massiveNames, ref string[] massivePosts)
+        static void MoveElemetToEndMassive(ref string[] massive, int indexForMoving)
         {
+            string temporaryMember;
+
+            for (int i = indexForMoving; i < massive.Length - 1; i++)
+            {
+                temporaryMember = massive[i + 1];
+                massive[i + 1] = massive[i];
+                massive[i] = temporaryMember;
+            }
+        }
+
+        static void DeleteLastElementFromMassive(ref string[] massive)
+        {
+            string[] temporaryMassive = new string[massive.Length - 1];
+
+            for (int i = 0; i < temporaryMassive.Length; i++)
+            {
+                temporaryMassive[i] = massive[i];
+            }
+
+            massive = temporaryMassive;
+        }
+
+        static void FindBySurname(string[] massiveNames, string[] massivePosts)
+        {
+            string[] findingNames = new string[0];
+            string[] findingPosts = new string[0];
             string surname;
-            int scoreOfАbsenceSurname = 0;
-            bool isThereSurnameInMassive = true;//Костыль с плохой реализацией?
+            bool isThereSurnameInMassive;
+
+            isThereSurnameInMassive = (findingNames.Length != 0 && findingPosts.Length != 0) && (findingNames.Length == findingPosts.Length);
 
             Console.WriteLine("Введите фамилию для поиска");
             surname = Console.ReadLine();
 
-            for (int i = 0; i < massiveNames.Length; i++) 
+            for (int i = 0; i < massiveNames.Length; i++)
             {
-                int j = 0;               
-                
-                while (massiveNames[i][j] != ' ')              
-                {
-                    if (massiveNames[i][j] != surname[j])
-                    {
-                        scoreOfАbsenceSurname++;
-                        break;
-                    }
-                    
-                    j++;
-                }
 
-                if (scoreOfАbsenceSurname == massiveNames.Length) //не достигаетая, нужно убрать из цикла for
+                if (CompareSurnames(massiveNames[i], surname)) //неправильная реализация
                 {
-                    isThereSurnameInMassive = false;
-                }
-
-                if (isThereSurnameInMassive)
-                {
-                    isThereSurnameInMassive = true;
-                    Console.WriteLine("Такое досье есть!Вот оно:");
-                    Console.WriteLine($"{massiveNames[i]} - {massivePosts[i]}");
-                    Console.WriteLine("Нажмите любую клавишу, чтобы продолжить.");
-                    break;
+                    ExpandMassive(ref findingNames, massiveNames[i]);
+                    ExpandMassive(ref findingPosts, massivePosts[i]);
                 }
             }
-            
-            if (isThereSurnameInMassive == false)
+
+            if (isThereSurnameInMassive == true)
+            {
+                Console.WriteLine("Такое досье есть!Вот оно:");
+
+                ShowDossiers(findingNames, findingPosts);
+            }
+            else
             {
                 Console.WriteLine("Такой фамилии не найдено! Нажмите любую клавишу, чтобы продолжить.");
                 Console.ReadKey();
             }
-
-            Console.ReadKey();
-            Console.Clear();
         }
 
-        //СТАРАЯ ВЕРСИЯ ЧЕРЕЗ ДВА ФЛАГА//
-        //static void FindingBySurname(ref string[] massiveNames, ref string[] massivePosts)
-        //{
-        //    string surname;
-        //    bool isThereSurnameInMassive = true;//Костыль с плохой реализацией?
+        static bool CompareSurnames (string surnameInString, string comparingSurname, char divider = ' ')
+        {
+            for (int i = 0; i < comparingSurname.Length; i++)
+            {
+                if (surnameInString[i] == comparingSurname[i] && surnameInString[i] != divider)
+                {
+                    continue;
+                }
+                else
+                {
+                    return false;
+                }
+            }
 
-        //    Console.WriteLine("Введите фамилию для поиска");
-        //    surname = Console.ReadLine();
-
-        //    for (int i = 0; i < massiveNames.Length; i++)
-        //    {
-        //        bool isThereSurnameInString = true;
-        //        int j = 0;
-
-        //        while (massiveNames[i][j] != ' ') //massiveNames[i].Contains(surname) - тоже можно
-        //        {
-        //            if (massiveNames[i][j] != surname[j])
-        //            {
-        //                isThereSurnameInString = false;
-        //                isThereSurnameInMassive = false;
-        //                break;
-        //            }
-
-        //            j++;
-        //        }
-
-        //        if (isThereSurnameInString)
-        //        {
-        //            isThereSurnameInMassive = true;
-        //            Console.WriteLine("Такое досье есть!Вот оно:");
-        //            Console.WriteLine($"{massiveNames[i]} - {massivePosts[i]}");
-        //            Console.WriteLine("Нажмите любую клавишу, чтобы продолжить.");
-        //            break;
-        //        }
-        //    }
-
-        //    if (isThereSurnameInMassive == false)
-        //    {
-        //        Console.WriteLine("Такой фамилии не найдено! Нажмите любую клавишу, чтобы продолжить.");
-        //        Console.ReadKey();
-        //    }
-        //}
+            return true;
+        }
     }
 }
