@@ -1,0 +1,68 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace _5_1_Word
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            Dictionary<string, string> vocabulary = new Dictionary<string, string>();
+
+            string checkWord;
+
+            FillingVocabulary(ref vocabulary);
+
+            Console.Clear();
+            Console.WriteLine("Введите слово для поиска: ");
+            checkWord = Console.ReadLine();
+
+            if (vocabulary.ContainsKey(checkWord))
+            {
+                Console.WriteLine($"Вот данное значение слова \"{checkWord}\" - {vocabulary[checkWord]}");
+            }
+            else
+            {
+                Console.WriteLine("Такого слова в словаре нет, либо вы допустили ошибку при вводе.");
+            }
+        }
+
+        static void FillingVocabulary (ref Dictionary<string,string> vocabulary) 
+        { 
+            const string AddCommand = "да, нужно добавить ещё";
+            const string EnoughCommand = "Нет, этого хватит";
+            const string NumberAddCommand = "1";
+            const string NumberEnoughCommand = "2";
+
+            bool isNeedStop = false;
+            string word;
+            string meaning;
+            string commandUser;
+            while (isNeedStop != true)
+            {
+                Console.WriteLine("Введите слово:");
+                word = Console.ReadLine();
+                Console.WriteLine("Введите значение слова:");
+                meaning = Console.ReadLine();
+
+                vocabulary.Add(word, meaning);
+
+                Console.WriteLine("Добавить ещё слово в словарь?");
+                Console.WriteLine($"{NumberAddCommand} - {AddCommand}\n{NumberEnoughCommand} - {EnoughCommand}");
+                commandUser = Console.ReadLine();
+
+                switch (commandUser)
+                {
+                    case NumberEnoughCommand:
+                        isNeedStop = true;
+                        break;
+                    case NumberAddCommand:
+                        break;
+                }
+            }
+        }
+    }
+}
