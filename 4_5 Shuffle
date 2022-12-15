@@ -34,55 +34,16 @@ namespace _4_5_Shuffle
 
         static void Shuffle(ref int[] massiveNumbers)
         {
-            RandomFirstPartMassive(ref massiveNumbers);
-            RandomSecondPartMassive(ref massiveNumbers);
-            RandomToBeginningMassive(ref massiveNumbers);
-        }
 
-        static void RandomFirstPartMassive (ref int[] massiveNumbers)
-        {
             Random random = new Random();
-            int halfOfMassive = massiveNumbers.Length / 2;
+            int lengthOfMassive = massiveNumbers.Length;
 
-            for (int i = 0; i < massiveNumbers.Length / halfOfMassive; i++)
+            for (int i = 0; i < lengthOfMassive; i++)
             {
-                int indexRandomMember = random.Next(i, halfOfMassive + 1);
+                int indexRandomMember = random.Next(i, lengthOfMassive);
                 int temporaryElement = massiveNumbers[i];
                 massiveNumbers[i] = massiveNumbers[indexRandomMember];
                 massiveNumbers[indexRandomMember] = temporaryElement;
-            }
-        }
-
-        static void RandomSecondPartMassive (ref int[] massiveNumbers)
-        {
-            Random random = new Random();
-            int halfOfMassive = massiveNumbers.Length / 2;
-            int endOfMassive = massiveNumbers.Length;
-
-            for (int i = halfOfMassive; i < endOfMassive; i++)
-            {
-                int indexRandomMember = random.Next(halfOfMassive, endOfMassive);
-                int temporaryElement = massiveNumbers[i];
-                massiveNumbers[i] = massiveNumbers[indexRandomMember];
-                massiveNumbers[indexRandomMember] = temporaryElement;
-            }
-        }
-
-        static void RandomToBeginningMassive(ref int[] massiveNumbers)
-        {
-            Random random = new Random();
-            int minValueRandom = 1;
-            int maxValueRandom = massiveNumbers.Length;
-            int scoreOfMemberForMove = random.Next(minValueRandom, maxValueRandom);
-
-            for (int i = scoreOfMemberForMove; i > 0; i--)
-            {
-                for (int j = 0; j < i; j++)
-                {
-                    int temporaryElement = massiveNumbers[i];
-                    massiveNumbers[i] = massiveNumbers[i - 1];
-                    massiveNumbers[i - 1] = temporaryElement;
-                }
             }
         }
     }
