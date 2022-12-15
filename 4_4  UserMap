@@ -34,12 +34,14 @@ namespace _4_4_UserMap
 
             bool isPlaying = true;
 
-            int userX = 0;
-            int userY = 0;
+            int userXPosition = 0;
+            int userYPosition = 0;
             char userSymbol = 'Ы';
             bool areUPowerfull = false;
 
             bool areUserAndEnemyMeeting = false;
+            char symbolOfWall = '#';
+            char symbolOfPowerfull = 'P';
 
             Random randomEnemyMove = new Random();
             int enemyX = 0;
@@ -48,7 +50,7 @@ namespace _4_4_UserMap
 
             Console.CursorVisible = false;
 
-            char[,] map = ConvertToCharMassive(mapFirstly, userSymbol, ref userX, ref userY, 
+            char[,] map = ConvertToCharMassive(mapFirstly, userSymbol, ref userXPosition, ref userYPosition, 
                 enemySymbol, ref enemyX, ref enemyY);
 
             DrawMap(map);
@@ -58,8 +60,8 @@ namespace _4_4_UserMap
                 if (Console.KeyAvailable)
                 {
                     ConsoleKeyInfo key = Console.ReadKey(true);
-                    MovePlayer(map, ref userX, ref userY, userSymbol, key, ref areUPowerfull);
-                    MoveEnemy(map, ref enemyX, ref enemyY,enemySymbol,userSymbol,ref areUserAndEnemyMeeting,areUPowerfull, randomEnemyMove);
+                    MovePlayer(map, ref userXPosition, ref userYPosition, userSymbol, key, ref areUPowerfull, symbolOfWall, symbolOfPowerfull);
+                    MoveEnemy(map, ref enemyX, ref enemyY,enemySymbol,userSymbol,ref areUserAndEnemyMeeting,areUPowerfull, symbolOfWall, randomEnemyMove);
 
                     if (areUPowerfull)
                     {
@@ -128,163 +130,111 @@ namespace _4_4_UserMap
             return resultMassive;
         }
 
-        static void MovePlayer (char[,] massive, ref int X, ref int Y, char symbolOfUser, ConsoleKeyInfo key, ref bool areUPowerfull, char symbolOfChange = ' ')
+        static void MovePlayer (char[,] massive, ref int playerPositionX, ref int playerPositionY, char symbolOfUser, ConsoleKeyInfo key, ref bool areUPowerfull,
+            char symbolOfWall, char symbolOfPowerful)
         {
+            const ConsoleKey goUp = ConsoleKey.UpArrow;
+            const ConsoleKey goDown = ConsoleKey.DownArrow;
+            const ConsoleKey goLeft = ConsoleKey.LeftArrow;
+            const ConsoleKey goRight = ConsoleKey.RightArrow;
+
             switch (key.Key)
             {
-                case ConsoleKey.UpArrow:
-                    if (massive[X - 1, Y] == '#')
-                    {
-                        break;
-                    }
-
-                    if (massive[X - 1, Y] == 'P')
-                    {
-                        areUPowerfull = true;
-                    }
-
-                    DrawSymbolAfterStep(ref massive,  ref X, ref Y);
-                    X += -1;
-                    massive[X, Y] = symbolOfUser;
+                case goUp:
+                    GoToUserKey(-1, 0, massive, ref playerPositionX, ref playerPositionY, symbolOfUser, ref areUPowerfull, symbolOfWall, symbolOfPowerful);
                     break;
 
-                case ConsoleKey.DownArrow:
-                    if (massive[X + 1, Y] == '#')
-                    {
-                        break;
-                    }
-
-                    if (massive[X + 1, Y] == 'P')
-                    {
-                        areUPowerfull = true;
-                    }
-
-                    DrawSymbolAfterStep(ref massive, ref X, ref Y);
-                    X += 1;
-                    massive[X, Y] = symbolOfUser;
+                case goDown:
+                    GoToUserKey(1, 0, massive, ref playerPositionX, ref playerPositionY, symbolOfUser, ref areUPowerfull, symbolOfWall, symbolOfPowerful);
                     break;
 
-                case ConsoleKey.LeftArrow:
-                    if (massive[X, Y - 1] == '#')
-                    {
-                        break;
-                    }
-
-                    if (massive[X, Y - 1] == 'P')
-                    {
-                        areUPowerfull = true;
-                    }
-
-                    DrawSymbolAfterStep(ref massive,  ref X, ref Y);
-                    Y -= 1;
-                    massive[X, Y] = symbolOfUser;
+                case goLeft:
+                    GoToUserKey(0, -1, massive, ref playerPositionX, ref playerPositionY, symbolOfUser, ref areUPowerfull, symbolOfWall, symbolOfPowerful);
                     break;
 
-                case ConsoleKey.RightArrow:
-                    if (massive[X, Y + 1] == '#')
-                    {
-                        break;
-                    }
-
-                    if (massive[X, Y + 1] == 'P')
-                    {
-                        areUPowerfull = true;
-                    }
-
-                    DrawSymbolAfterStep(ref massive, ref X, ref Y);
-                    Y += 1;
-                    massive[X, Y] = symbolOfUser;
+                case goRight:
+                    GoToUserKey(0, 1, massive, ref playerPositionX, ref playerPositionY, symbolOfUser, ref areUPowerfull, symbolOfWall, symbolOfPowerful);
                     break;
             }
 
-            Console.SetCursorPosition(Y, X);
+            Console.SetCursorPosition(playerPositionY, playerPositionX);
             Console.Write(symbolOfUser);
         }
 
-        static void DrawSymbolAfterStep (ref char[,] massive, ref int X, ref int Y, char symbolOfChange = ' ')
+        static void GoToUserKey (int changingPositionX, int changingPositionY, char[,] massive, ref int playerPositionX, ref int playerPositionY, char symbolOfUser, ref bool areUPowerfull,
+            char symbolOfWall, char symbolOfPowerful)
         {
-            massive[X, Y] = symbolOfChange;
-            Console.SetCursorPosition(Y, X);
+            if (massive[playerPositionX + changingPositionX, playerPositionY + changingPositionY] == symbolOfWall)
+            {
+                return;
+            }
+
+            if (massive[playerPositionX + changingPositionX, playerPositionY + changingPositionY] == symbolOfPowerful)
+            {
+                areUPowerfull = true;
+            }
+
+            DrawSymbolAfterStep(ref massive, ref playerPositionX, ref playerPositionY);
+            playerPositionX += changingPositionX;
+            playerPositionY += changingPositionY;
+            massive[playerPositionX, playerPositionY] = symbolOfUser;
+        }
+
+        static void DrawSymbolAfterStep (ref char[,] massive, ref int positionX, ref int positionY, char symbolOfChange = ' ')
+        {
+            massive[positionX, positionY] = symbolOfChange;
+            Console.SetCursorPosition(positionY, positionX);
             Console.Write(symbolOfChange);
         }
 
-        static void MoveEnemy(char[,] massive, ref int X, ref int Y, char symbolEnemy,char symbolUser, ref bool areUserAndEnemyMeet,bool areUPowerfull, Random random)
+        static void MoveEnemy(char[,] massive, ref int enemyPositionX, ref int enemyPositionY, char symbolEnemy,char symbolUser, ref bool areUserAndEnemyMeet,bool areUPowerfull, char symbolOfWall, Random random)
         {
             int enemyMove = random.Next(1, 5);
 
             switch (enemyMove)
             {
                 case 1:
-                   
-                    while (massive[X - 1, Y] != '#')
-                    {
-                        if (massive[X - 1, Y] == symbolUser)
-                        {
-                            areUserAndEnemyMeet = true;
-                        }
-
-                        DrawSymbolAfterStep(ref massive, ref X, ref Y);
-                        X += -1;
-                    }
-
+                    GoToEnemyAfterUserKey(-1, 0, massive, ref enemyPositionX, ref enemyPositionY, symbolUser, ref areUserAndEnemyMeet, symbolOfWall);
                     break;
 
                 case 2:
-
-                    while (massive[X + 1, Y] != '#')
-                    {
-                        if (massive[X + 1, Y] == symbolUser)
-                        {
-                            areUserAndEnemyMeet = true;
-                        }
-
-                        DrawSymbolAfterStep(ref massive, ref X, ref Y);
-                        X += 1; 
-                    }
-
+                    GoToEnemyAfterUserKey(1, 0, massive, ref enemyPositionX, ref enemyPositionY, symbolUser, ref areUserAndEnemyMeet, symbolOfWall);
                     break;
 
                 case 3:
-
-                    while (massive[X, Y - 1] != '#')
-                    {
-                        if (massive[X, Y - 1] == symbolUser)
-                        {
-                            areUserAndEnemyMeet = true;
-                        }
-
-                        DrawSymbolAfterStep(ref massive, ref X, ref Y);
-                        Y -= 1; 
-                    }
-
+                    GoToEnemyAfterUserKey(0, -1, massive, ref enemyPositionX, ref enemyPositionY, symbolUser, ref areUserAndEnemyMeet, symbolOfWall);
                     break;
 
                 case 4:
-
-                    while (massive[X, Y + 1] != '#')
-                    {
-                        if (massive[X, Y + 1] == symbolUser)
-                        {
-                            areUserAndEnemyMeet = true;
-                        }
-
-                        DrawSymbolAfterStep(ref massive, ref X, ref Y);
-                        Y += 1; 
-                    }
-
+                    GoToEnemyAfterUserKey(0, 1, massive, ref enemyPositionX, ref enemyPositionY, symbolUser, ref areUserAndEnemyMeet, symbolOfWall);
                     break;
             }
 
             if (areUPowerfull && areUserAndEnemyMeet)
             {
-                Console.SetCursorPosition(Y, X);
+                Console.SetCursorPosition(enemyPositionY, enemyPositionX);
                 Console.Write(symbolUser);
             }
             else
             {
-                Console.SetCursorPosition(Y, X);
+                Console.SetCursorPosition(enemyPositionY, enemyPositionX);
                 Console.Write(symbolEnemy);
             }
-        }        
+        }
+        
+        static void GoToEnemyAfterUserKey (int changingPositionX, int changingPositionY, char[,] massive, ref int enemyPositionX, ref int enemyPositionY, char symbolUser, ref bool areUserAndEnemyMeet, char symbolOfWall)
+        {
+            while (massive[enemyPositionX + changingPositionX, enemyPositionY + changingPositionY] != symbolOfWall)
+            {
+                if (massive[enemyPositionX + changingPositionX, enemyPositionY + changingPositionY] == symbolUser)
+                {
+                    areUserAndEnemyMeet = true;
+                }
+
+                DrawSymbolAfterStep(ref massive, ref enemyPositionX, ref enemyPositionY);
+                enemyPositionX += changingPositionX;
+                enemyPositionY += changingPositionY;
+            }
+        }
     }
 }
