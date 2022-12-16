@@ -12,17 +12,17 @@ namespace _5_1_Word
         {
             Dictionary<string, string> vocabulary = new Dictionary<string, string>();
 
-            string checkWord;
+            string wordForSearch;
 
-            FillingVocabulary(ref vocabulary);
+            FillVocabulary(ref vocabulary);
 
             Console.Clear();
             Console.WriteLine("Введите слово для поиска: ");
-            checkWord = Console.ReadLine();
+            wordForSearch = Console.ReadLine();
 
-            if (vocabulary.ContainsKey(checkWord))
+            if (vocabulary.ContainsKey(wordForSearch))
             {
-                Console.WriteLine($"Вот данное значение слова \"{checkWord}\" - {vocabulary[checkWord]}");
+                Console.WriteLine($"Вот данное значение слова \"{wordForSearch}\" - {vocabulary[wordForSearch]}");
             }
             else
             {
@@ -30,17 +30,18 @@ namespace _5_1_Word
             }
         }
 
-        static void FillingVocabulary (ref Dictionary<string,string> vocabulary) 
+        static void FillVocabulary (ref Dictionary<string,string> vocabulary) 
         { 
             const string AddCommand = "да, нужно добавить ещё";
             const string EnoughCommand = "Нет, этого хватит";
-            const string NumberAddCommand = "1";
+            const string NumberAddCommand = "Любая клавиша";
             const string NumberEnoughCommand = "2";
 
             bool isNeedStop = false;
             string word;
             string meaning;
             string commandUser;
+
             while (isNeedStop != true)
             {
                 Console.WriteLine("Введите слово:");
@@ -54,13 +55,9 @@ namespace _5_1_Word
                 Console.WriteLine($"{NumberAddCommand} - {AddCommand}\n{NumberEnoughCommand} - {EnoughCommand}");
                 commandUser = Console.ReadLine();
 
-                switch (commandUser)
+                if(commandUser == NumberEnoughCommand)
                 {
-                    case NumberEnoughCommand:
-                        isNeedStop = true;
-                        break;
-                    case NumberAddCommand:
-                        break;
+                    isNeedStop = true;
                 }
             }
         }
