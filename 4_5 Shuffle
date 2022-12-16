@@ -11,39 +11,47 @@ namespace _4_5_Shuffle
         static void Main(string[] args)
         {
             Random random = new Random();
-            int minValueMasiveNumbers = -100;
-            int maxValueMasiveNumbers = 101;
-            int sizeMassiveNumbers = 10;
-            int[] massiveNumbers = new int[sizeMassiveNumbers];
+            int minValueArrayNumbers = -100;
+            int maxValueArrayNumbers = 101;
+            int sizeArrayNumbers = 10;
+            int[] arrayNumbers = new int[sizeArrayNumbers];
 
-            for (int i = 0; i < massiveNumbers.Length; i++)
-            {
-                massiveNumbers[i] = random.Next(minValueMasiveNumbers, maxValueMasiveNumbers);
+            GenerateArray(arrayNumbers, minValueArrayNumbers, maxValueArrayNumbers, random);
+            Shuffle( arrayNumbers);
 
-                Console.Write(massiveNumbers[i] + " ");
-            }
-
-            Shuffle(massiveNumbers);
             Console.WriteLine("\nПосле перемешивания: ");
+            WriteArray(arrayNumbers);
+        }
 
-            for (int i = 0; i < massiveNumbers.Length; i++)
+        static void Shuffle(int[] arrayNumbers)
+        {
+            Random random = new Random();
+            int lengthOfArray = arrayNumbers.Length;
+
+            for (int i = 0; i < lengthOfArray; i++)
             {
-                Console.Write(massiveNumbers[i] + " ");
+                int indexRandomMember = random.Next(i, lengthOfArray);
+                int temporaryElement = arrayNumbers[i];
+                arrayNumbers[i] = arrayNumbers[indexRandomMember];
+                arrayNumbers[indexRandomMember] = temporaryElement;
             }
         }
 
-        static void Shuffle(int[] massiveNumbers)
+        static void GenerateArray(int[] arrayNumbers,int minValueArrayNumbers,int maxValueArrayNumbers, Random random)
         {
-
-            Random random = new Random();
-            int lengthOfMassive = massiveNumbers.Length;
-
-            for (int i = 0; i < lengthOfMassive; i++)
+            for (int i = 0; i < arrayNumbers.Length; i++)
             {
-                int indexRandomMember = random.Next(i, lengthOfMassive);
-                int temporaryElement = massiveNumbers[i];
-                massiveNumbers[i] = massiveNumbers[indexRandomMember];
-                massiveNumbers[indexRandomMember] = temporaryElement;
+                arrayNumbers[i] = random.Next(minValueArrayNumbers, maxValueArrayNumbers);
+
+                Console.Write(arrayNumbers[i] + " ");
+            }
+        }
+
+        static void WriteArray(int[] arrayNumbers)
+        {
+            for (int i = 0; i < arrayNumbers.Length; i++)
+            {
+                Console.Write(arrayNumbers[i] + " ");
             }
         }
     }
