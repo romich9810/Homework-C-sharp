@@ -1,0 +1,86 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace _5_3_improvingDynamicArray
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            const string sumCommand =  "sum";
+            const string exitCommand =  "exit";
+
+            List<float> numbers = new List<float>();
+
+            string commandFromUser;
+            bool isNeedComplete = true;
+
+            while (isNeedComplete)
+            {
+                Console.WriteLine("Введённые числа: ");
+
+                for (int i = 0; i < numbers.Count; i++)
+                {
+                    Console.Write(numbers[i] +  " ");
+                }
+
+                Console.SetCursorPosition(0, 8);
+                Console.Write($"{sumCommand} - сумма введённых чисел, {exitCommand} - выход из программы.\nВведите число или команду: : ");
+                commandFromUser = Console.ReadLine();
+
+                switch (commandFromUser)
+                {
+                    case sumCommand:
+                        SumUpNumbers(numbers);
+                        break;
+
+                    case exitCommand:
+                        isNeedComplete = false;
+                        break;
+
+                    default:
+                        AddNumber(numbers, commandFromUser);
+                        break;
+                }
+
+                Console.Clear();
+            }
+        }
+
+        static void SumUpNumbers (List<float> numbers)
+        {
+            float summOfNumbers = 0;
+
+            foreach (float number in numbers)
+            {
+                summOfNumbers += number;
+            }
+
+            Console.WriteLine($"Сумма всех чисел, введённых пользователем, равна {summOfNumbers}");
+            Console.ReadKey();
+        }
+
+        static void AddNumber(List<float> numbers, string commandFromUser)
+        {
+            bool isEnterAreCorreclty = true;
+            float addingElement;
+
+            while (isEnterAreCorreclty == true)
+            {
+                if (float.TryParse(commandFromUser, out addingElement))
+                {
+                    numbers.Add(addingElement);
+                    isEnterAreCorreclty = false;
+                }
+                else
+                {
+                    Console.WriteLine("Неверный формат числа. Попробуйте ещё раз.\nВведите число: ");
+                    commandFromUser = Console.ReadLine();
+                }
+            }
+        }
+    }
+}
