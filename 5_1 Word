@@ -10,19 +10,19 @@ namespace _5_1_Word
     {
         static void Main(string[] args)
         {
-            Dictionary<string, string> vocabulary = new Dictionary<string, string>();
+            Dictionary<string, string> words = new Dictionary<string, string>();
 
             string wordForSearch;
 
-            FillVocabulary(ref vocabulary);
+            FillVocabulary(words);
 
             Console.Clear();
             Console.WriteLine("Введите слово для поиска: ");
             wordForSearch = Console.ReadLine();
 
-            if (vocabulary.ContainsKey(wordForSearch))
+            if (words.ContainsKey(wordForSearch))
             {
-                Console.WriteLine($"Вот данное значение слова \"{wordForSearch}\" - {vocabulary[wordForSearch]}");
+                Console.WriteLine($"Вот данное значение слова \"{wordForSearch}\" - {words[wordForSearch]}");
             }
             else
             {
@@ -30,7 +30,7 @@ namespace _5_1_Word
             }
         }
 
-        static void FillVocabulary (ref Dictionary<string,string> vocabulary) 
+        static void FillVocabulary (Dictionary<string,string> words) 
         { 
             const string AddCommand = "да, нужно добавить ещё";
             const string EnoughCommand = "Нет, этого хватит";
@@ -49,7 +49,7 @@ namespace _5_1_Word
                 Console.WriteLine("Введите значение слова:");
                 meaning = Console.ReadLine();
 
-                vocabulary.Add(word, meaning);
+                words.Add(word, meaning);
 
                 Console.WriteLine("Добавить ещё слово в словарь?");
                 Console.WriteLine($"{NumberAddCommand} - {AddCommand}\n{NumberEnoughCommand} - {EnoughCommand}");
