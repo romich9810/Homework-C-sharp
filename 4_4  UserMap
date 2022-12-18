@@ -135,29 +135,29 @@ namespace _4_4_UserMap
         static void MovePlayer (char[,] massive, ref int playerPositionVertical, ref int playerPositionHorrizon, char symbolOfPlayer, ConsoleKeyInfo key, ref bool arePlayerPowerfull,
             char symbolOfWall, char symbolOfPowerful)
         {
-            const ConsoleKey goUp = ConsoleKey.UpArrow;
-            const ConsoleKey goDown = ConsoleKey.DownArrow;
-            const ConsoleKey goLeft = ConsoleKey.LeftArrow;
-            const ConsoleKey goRight = ConsoleKey.RightArrow;
+            const ConsoleKey GoUp = ConsoleKey.UpArrow;
+            const ConsoleKey GoDown = ConsoleKey.DownArrow;
+            const ConsoleKey GoLeft = ConsoleKey.LeftArrow;
+            const ConsoleKey GoRight = ConsoleKey.RightArrow;
 
             int verticalPosition = 0;
             int horizonPosition = 0;
 
             switch (key.Key)
             {
-                case goUp:
+                case GoUp:
                     verticalPosition -= 1;
                     break;
 
-                case goDown:
+                case GoDown:
                     verticalPosition += 1;
                     break;
 
-                case goLeft:
+                case GoLeft:
                     horizonPosition -= 1;
                     break;
 
-                case goRight:
+                case GoRight:
                     horizonPosition += 1;
                     break;
             }
@@ -235,7 +235,7 @@ namespace _4_4_UserMap
                     arePlayerAndEnemyMeet = true;
                 }
 
-                ChangeSymbolAfterStep(massive, ref enemyPositionX, ref enemyPositionY);//эту часть в DrawEnemy
+                ChangeSymbolAfterStep(massive, ref enemyPositionX, ref enemyPositionY);
                 enemyPositionX += changingPositionVertical;
                 enemyPositionY += changingPositionHorrizon;
             }
