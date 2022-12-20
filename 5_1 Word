@@ -10,23 +10,45 @@ namespace _5_1_Word
     {
         static void Main(string[] args)
         {
+            const string NumberFillCommand = "1";
+            const string NumberSeachWordCommand = "2";
+            const string NumberExitCommand = "3";
+            const string FillCommand = "заполнить словать новым словом";
+            const string SearchCommand = "найти значение слова";
+            const string ExitCommand = "выйти из программы";
+
             Dictionary<string, string> words = new Dictionary<string, string>();
 
-            string wordForSearch;
+            bool isNeedRepead = true;
+            string userCommand;
 
-            FillVocabulary(words);
-
-            Console.Clear();
-            Console.WriteLine("Введите слово для поиска: ");
-            wordForSearch = Console.ReadLine();
-
-            if (words.ContainsKey(wordForSearch))
+            while(isNeedRepead == true)
             {
-                Console.WriteLine($"Вот данное значение слова \"{wordForSearch}\" - {words[wordForSearch]}");
-            }
-            else
-            {
-                Console.WriteLine("Такого слова в словаре нет, либо вы допустили ошибку при вводе.");
+                Console.WriteLine($"\tДобро пожаловать в словарь!\t\n\nВыберите команду:\n" +
+                    $"{NumberFillCommand} - {FillCommand}\n{NumberSeachWordCommand} - {SearchCommand}\n{NumberExitCommand} - {ExitCommand}");
+                userCommand = Console.ReadLine();
+
+                switch(userCommand)
+                {
+                    case NumberFillCommand:
+                        FillVocabulary(words);
+                        break;
+
+                    case NumberSeachWordCommand:
+                        SearchWord(words);
+                        break;
+
+                    case NumberExitCommand:
+                        isNeedRepead = false;
+                        break;
+
+                    default:
+                        Console.WriteLine("Неверная команда. Попробуйте ещё раз.");
+                        Console.ReadKey();
+                        break;
+                }
+
+                Console.Clear();
             }
         }
 
@@ -42,7 +64,7 @@ namespace _5_1_Word
             string meaning;
             string commandUser;
 
-            while (isNeedStop != true)
+            while (isNeedStop == false)
             {
                 Console.WriteLine("Введите слово:");
                 word = Console.ReadLine();
@@ -55,11 +77,32 @@ namespace _5_1_Word
                 Console.WriteLine($"{NumberAddCommand} - {AddCommand}\n{NumberEnoughCommand} - {EnoughCommand}");
                 commandUser = Console.ReadLine();
 
-                if(commandUser == NumberEnoughCommand)
+                if (commandUser == NumberEnoughCommand)
                 {
                     isNeedStop = true;
                 }
             }
+        }
+
+        static void SearchWord(Dictionary<string, string> words)
+        {
+            string wordForSearch;
+
+            Console.Clear();
+            Console.WriteLine("Введите слово для поиска: ");
+            wordForSearch = Console.ReadLine();
+
+            if (words.ContainsKey(wordForSearch))
+            {
+                Console.WriteLine($"Вот данное значение слова \"{wordForSearch}\" - {words[wordForSearch]}");
+
+            }
+            else
+            {
+                Console.WriteLine("Такого слова в словаре нет, либо вы допустили ошибку при вводе.");
+            }
+
+            Console.ReadKey();
         }
     }
 }
