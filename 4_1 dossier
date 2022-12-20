@@ -38,21 +38,18 @@ namespace _4_1_dossier
                 switch (commandFromUser)
                 {
                     case NumberAddDossier:
-
                         AddDossier(ref nameSurnames, ref posts);
                         break;
 
                     case NumberShowAllDossiers:
-
                         ShowDossiers(nameSurnames, posts);
                         break;
-                    case NumberDeleteDossier:
 
+                    case NumberDeleteDossier:
                         DeleteDossier(ref nameSurnames, ref posts);
                         break;
 
                     case NumberSearchingBySurname:
-
                         FindBySurname(nameSurnames, posts);
                         break;
 
@@ -70,9 +67,9 @@ namespace _4_1_dossier
 
         static void AddDossier(ref string[] massiveNames, ref string[] massivePosts)
         {
-            const string numberAddAgain = "1";
-            const string commandAddAgain = "добавить ещё";
-            const string commandBack = "любая клавиша - к главному меню";
+            const string NumberAddAgain = "1";
+            const string CommandAddAgain = "добавить ещё";
+            const string CommandBack = "любая клавиша - к главному меню";
 
             string command;
             bool isNeedContune = true;
@@ -89,20 +86,16 @@ namespace _4_1_dossier
                 ExpandMassive(ref massivePosts);
 
                 Console.Clear();
-                Console.WriteLine($"Данные успешно внесены.\n{commandBack}\n{numberAddAgain} - {commandAddAgain}");
+                Console.WriteLine($"Данные успешно внесены.\n{CommandBack}\n{NumberAddAgain} - {CommandAddAgain}");
                 command = Console.ReadLine();
 
-                switch (command)
+                if (command != NumberAddAgain)
                 {
-                    case numberAddAgain:
-                        break;
-
-                    default:
-                        Console.Clear();
-                        isNeedContune = false;
-                        break;
+                    isNeedContune = false;
                 }
             }
+
+            Console.Clear();
         }
 
         static void ExpandMassive(ref string[] massive)
@@ -116,19 +109,6 @@ namespace _4_1_dossier
 
             Console.Write("Введите данные:");
             temporaryMassive[temporaryMassive.Length - 1] = Console.ReadLine();
-            massive = temporaryMassive;
-        }
-
-        static void ExpandMassive(ref string[] massive, string addingElement)
-        {
-            string[] temporaryMassive = new string[massive.Length + 1];
-
-            for (int j = 0; j < massive.Length; j++)
-            {
-                temporaryMassive[j] = massive[j];
-            }
-
-            temporaryMassive[temporaryMassive.Length - 1] = addingElement;
             massive = temporaryMassive;
         }
 
@@ -152,20 +132,27 @@ namespace _4_1_dossier
             int indexForDeleting;
 
             ShowDossiers(massiveNames, massivePosts);
-
             Console.WriteLine("Введите индекс для удаления досье: ");
-            indexFromUserForDeleting = Convert.ToInt32(Console.ReadLine());
 
-            indexForDeleting = indexFromUserForDeleting - 1;
+            if (int.TryParse(Console.ReadLine(), out indexFromUserForDeleting))
+            {
+                indexForDeleting = indexFromUserForDeleting - 1;
 
-            MoveElemetToEndMassive(ref massiveNames, indexForDeleting);
-            MoveElemetToEndMassive(ref massivePosts, indexForDeleting);
+                MoveElemetToEndMassive(ref massiveNames, indexForDeleting);
+                MoveElemetToEndMassive(ref massivePosts, indexForDeleting);
 
-            DeleteLastElementFromMassive(ref massiveNames);
-            DeleteLastElementFromMassive(ref massivePosts);
+                DeleteLastElementFromMassive(ref massiveNames);
+                DeleteLastElementFromMassive(ref massivePosts);
 
-            Console.WriteLine("\nПосле удаления:");
-            ShowDossiers(massiveNames, massivePosts);
+                Console.WriteLine("\nПосле удаления:");
+                ShowDossiers(massiveNames, massivePosts);
+            }
+            else
+            {
+                Console.WriteLine("Неверное значение индекса.");
+                Console.ReadKey();
+            }
+
             Console.Clear();
         }
 
@@ -195,54 +182,32 @@ namespace _4_1_dossier
 
         static void FindBySurname(string[] massiveNames, string[] massivePosts)
         {
-            string[] findingNames = new string[0];
-            string[] findingPosts = new string[0];
+            char divider = ' ';
+            string[] potentialMatchingWords;
             string surname;
-            bool isThereSurnameInMassive;
-
-            isThereSurnameInMassive = (findingNames.Length != 0 && findingPosts.Length != 0) && (findingNames.Length == findingPosts.Length);
+            bool isThereSurnameInMassive = false;
 
             Console.WriteLine("Введите фамилию для поиска");
             surname = Console.ReadLine();
 
             for (int i = 0; i < massiveNames.Length; i++)
             {
+                potentialMatchingWords = massiveNames[i].Split(divider);
 
-                if (CompareSurnames(massiveNames[i], surname)) //неправильная реализация
+                if (potentialMatchingWords[0] == surname) 
                 {
-                    ExpandMassive(ref findingNames, massiveNames[i]);
-                    ExpandMassive(ref findingPosts, massivePosts[i]);
+                    Console.WriteLine($"Такое досье есть!Вот оно:\n{massiveNames[i]} - {massivePosts[i]}");
+                    isThereSurnameInMassive = true;
                 }
             }
 
-            if (isThereSurnameInMassive == true)
-            {
-                Console.WriteLine("Такое досье есть!Вот оно:");
-
-                ShowDossiers(findingNames, findingPosts);
-            }
-            else
+            if (isThereSurnameInMassive == false)
             {
                 Console.WriteLine("Такой фамилии не найдено! Нажмите любую клавишу, чтобы продолжить.");
                 Console.ReadKey();
             }
-        }
 
-        static bool CompareSurnames (string surnameInString, string comparingSurname, char divider = ' ')
-        {
-            for (int i = 0; i < comparingSurname.Length; i++)
-            {
-                if (surnameInString[i] == comparingSurname[i] && surnameInString[i] != divider)
-                {
-                    continue;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-
-            return true;
+            Console.Clear();
         }
     }
 }
