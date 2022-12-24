@@ -1,0 +1,58 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace _5_5_TwoArrayOriginally
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            string[] firstArrayOfString;
+            string[] secondArrayOfString;
+            char divider = ' ';
+
+            List<string> resultStrings = new List<string>();
+
+            Console.WriteLine("Введите первый массив строк через пробел: ");
+            firstArrayOfString = Console.ReadLine().Split(divider);
+
+            Console.WriteLine("Введите второй массив строк через пробел: ");
+            secondArrayOfString = Console.ReadLine().Split(divider);
+
+            resultStrings.AddRange(firstArrayOfString);
+            resultStrings.AddRange(secondArrayOfString);
+
+            RemoveRepeats(ref resultStrings);
+            ShowAfretRemove(resultStrings);// переделать
+        }
+
+        static void RemoveRepeats(ref List <string> resultStrings)
+        {
+            for (int i = 0; i < resultStrings.Count; i++)
+            {
+                for (int j = i + 1; j < resultStrings.Count; j++)
+                {
+                    if (resultStrings[j] == resultStrings[i])
+                    {
+                        resultStrings.RemoveAt(j);
+                    }
+                }
+            }
+        }
+
+        static void ShowAfretRemove (List<string> resultStrings)
+        {
+            Console.WriteLine("После удаления повторений: ");
+
+            foreach (var resultString in resultStrings)
+            {
+                Console.Write(resultString + ", ");
+            }
+
+            Console.WriteLine();
+        }
+    }
+}
