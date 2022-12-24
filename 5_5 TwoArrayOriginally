@@ -26,7 +26,7 @@ namespace _5_5_TwoArrayOriginally
             resultStrings.AddRange(secondArrayOfString);
 
             RemoveRepeats(ref resultStrings);
-            ShowAfretRemove(resultStrings);// переделать
+            ShowAfretRemove(resultStrings);
         }
 
         static void RemoveRepeats(ref List <string> resultStrings)
@@ -38,6 +38,7 @@ namespace _5_5_TwoArrayOriginally
                     if (resultStrings[j] == resultStrings[i])
                     {
                         resultStrings.RemoveAt(j);
+                        j--;
                     }
                 }
             }
@@ -52,7 +53,7 @@ namespace _5_5_TwoArrayOriginally
                 Console.Write(resultString + ", ");
             }
 
-            Console.WriteLine();
+            Console.Write("\b");
         }
     }
 }
