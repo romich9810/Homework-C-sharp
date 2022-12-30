@@ -19,8 +19,8 @@ namespace _5_4_ImprovingDossiers
             const string NumberDeleteDossier = "3";
             const string NumberExit = "4";
 
-            List<string> posts = new List<string>();
-            Dictionary <int, string> names = new Dictionary<int, string>();
+            //List<string> posts = new List<string>();
+            Dictionary<string, string> dossiers = new Dictionary<string, string>();
 
             bool isWorking = true;
             string commandFromUser;
@@ -35,17 +35,15 @@ namespace _5_4_ImprovingDossiers
                 switch (commandFromUser)
                 {
                     case NumberAddDossier:
-
-                        AddDossier(names, posts);
+                        AddDossier(dossiers);
                         break;
 
                     case NumberShowAllDossiers:
-                        ShowDossiers(names, posts);
+                        ShowDossiers(dossiers);
                         break;
 
                     case NumberDeleteDossier:
-
-                        DeleteDossier(ref names, posts);
+                        DeleteDossier(ref dossiers);
                         break;
 
                     case NumberExit:
@@ -57,10 +55,12 @@ namespace _5_4_ImprovingDossiers
                         Console.WriteLine("Неверная команда. Попробуйте ещё раз.");
                         break;
                 }
+
+                Console.Clear();
             }
         }
 
-        static void AddDossier(Dictionary<int, string> names, List<string> posts)
+        static void AddDossier(Dictionary<string, string> dossiers)
         {
             const string NumberAddAgain = "1";
             const string CommandAddAgain = "добавить ещё";
@@ -69,7 +69,6 @@ namespace _5_4_ImprovingDossiers
             string command;
             bool isNeedContune = true;
 
-            int numberOfName = names.Count;
             string userName;
             string userPost;
 
@@ -77,16 +76,12 @@ namespace _5_4_ImprovingDossiers
             {
                 Console.Clear();
 
-                numberOfName++;
-
                 Console.WriteLine("Введите ФИО: ");
                 userName = Console.ReadLine();
-                names.Add(numberOfName, userName);
-
                 Console.WriteLine("Введите должность: ");
                 userPost = Console.ReadLine();
 
-                posts.Add(userPost);
+                dossiers.Add(userName, userPost);
 
                 Console.Clear();
                 Console.WriteLine($"Данные успешно внесены.\n{CommandBack}\n{NumberAddAgain} - {CommandAddAgain}");
@@ -94,73 +89,44 @@ namespace _5_4_ImprovingDossiers
 
                 if (command != NumberAddAgain)
                 {
-                    Console.Clear();
                     isNeedContune = false;
                 }
             }
         }
 
-        static void ShowDossiers(Dictionary<int, string> dossiers, List<string> posts)
+        static void ShowDossiers(Dictionary<string, string> dossiers)
         {
-            int indexForShowPosts;
-
             Console.WriteLine("Все имеющиеся досье:\n");
 
-            foreach(var dossier in dossiers)
+            foreach (var dossier in dossiers)
             {
-                indexForShowPosts = dossier.Key - 1;
-
-                Console.WriteLine($"{dossier.Key}) {dossier.Value} - {posts[indexForShowPosts]}");
+                Console.WriteLine($"{dossier.Key} -  {dossier.Value}");
             }
 
             Console.WriteLine("Для возвращения нажмите любую клавишу.");
             Console.ReadKey();
-            Console.Clear();
         }
 
-        static void DeleteDossier(ref Dictionary<int, string> names, List<string> posts)
+        static void DeleteDossier(ref Dictionary<string, string> dossiers)
         {
-            string keyIndexForDeleting;
-            int indexForDeletingNames;
-            int indexForDeletingPosts;
+            string nameForDeleting;
 
-            ShowDossiers(names, posts);
+            ShowDossiers(dossiers);
 
-            Console.WriteLine("Введите индекс для удаления досье: ");
-            keyIndexForDeleting = Console.ReadLine();       
+            Console.WriteLine("Введите ФИО удаления досье: ");
+            nameForDeleting = Console.ReadLine();
 
-            if (int.TryParse(keyIndexForDeleting,out indexForDeletingNames)) 
+            if (dossiers.ContainsKey(nameForDeleting))
             {
-                indexForDeletingPosts = indexForDeletingNames - 1;
-
-                RemoveInDictionary(ref names, indexForDeletingNames);
-                posts.RemoveAt(indexForDeletingPosts);
+                dossiers.Remove(nameForDeleting);
                 Console.WriteLine("Досье успешно удалено.");
                 Console.ReadKey();
-                Console.Clear();
             }
             else
             {
                 Console.WriteLine("Такого досье не найдено либо вы ввели неверный индекс.");
                 Console.ReadKey();
-                Console.Clear();
             }
-        }
-
-        static void RemoveInDictionary (ref Dictionary<int, string> names, int indexForDeleting)
-        {
-            Dictionary<int, string> temporaryNames = new Dictionary<int, string>();
-            int temporaryIndexNames = 0;
-
-            names.Remove(indexForDeleting);
-
-            foreach (var name in names)
-            {
-                temporaryIndexNames++;
-                temporaryNames.Add(temporaryIndexNames, name.Value);
-            }
-
-            names = temporaryNames;
         }
     }
 }
