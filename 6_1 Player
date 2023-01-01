@@ -1,0 +1,53 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace _6_1_Player
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            Player[] players = new Player[] {new Player(), new Player("Володя", "Бердыш"), new Player ("Петя", "Самопал") };
+
+            foreach(var player in players)
+            {
+                player.ShowPlayerInfo();
+            }
+
+            Console.ReadKey();
+        }
+
+        class Player
+        {
+            private string _name;
+            private int _health;
+            private int _armor;
+            private string _weapoon;
+
+
+            public Player ()
+            {
+                _name = "user";
+                _health = 100;
+                _armor = 100;
+                _weapoon = "меч новичка";
+            }
+
+            public Player (string name, string weapoon)
+            {
+                _name = name;
+                _health = 100;
+                _armor = 100;
+                _weapoon = weapoon;
+            }
+
+            public void ShowPlayerInfo()
+            {
+                Console.WriteLine($"Имя: {_name}\nЗдоровье - {_health} ед.\nБроня - {_armor}\nОружие: {_weapoon}\n");
+            }
+        }
+    }
+}
