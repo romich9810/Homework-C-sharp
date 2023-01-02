@@ -1,0 +1,49 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace _6_2_PlayerDrawer
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            Renderer render = new Renderer();
+
+            Console.WriteLine("Введите позицию X");
+            int.TryParse(Console.ReadLine(), out int userPositionX);
+
+            Console.WriteLine("Введите позицию Y");
+            int.TryParse(Console.ReadLine(), out int userPositionY);
+
+            Player player = new Player(userPositionX, userPositionY);
+
+            render.RenderPlayerPosition(player.PosissionX, player.PosissionY, player.SymbolPlayer);          
+        }
+
+        class Renderer
+        {
+            public void RenderPlayerPosition(int positonX, int positionY, char symbol)
+            {
+                Console.SetCursorPosition(positionY, positonX);
+                Console.Write(symbol);
+            }
+        }
+
+        class Player
+        {
+            public char SymbolPlayer { get; private set; }
+            public int PosissionX { get;  set; }
+            public int PosissionY { get;  set; }
+
+            public Player(int posissionX, int posissionY, char symbolPlayer = '@')
+            {
+                SymbolPlayer = symbolPlayer;
+                PosissionX = posissionX;
+                PosissionY = posissionY;
+            }
+        }
+    }
+}
