@@ -65,7 +65,7 @@ namespace _4_1_dossier
             }
         }
 
-        static void AddDossier(ref string[] massiveNames, ref string[] massivePosts)
+        static void AddDossier(ref string[] arrayNames, ref string[] arrayPosts)
         {
             const string NumberAddAgain = "1";
             const string CommandAddAgain = "добавить ещё";
@@ -80,10 +80,10 @@ namespace _4_1_dossier
                 Console.WriteLine("***ФИО cотрудников***\n");
 
                 Console.Write("ФИО сотрудника. ");
-                ExpandMassive(ref massiveNames);
+                arrayNames = ExpandMassive(arrayNames);
 
                 Console.Write("Должность сотрудника. ");
-                ExpandMassive(ref massivePosts);
+                arrayPosts = ExpandMassive(arrayPosts);
 
                 Console.Clear();
                 Console.WriteLine($"Данные успешно внесены.\n{CommandBack}\n{NumberAddAgain} - {CommandAddAgain}");
@@ -98,27 +98,29 @@ namespace _4_1_dossier
             Console.Clear();
         }
 
-        static void ExpandMassive(ref string[] massive)
+        static string[] ExpandMassive(string[] array)
         {
-            string[] temporaryMassive = new string[massive.Length + 1];
+            string[] temporaryArray = new string[array.Length + 1];
 
-            for (int j = 0; j < massive.Length; j++)
+            for (int j = 0; j < array.Length; j++)
             {
-                temporaryMassive[j] = massive[j];
+                temporaryArray[j] = array[j];
             }
 
             Console.Write("Введите данные:");
-            temporaryMassive[temporaryMassive.Length - 1] = Console.ReadLine();
-            massive = temporaryMassive;
+            temporaryArray[temporaryArray.Length - 1] = Console.ReadLine();
+            array = temporaryArray;
+
+            return array;
         }
 
-        static void ShowDossiers(string[] massiveNames, string[] massivePosts)
+        static void ShowDossiers(string[] arrayNames, string[] arrayPosts)
         {
             Console.WriteLine("Все имеющиеся досье:\n");
 
-            for (int i = 0; i < massiveNames.Length; i++)
+            for (int i = 0; i < arrayNames.Length; i++)
             {
-                Console.WriteLine($"{i + 1}) {massiveNames[i]} - {massivePosts[i]}");
+                Console.WriteLine($"{i + 1}) {arrayNames[i]} - {arrayPosts[i]}");
             }
 
             Console.WriteLine("Для возвращения нажмите любую клавишу.");
@@ -126,26 +128,23 @@ namespace _4_1_dossier
             Console.Clear();
         }
 
-        static void DeleteDossier(ref string[] massiveNames, ref string[] massivePosts)
+        static void DeleteDossier(ref string[] arrayNames, ref string[] arrayPosts)
         {
             int indexFromUserForDeleting;
             int indexForDeleting;
 
-            ShowDossiers(massiveNames, massivePosts);
+            ShowDossiers(arrayNames, arrayPosts);
             Console.WriteLine("Введите индекс для удаления досье: ");
 
             if (int.TryParse(Console.ReadLine(), out indexFromUserForDeleting))
             {
                 indexForDeleting = indexFromUserForDeleting - 1;
 
-                MoveElemetToEndMassive(ref massiveNames, indexForDeleting);
-                MoveElemetToEndMassive(ref massivePosts, indexForDeleting);
-
-                DeleteLastElementFromMassive(ref massiveNames);
-                DeleteLastElementFromMassive(ref massivePosts);
+                arrayNames = DeleteElementByIndexInArray(arrayNames, indexForDeleting);
+                arrayPosts = DeleteElementByIndexInArray(arrayPosts, indexForDeleting);
 
                 Console.WriteLine("\nПосле удаления:");
-                ShowDossiers(massiveNames, massivePosts);
+                ShowDossiers(arrayNames, arrayPosts);
             }
             else
             {
@@ -156,52 +155,52 @@ namespace _4_1_dossier
             Console.Clear();
         }
 
-        static void MoveElemetToEndMassive(ref string[] massive, int indexForMoving)
+        static string[] DeleteElementByIndexInArray(string[] array, int indexForMoving)
         {
             string temporaryMember;
 
-            for (int i = indexForMoving; i < massive.Length - 1; i++)
+            for (int i = indexForMoving; i < array.Length - 1; i++)
             {
-                temporaryMember = massive[i + 1];
-                massive[i + 1] = massive[i];
-                massive[i] = temporaryMember;
-            }
-        }
-
-        static void DeleteLastElementFromMassive(ref string[] massive)
-        {
-            string[] temporaryMassive = new string[massive.Length - 1];
-
-            for (int i = 0; i < temporaryMassive.Length; i++)
-            {
-                temporaryMassive[i] = massive[i];
+                temporaryMember = array[i + 1];
+                array[i + 1] = array[i];
+                array[i] = temporaryMember;
             }
 
-            massive = temporaryMassive;
+            string[] temporaryArray = new string[array.Length - 1];
+
+            for (int i = 0; i < temporaryArray.Length; i++)
+            {
+                temporaryArray[i] = array[i];
+            }
+
+            array = temporaryArray;
+
+            return array;
         }
 
-        static void FindBySurname(string[] massiveNames, string[] massivePosts)
+        static void FindBySurname(string[] arrayNames, string[] arrayPosts)
         {
             char divider = ' ';
             string[] potentialMatchingWords;
             string surname;
-            bool isThereSurnameInMassive = false;
+            bool isThereSurnameInArray = false;
 
             Console.WriteLine("Введите фамилию для поиска");
             surname = Console.ReadLine();
 
-            for (int i = 0; i < massiveNames.Length; i++)
+            for (int i = 0; i < arrayNames.Length; i++)
             {
-                potentialMatchingWords = massiveNames[i].Split(divider);
+                potentialMatchingWords = arrayNames[i].Split(divider);
 
                 if (potentialMatchingWords[0] == surname) 
                 {
-                    Console.WriteLine($"Такое досье есть!Вот оно:\n{massiveNames[i]} - {massivePosts[i]}");
-                    isThereSurnameInMassive = true;
+                    Console.WriteLine($"Такое досье есть!Вот оно:\n{arrayNames[i]} - {arrayPosts[i]}");
+                    isThereSurnameInArray = true;
+                    Console.ReadKey();
                 }
             }
 
-            if (isThereSurnameInMassive == false)
+            if (isThereSurnameInArray == false)
             {
                 Console.WriteLine("Такой фамилии не найдено! Нажмите любую клавишу, чтобы продолжить.");
                 Console.ReadKey();
