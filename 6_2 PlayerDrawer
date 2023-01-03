@@ -12,15 +12,34 @@ namespace _6_2_PlayerDrawer
         {
             Renderer render = new Renderer();
 
-            Console.WriteLine("Введите позицию X");
-            int.TryParse(Console.ReadLine(), out int userPositionX);
+            bool isPositionXCorrect;
+            bool isPositionYCorrect;
+            bool areNeedWritePositionsAgain = true;
 
-            Console.WriteLine("Введите позицию Y");
-            int.TryParse(Console.ReadLine(), out int userPositionY);
+            while (areNeedWritePositionsAgain)
+            {
+                Console.WriteLine("Введите позицию X");
+                isPositionXCorrect = int.TryParse(Console.ReadLine(), out int userPositionX);
 
-            Player player = new Player(userPositionX, userPositionY);
+                Console.WriteLine("Введите позицию Y");
+                isPositionYCorrect = int.TryParse(Console.ReadLine(), out int userPositionY);
 
-            render.RenderPlayerPosition(player.PosissionX, player.PosissionY, player.SymbolPlayer);          
+                if (isPositionXCorrect & isPositionYCorrect)
+                {
+                    Console.Clear();
+
+                    Player player = new Player(userPositionX, userPositionY);
+
+                    render.RenderPlayerPosition(player.PosissionX, player.PosissionY, player.SymbolPlayer);
+
+                    areNeedWritePositionsAgain = false;
+                }
+                else
+                {
+                    Console.Clear();
+                    Console.WriteLine("Одна из позиций или все позиции введены неверно.");
+                }
+            }      
         }
 
         class Renderer
@@ -28,15 +47,15 @@ namespace _6_2_PlayerDrawer
             public void RenderPlayerPosition(int positonX, int positionY, char symbol)
             {
                 Console.SetCursorPosition(positionY, positonX);
-                Console.Write(symbol);
+                Console.Write(symbol + " - игрок здесь");
             }
         }
 
         class Player
         {
             public char SymbolPlayer { get; private set; }
-            public int PosissionX { get;  set; }
-            public int PosissionY { get;  set; }
+            public int PosissionX {  get; private set; }
+            public int PosissionY { get; private set; }
 
             public Player(int posissionX, int posissionY, char symbolPlayer = '@')
             {
