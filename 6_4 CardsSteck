@@ -1,0 +1,193 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection.Emit;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace _6_4_CardsSteck
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            const string CommandToContune = "да, продолжить";
+            const string CommandToFinish = "завершить игру";
+            const string CommandToContuneNumber = "1";
+            const string CommandToFinishNumber = "2";
+
+            Deck deck = new Deck();
+
+            bool isNeedPlayContune = true;
+            string commandFromUser;
+
+            while (isNeedPlayContune)
+            {
+                deck.Play();
+
+                Console.WriteLine($"Продолжить игру?\n{CommandToContuneNumber} - {CommandToContune}\n{CommandToFinishNumber} - {CommandToFinish}");
+                commandFromUser = Console.ReadLine();
+
+                switch (commandFromUser)
+                {
+                    case CommandToContuneNumber:
+                        Console.Clear();
+                        break;
+                    case CommandToFinishNumber:
+                        isNeedPlayContune = false;
+                        break;
+                    default:
+                        Console.WriteLine("Неверное значение команды!");
+                        break;
+                }
+            }
+        }
+
+        private enum Suit { Hearts , Spades, Diamonds, Clubs };
+        private enum ValueCard { Two , Three, Four, Five, Six, Seven, Eight, Nine, Ten, Jack, Queen, King, Ace };
+
+        class Card
+        {
+            private Suit _suit;
+            public Suit Suit { get { return _suit; } }
+
+            private ValueCard _valueCard;
+            public ValueCard ValueCard { get { return _valueCard; } }
+
+            public Card(Suit suit, ValueCard valueCard)
+            {
+                _suit = suit;   
+                _valueCard = valueCard;
+            }
+
+            public void ShowCard()
+            {
+                Console.WriteLine($"{Suit}, {ValueCard}");
+            }
+        }
+
+        class Player
+        {
+            private List<Card> _playerCard { get; set; } = new List<Card>();
+
+            public void GiveCartToPlayer(Card card)
+            {
+                _playerCard.Add(card);
+            }
+
+            public void ShowAllCardOfPlayer()
+            {
+                Console.WriteLine("У игрока на руках следующие карты: ");
+                
+                foreach(Card card in _playerCard)
+                {
+                    card.ShowCard();
+                }
+
+                Console.WriteLine();
+            }
+        }
+
+        class CardsPack
+        {
+            private Stack<Card> _cardPack;
+
+            public CardsPack()
+            {
+                _cardPack = FillPackOfRandomCards(FillVariantsOfCards());
+            }
+
+            private List<Card> FillVariantsOfCards()
+            {
+                int scoreOfSuit = 4;
+                int scoreOfValueCard = 13;
+
+                List<Card> cardsPack = new List<Card>();
+
+                for (int i = 0; i < scoreOfSuit; i++)
+                {
+                    for (int j = 0; j < scoreOfValueCard; j++)
+                    {
+                        cardsPack.Add(new Card((Suit)i, (ValueCard)j));
+                    }
+                }
+
+                return cardsPack;
+            }
+
+            private Stack<Card> FillPackOfRandomCards(List<Card> cardsPack)
+            {
+                Stack<Card> cards = new Stack<Card>();
+                Random random = new Random();
+
+                bool isPackEmpty = false;
+
+                Card removingCard;               
+
+                while (isPackEmpty == false)
+                {
+                    int indexOfCard = random.Next(0, cardsPack.Count); 
+                    removingCard = cardsPack[indexOfCard];//Возможны проблемы с ссылками
+                    cards.Push(removingCard);
+                    cardsPack.RemoveAt(indexOfCard);
+
+                    if (cardsPack.Count == 0)
+                    {
+                        isPackEmpty = true;
+                    }
+                }
+
+                return cards;
+            }
+
+            public Card TakeCardFromPack()
+            {
+                if (_cardPack.Count == 0)
+                {
+                    Console.WriteLine("Колода пуста!");
+                    return null;
+                }
+                else
+                {
+                    return _cardPack.Pop();
+                }
+            }
+            
+            public int TakeCountOfCardsInPack()
+            {
+                return _cardPack.Count;
+            }
+        }
+
+        class Deck
+        {
+            private Player _player = new Player();
+            private CardsPack _cardsPack = new CardsPack();
+
+            public void Play()
+            {
+                bool isValueOfCardsCorrect;
+
+                Console.WriteLine("Перед вами лежит колода карт. Сколько вы хотие взять карт на руку?");
+                isValueOfCardsCorrect = int.TryParse(Console.ReadLine(), out int valueOfCards);
+
+                if (isValueOfCardsCorrect & (_cardsPack.TakeCountOfCardsInPack() >= valueOfCards))
+                {
+                    for (int i = 0; i < valueOfCards; i++)
+                    {
+                        Card cardForPlayer = _cardsPack.TakeCardFromPack();
+                        _player.GiveCartToPlayer(cardForPlayer);
+                    }
+
+                    _player.ShowAllCardOfPlayer();
+                }
+                else 
+                {
+                    Console.WriteLine($"Неверное значение количества карт! Вы хотите взять {valueOfCards} шт, а в колоде осталось {_cardsPack.TakeCountOfCardsInPack()} шт."); 
+                    Console.ReadKey();
+                    Console.Clear();
+                }
+            }
+        }
+    }
+}
