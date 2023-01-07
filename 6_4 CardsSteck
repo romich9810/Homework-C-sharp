@@ -49,9 +49,9 @@ namespace _6_4_CardsSteck
         class Card
         {
             private Suit _suit;
-            public Suit Suit { get { return _suit; } }
-
             private ValueCard _valueCard;
+
+            public Suit Suit { get { return _suit; } }
             public ValueCard ValueCard { get { return _valueCard; } }
 
             public Card(Suit suit, ValueCard valueCard)
