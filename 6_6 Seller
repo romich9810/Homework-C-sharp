@@ -1,0 +1,348 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.Remoting.Messaging;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace _6_6_Seller
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            Shop shop = new Shop();
+
+            shop.Work();
+        }
+
+        class Seller
+        {
+            private List<Item> _items = new List<Item>();
+
+            private int _money;
+
+            public int Money { get { return _money; }  }
+
+            public Seller()
+            {
+                _money = 0;
+                _items = RandomItems();
+            }
+
+            public void ShowItems()
+            {
+                int position = 0;
+
+                Console.WriteLine("Вот что я могу предложить: \n");
+
+                foreach(Item item in _items)
+                {
+                    Console.Write(++position + ") ");
+                    item.ShowDescritpionItem();
+                }
+
+                Console.WriteLine();
+            }
+
+            public Item SellItem(int position, int moneyUser)
+            {
+                if (moneyUser == 0 | position >= _items.Count)
+                {
+                    Console.WriteLine("Вы и сами не знаете, чего хотие, голубчик. (некорректная позиция либо не хватает денег)");
+                    return null;
+                }
+                else
+                {
+                    Item item = _items[position];
+                    _items.RemoveAt(position);
+
+                    Console.WriteLine($"Пожалуйста! Вот ваш {item.Name}. С вас {item.Price}");
+
+                    _money += moneyUser;
+
+                    return item;
+                }
+            }
+
+            public Item GiveItemForMakeChoise(int position)
+            {
+                return _items[position];
+            }
+
+            private List<Item> RandomItems()
+            {
+                List<Item> foodItems = new List<Item>()
+                { 
+                    new Food(15,"банан","жёлтое вытянутое создание, пахнет вкусно", 96),
+                    new Food(8,"картошка", "белорусский фрукт, овощ, хлеб, завтрак, обед, торт", 77),
+                    new Food(50, "cникерс", "сладкий батончик с орехами, от которого \"не тормозят\"", 392),
+                    new Food(100, "арбуз", "съешь меня и пожалеешь в дороге", 50),
+                };
+
+                List<Item> toolItems = new List<Item>()
+                {
+                    new Tool(300,"лопата", "фитнес-тренажёр, а также твой друг на лето у бабушки", "копать грунт"),
+                    new Tool(200, "ручка шариковая", "ручка - она и в Африке ручка. Хотя там перья, но это не точно", "записывать информацию"),
+                    new Tool(1000, "топор", "и кашу сваришь, и дрова нарубишь", "рубить деревья, рубить плоть"),
+                    new Tool(5000, "Перфоратор \"Bosh\"", "достал? @бошь!", "сверлить стены"),
+                };
+
+                List<Item> otherItems = new List<Item>()
+                {  
+                    new OtherItem(150,"Носки чёрные летние", "защити свои ножки от грязи и ночного зноя", "выглядят объёмными и прочными"),
+                    new OtherItem(500,"Книга \"Радиоаппаратура своими руками\"","старая советская книга, которую он любил больше, чем жену", "страницы книги хорошо горят, есть схема приёмника на 5 стр."),
+                    new OtherItem(250,"набор ниток и иголок","такие наборы выдавались в номерах при заселении","иголки достаточно острые, нитки режут бумагу"),
+                    new OtherItem(1000, "бинокль", "явно от твоего дяди-моряка", "в детстве жёг им муравьев и подглядывал за Наташкой")
+                };
+
+                List<Item> randomItems = new List<Item>();
+
+                Random random = new Random();
+
+                randomItems.Add(foodItems[random.Next(0, foodItems.Count)]);
+                randomItems.Add(toolItems[random.Next(0, toolItems.Count)]);
+                randomItems.Add(otherItems[random.Next(0, otherItems.Count)]);
+
+                return randomItems;
+            }
+        }
+
+        class User
+        {
+            private List<Item> _bag = new List<Item>();
+
+            private int _money;
+            private int _wannaPosition;
+
+            public int Money { get { return _money;} }
+            public int WannaPosition { get { return _wannaPosition;} }
+            
+            public User()
+            {
+                Random random = new Random();   
+                _money = random.Next(0, 1000);
+            }
+            
+            public bool IsWantingPositionCorrect()
+            {
+                bool isPositionReadCorrect;
+
+                Console.WriteLine("Я хочу предмет на позиции (введите): ");
+                isPositionReadCorrect = int.TryParse(Console.ReadLine(), out int wantPosition);
+
+                if (isPositionReadCorrect & wantPosition > 0)
+                {
+                    _wannaPosition = wantPosition - 1;
+                    return true;
+                }
+                else
+                {
+                    Console.WriteLine("Позиция некорректна!");
+                    Console.ReadKey();
+                    Console.Clear();
+                    return false;
+                }
+            }
+
+            public int GiveMoneyToSeller(Item item) 
+            {
+                if (_money < item.Price)
+                {
+                    Console.WriteLine($"У меня не хватает денег на {item.Name}");
+
+                    return 0;
+                }
+                else
+                {
+                    _money -= item.Price;
+
+                    Console.WriteLine($"*Протягиваю продавцу {item.Price} за {item.Name}*");
+
+                    return item.Price;
+                }
+            }
+
+            public void PutItemInBag(Item item)
+            {
+                _bag.Add(item);
+                Console.WriteLine($"{item.Name} у вас в сумке.");
+            }
+
+            public void ShowMyMoney()
+            {
+                Console.SetCursorPosition(50, 0);
+                Console.WriteLine($"У вас  есть {Money} ед. денег.");
+                Console.SetCursorPosition(0, 0);
+            }
+
+            public void ShowMyBag()
+            {
+                Console.Clear();
+                Console.WriteLine("Содержимое сумки: ");
+
+                foreach(Item item in _bag)
+                {
+                    Console.WriteLine(item.Name); 
+                }
+
+                Console.ReadKey();
+            }
+        }
+
+        class Shop
+        {
+            Seller seller = new Seller();
+            User user = new User();
+
+            public void Work()
+            {
+                const string TradeCommand = "купить товар";
+                const string ShowMyBagCommand = "посмотреть мои купленыне предметы";
+                const string ExitCommand = "выход";
+
+                const string TradeCommandNumber = "1";
+                const string ShowMyBagCommandNumber = "2";
+                const string ExitCommandNumber = "3";
+
+                string userCommand;
+
+                bool isNeedWorkContune = true;
+
+                while (isNeedWorkContune)
+                {
+                    Console.WriteLine("Добро пожаловать в магазин!\n");
+                    Console.WriteLine($"{TradeCommandNumber} - {TradeCommand}\n{ShowMyBagCommandNumber} - {ShowMyBagCommand}\n{ExitCommandNumber} - {ExitCommand}");
+                    userCommand = Console.ReadLine();
+
+                    switch (userCommand)
+                    {
+                        case TradeCommandNumber:
+                            TradeItem();
+                            break;
+
+                        case ShowMyBagCommandNumber:
+                            user.ShowMyBag();
+                            break;
+
+                        case ExitCommandNumber:
+                            isNeedWorkContune = false;
+                            break;
+
+                        default:
+                            Console.WriteLine("Неверная команда");
+                            break;
+                    }
+
+                    Console.Clear();
+                }
+            }
+
+            private void TradeItem()
+            {
+                Console.Clear();
+                user.ShowMyMoney();
+                seller.ShowItems();
+
+                if (user.IsWantingPositionCorrect())
+                {
+                    int positionForTrade = user.WannaPosition;
+                    int moneyForSeller = user.GiveMoneyToSeller(seller.GiveItemForMakeChoise(positionForTrade));
+
+                    if (moneyForSeller == 0)
+                    {
+                        Console.WriteLine("Cделка не удалась!");                        
+                    }
+                    else
+                    {
+                        Item itemForTrade = seller.SellItem(positionForTrade, moneyForSeller);
+                        user.PutItemInBag(itemForTrade);
+                    }
+
+                    Console.ReadKey();
+                }
+            }
+        }
+
+        abstract class Item
+        {
+            private int _price;
+            private string _name;
+            private string _description;
+
+            public int Price { get { return _price; } set { _price = value; } }
+            public string Name { get { return _name; } set { _name = value; } }
+            public string Description { get { return _description; } set { _description = value; } }
+
+            protected Item(int price, string name, string description)
+            {
+                _price = price;
+                _name = name;
+                _description = description;
+            }
+
+            public virtual void ShowDescritpionItem() 
+            {
+                Console.WriteLine("Характеристики предмета: ");
+                Console.Write($"Цена: {Price},\nНаименование: {Name},\nОписание: {Description}\n");
+            }
+        }
+
+        class Food : Item
+        {
+            private int _callories;
+
+            public int Callories { get { return _callories; } }
+
+            public Food(int price, string name, string description, int callories): base (price, name, description)
+            {
+                _callories = callories;
+            }
+
+            public  override void ShowDescritpionItem()
+            {
+                base.ShowDescritpionItem();
+                Console.WriteLine($"Каллории: {Callories}");
+                Console.WriteLine();
+            }
+        }
+
+        class Tool : Item
+        {
+            private string _purpose;
+
+            public string Purpose { get { return _purpose; } }
+
+            public Tool(int price, string name, string description, string purpose) : base(price, name, description)
+            {
+                _purpose = purpose;
+            }
+
+            public override void ShowDescritpionItem()
+            {
+                base.ShowDescritpionItem();
+                Console.WriteLine($"Предназначение: {Purpose}");
+                Console.WriteLine();
+            }
+        }
+
+        class OtherItem : Item
+        {
+            private string _possiblyPurpose;
+            
+            public string PossiblyPurpose { get { return _possiblyPurpose; } }
+
+            public OtherItem(int price, string name, string description, string possiblyPurpose) : base (price, name, description)
+            {
+                _possiblyPurpose = possiblyPurpose;
+            }
+
+            public override void  ShowDescritpionItem()
+            {
+                base.ShowDescritpionItem();
+                Console.WriteLine($"Возможное предназначение: {PossiblyPurpose}");
+                Console.WriteLine();
+            }
+        }
+    }
+}
