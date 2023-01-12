@@ -286,7 +286,7 @@ namespace _6_8_Arena
             }  
         }
 
-        private List<Unit> ChooseFighter() //ничего не возвращает, заебал)))) Ввод двух бойцов есть
+        private List<Unit> ChooseFighter()
         {
             List<Unit> fighters = new List<Unit>();
             Unit firstFighter;
