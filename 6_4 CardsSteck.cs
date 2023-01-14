@@ -11,35 +11,49 @@ namespace _6_4_CardsSteck
     {
         static void Main(string[] args)
         {
-            const string CommandToContune = "да, продолжить";
-            const string CommandToFinish = "завершить игру";
-            const string CommandToContuneNumber = "1";
-            const string CommandToFinishNumber = "2";
+            const string CommandToTakeCardsNumber = "1";
+            const string CommandToShowAllCardsNumber = "2";
+            const string CommandToFinishNumber = "3";
 
-            Deck deck = new Deck();
+            string CommandToTakeCards = "взять карты";
+            string CommandToFinish = "завершить игру";
+            string CommandToShowAllCards = "посмотреть все карты в руке";
+
+            GameTable table = new GameTable();
 
             bool isNeedPlayContune = true;
             string commandFromUser;
 
             while (isNeedPlayContune)
             {
-                deck.Play();
+                Console.WriteLine($"Перед вами колода карт." +
+                    $"\n{CommandToTakeCardsNumber} - {CommandToTakeCards}" +
+                    $"\n{CommandToShowAllCardsNumber} - {CommandToShowAllCards}" +
+                    $"\n{CommandToFinishNumber} - {CommandToFinish}");
 
-                Console.WriteLine($"Продолжить игру?\n{CommandToContuneNumber} - {CommandToContune}\n{CommandToFinishNumber} - {CommandToFinish}");
                 commandFromUser = Console.ReadLine();
 
                 switch (commandFromUser)
                 {
-                    case CommandToContuneNumber:
-                        Console.Clear();
+                    case CommandToTakeCardsNumber:
+                        table.TakeCards();
                         break;
+
+                    case CommandToShowAllCardsNumber:
+                        table.ShowAllPlayerCards();
+                        break;
+
                     case CommandToFinishNumber:
                         isNeedPlayContune = false;
                         break;
+
                     default:
                         Console.WriteLine("Неверное значение команды!");
                         break;
                 }
+
+                Console.ReadKey();
+                Console.Clear();
             }
         }
 
@@ -50,15 +64,14 @@ namespace _6_4_CardsSteck
         {
             private Suit _suit;
             private ValueCard _valueCard;
+            public Card(Suit suit, ValueCard valueCard)
+            {
+                _suit = suit;
+                _valueCard = valueCard;
+            }
 
             public Suit Suit { get { return _suit; } }
             public ValueCard ValueCard { get { return _valueCard; } }
-
-            public Card(Suit suit, ValueCard valueCard)
-            {
-                _suit = suit;   
-                _valueCard = valueCard;
-            }
 
             public void ShowCard()
             {
@@ -68,9 +81,9 @@ namespace _6_4_CardsSteck
 
         class Player
         {
-            private List<Card> _playerCard { get; set; } = new List<Card>();
+            private List<Card> _playerCard = new List<Card>(); //сделать метод для работы с приватным листом, свойство убратть
 
-            public void GiveCartToPlayer(Card card)
+            public void TakeCard(Card card)
             {
                 _playerCard.Add(card);
             }
@@ -88,16 +101,16 @@ namespace _6_4_CardsSteck
             }
         }
 
-        class CardsPack
+        class Pack
         {
             private Stack<Card> _cardPack;
 
-            public CardsPack()
+            public Pack()
             {
-                _cardPack = FillPackOfRandomCards(FillVariantsOfCards());
+                _cardPack = Shuffle(GiveAllCards());
             }
 
-            private List<Card> FillVariantsOfCards()
+            private List<Card> GiveAllCards()
             {
                 int scoreOfSuit = 4;
                 int scoreOfValueCard = 13;
@@ -115,7 +128,7 @@ namespace _6_4_CardsSteck
                 return cardsPack;
             }
 
-            private Stack<Card> FillPackOfRandomCards(List<Card> cardsPack)
+            private Stack<Card> Shuffle(List<Card> cardsPack)
             {
                 Stack<Card> cards = new Stack<Card>();
                 Random random = new Random();
@@ -140,7 +153,7 @@ namespace _6_4_CardsSteck
                 return cards;
             }
 
-            public Card TakeCardFromPack()
+            public Card GiveCard()
             {
                 if (_cardPack.Count == 0)
                 {
@@ -153,40 +166,41 @@ namespace _6_4_CardsSteck
                 }
             }
             
-            public int TakeCountOfCardsInPack()
+            public int GiveCountOfCards()
             {
                 return _cardPack.Count;
             }
         }
 
-        class Deck
+        class GameTable
         {
             private Player _player = new Player();
-            private CardsPack _cardsPack = new CardsPack();
+            private Pack _cardsPack = new Pack();
 
-            public void Play()
+            public void TakeCards()
             {
                 bool isValueOfCardsCorrect;
 
                 Console.WriteLine("Перед вами лежит колода карт. Сколько вы хотие взять карт на руку?");
                 isValueOfCardsCorrect = int.TryParse(Console.ReadLine(), out int valueOfCards);
 
-                if (isValueOfCardsCorrect & (_cardsPack.TakeCountOfCardsInPack() >= valueOfCards))
+                if (isValueOfCardsCorrect & (_cardsPack.GiveCountOfCards() >= valueOfCards))
                 {
                     for (int i = 0; i < valueOfCards; i++)
                     {
-                        Card cardForPlayer = _cardsPack.TakeCardFromPack();
-                        _player.GiveCartToPlayer(cardForPlayer);
+                        Card cardForPlayer = _cardsPack.GiveCard();
+                        _player.TakeCard(cardForPlayer);
                     }
-
-                    _player.ShowAllCardOfPlayer();
                 }
                 else 
                 {
-                    Console.WriteLine($"Неверное значение количества карт! Вы хотите взять {valueOfCards} шт, а в колоде осталось {_cardsPack.TakeCountOfCardsInPack()} шт."); 
-                    Console.ReadKey();
-                    Console.Clear();
+                    Console.WriteLine($"Неверное значение количества карт! Вы хотите взять {valueOfCards} шт, а в колоде осталось {_cardsPack.GiveCountOfCards()} шт."); 
                 }
+            }
+
+            public void ShowAllPlayerCards()
+            {
+                _player.ShowAllCardOfPlayer();
             }
         }
     }
