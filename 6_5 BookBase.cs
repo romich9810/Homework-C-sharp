@@ -192,9 +192,9 @@ namespace _6_5_BookBase
                         {
                             foundedBooks.Add(book);
                         }
-
-                        ShowFounded(foundedBooks);
                     }
+
+                    ShowFounded(foundedBooks);
                 }
                 else
                 {
@@ -213,7 +213,7 @@ namespace _6_5_BookBase
 
                 foreach (Book book in _listBooks)
                 {
-                    if (book.Name.ToLower() == nameOrAuthor.ToLower())
+                    if (book.Author.ToLower() == nameOrAuthor.ToLower())
                     {
                         foundedBooks.Add(book);
                     }
@@ -233,7 +233,7 @@ namespace _6_5_BookBase
 
                 foreach (Book book in _listBooks)
                 {
-                    if (book.Author.ToLower() == nameOrBook.ToLower())
+                    if (book.Name.ToLower() == nameOrBook.ToLower())
                     {
                         foundedBooks.Add(book);
                     }
