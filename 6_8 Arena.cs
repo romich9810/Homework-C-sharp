@@ -19,7 +19,7 @@ namespace _6_8_Arena
                 arena.ShowFighters();
                 arena.Fight();
 
-                isNeedContune = arena.IsArenaFilly();
+                isNeedContune = arena.IsArenaFill();
 
                 Console.ReadKey();
                 Console.Clear();
@@ -39,7 +39,7 @@ namespace _6_8_Arena
 
         public bool IsAlive { get; protected set; } = true;
 
-        public virtual int DoAttack() { return 0; }//нужен ли ретурн ноль?
+        public virtual int GetAttack() { return 0; }//нужен ли ретурн ноль?
 
         public void TakeDamage(int damage)
         {
@@ -65,7 +65,13 @@ namespace _6_8_Arena
             }
         }
 
-        public int Attack()
+        public void Heal()
+        {
+            Healthpoint = 100;
+            Armor = 100;
+        }
+
+        protected int Attack()
         {
             ScoreOfAttacks++;
             return DamageByHand;
@@ -89,13 +95,15 @@ namespace _6_8_Arena
             NameCLass = "воин";
         }
 
-        public override int DoAttack()
+        public override int GetAttack()
         {
             int scoreForUsingUltraAttack = 3;
             int modifier = 2;
 
             if (ScoreOfAttacks == scoreForUsingUltraAttack)
             {
+                Console.WriteLine($"{Name} применил ультиматив!");
+
                 ScoreOfAttacks = 0;
                 return DamageByHand * modifier;
             }
@@ -130,7 +138,7 @@ namespace _6_8_Arena
             NameCLass = "лучник";
         }
 
-        public override int DoAttack()
+        public override int GetAttack()
         {
             Random random = new Random();
 
@@ -145,6 +153,8 @@ namespace _6_8_Arena
 
             if ((count == countForModifier) & (ScoreOfAttacks == scoreForUsingUltraAttack))
             {
+                Console.WriteLine($"{Name} применил ультиматив!");
+
                 ScoreOfAttacks = 0;
                 return DamageByHand * modifier;
             }
@@ -181,34 +191,19 @@ namespace _6_8_Arena
             }
         }
 
-        public bool IsArenaFilly()
-        { 
-            if (_fighters.Count == 1)
+        public bool IsArenaFill()
+        {
+            int onlyOneFighter = 1;
+
+            if (_fighters.Count == onlyOneFighter)
             {
-                Console.WriteLine("Остался всего один боец! Автоматическая победа!");
+                Console.WriteLine($"Остался всего один боец! Победа!{_fighters[onlyOneFighter - 1].Name}") ;
                 Console.ReadKey();
 
                 return false;
             }
 
             return _fighters.Count >= 0;
-        }
-
-        private Unit GetUnit(Random random)
-        {
-            int warriorIndex = 1;
-            int archerIndex = 2;
-
-            int indexForRandom = random.Next(warriorIndex, archerIndex + 1);
-
-            if (indexForRandom == warriorIndex)
-            {
-                return new Warrior(random);
-            }
-            else
-            {
-                return new Archer(random);
-            }
         }
 
         public void ShowFighters()
@@ -254,7 +249,7 @@ namespace _6_8_Arena
                     {
                         Console.WriteLine($"Бьёт {firstFighter.Name}");
 
-                        secondFighter.TakeDamage(firstFighter.DoAttack());
+                        secondFighter.TakeDamage(firstFighter.GetAttack());
 
                         Console.WriteLine($"После удара:\n{secondFighter.Name} - {secondFighter.Healthpoint} хп, {secondFighter.Armor} брони.");
                     }
@@ -263,7 +258,7 @@ namespace _6_8_Arena
                     {
                         Console.WriteLine($"Бьёт {secondFighter.Name}");
 
-                        firstFighter.TakeDamage(secondFighter.DoAttack());
+                        firstFighter.TakeDamage(secondFighter.GetAttack());
 
                         Console.WriteLine($"После удара:\n{firstFighter.Name} - {firstFighter.Healthpoint} хп, {firstFighter.Armor} брони.");
                     }
@@ -272,11 +267,17 @@ namespace _6_8_Arena
                 if (firstFighter.IsAlive == false && secondFighter.IsAlive == true)
                 {
                     Console.WriteLine($"Победа бойца {secondFighter.Name}!\nHP - {secondFighter.Healthpoint}, броня - {secondFighter.Armor}");
+
+                    secondFighter.Heal();
+                    _fighters.Add(secondFighter);
                 }
 
                 if (firstFighter.IsAlive == true && secondFighter.IsAlive == false)
                 {
                     Console.WriteLine($"Победа бойца {firstFighter.Name}!\nHP - {firstFighter.Healthpoint}, броня - {firstFighter.Armor}");
+
+                    firstFighter.Heal();
+                    _fighters.Add(firstFighter);
                 }
 
                 if (firstFighter.IsAlive == false && secondFighter.IsAlive == false)
@@ -286,7 +287,7 @@ namespace _6_8_Arena
             }  
         }
 
-        private List<Unit> ChooseFighter()
+        private List<Unit> ChooseFighter() 
         {
             List<Unit> fighters = new List<Unit>();
             Unit firstFighter;
@@ -327,6 +328,23 @@ namespace _6_8_Arena
             {
                 Console.WriteLine($"Неверный индекс одного из бойцов!");
                 return null;
+            }
+        }
+
+        private Unit GetUnit(Random random)
+        {
+            int warriorIndex = 1;
+            int archerIndex = 2;
+
+            int indexForRandom = random.Next(warriorIndex, archerIndex + 1);
+
+            if (indexForRandom == warriorIndex)
+            {
+                return new Warrior(random);
+            }
+            else
+            {
+                return new Archer(random);
             }
         }
     }
