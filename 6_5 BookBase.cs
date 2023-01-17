@@ -10,7 +10,7 @@ namespace _6_5_BookBase
     {
         static void Main(string[] args)
         {
-            BookBase bookBase = new BookBase();
+            DataBase bookBase = new DataBase();
             bookBase.Work();
         }
 
@@ -28,21 +28,127 @@ namespace _6_5_BookBase
             public int YearOfRelease { get; }
         }
 
-        class BookBase
+        class DataBase
         {
             private List<Book> _listBooks = new List<Book>();
             private int _yearNow = 2023;
 
-            public BookBase()
+            public DataBase()
             {
                 _listBooks = new List<Book>() {new Book("Война и мир", "Толстой Л.Н.", 1865), new Book("Капитанская дочка","Пушкин А. С.", 1836), new Book("1984", "Оруэлл Д.", 1949) };
             }
 
-            public void Add() 
+            public void Work()
+            {
+                const string ShowAllBooksNumber = "1";
+                const string AddBookNumber = "2";
+                const string DeleteBookNumber = "3";
+                const string FindBookByParametr = "4";
+                const string ExitCommandNumber = "5";
+
+                string ShowAllBooksCommand = "показать все книги в базе";
+                string AddBookCommand = "добавить книгу в базу";
+                string DeleteBookCommand = "удалить книгу из базы";
+                string FindByParametrsCommand = "найти книгу по параметрам";
+                string ExitCommand = "выход";
+
+                bool isNeedWorkElse = true;
+
+                string userCommand;
+
+                while (isNeedWorkElse)
+                {
+                    Console.WriteLine($"Добро пожаловать в базу книг!" +
+                        $"\n\n{ShowAllBooksNumber} - {ShowAllBooksCommand}" +
+                        $"\n{AddBookNumber} - {AddBookCommand}" +
+                        $"\n{DeleteBookNumber} - {DeleteBookCommand}" +
+                        $"\n{FindBookByParametr} - {FindByParametrsCommand}" +
+
+                        $"\n{ExitCommandNumber} - {ExitCommand}");
+                    userCommand = Console.ReadLine();
+
+                    switch (userCommand)
+                    {
+                        case ShowAllBooksNumber:
+                            ShowBooks();
+                            break;
+
+                        case AddBookNumber:
+                            AddBook();
+                            break;
+
+                        case DeleteBookNumber:
+                            DeleteBook();
+                            break;
+
+                        case FindBookByParametr:
+
+                            const string FindBookByYearNumber = "1";
+                            const string FindBookByAuthorCommandNumber = "2";
+                            const string FindBookByNameOfBookCommandNumber = "3";
+                            const string GoPreviousMenuCommandNumber = "4";
+
+                            string FindBookByYearCommand = "найти книгу по году издания";
+                            string FindBookByAuthorCommand = "найти книгу по автору";
+                            string FindBookByNameOfBookCommand = "Найти книгу по названию";
+                            string GoPreviousMenuCommand = "вернуться назад в главное меню";
+
+                            Console.Clear();
+
+                            Console.WriteLine($"Выберите параметра для поиска: " +
+                                $"\n{FindBookByYearNumber} - {FindBookByYearCommand}" +
+                                $"\n{FindBookByAuthorCommandNumber} - {FindBookByAuthorCommand}" +
+                                $"\n{FindBookByNameOfBookCommandNumber} - {FindBookByNameOfBookCommand}" +
+                                $"\n{GoPreviousMenuCommandNumber} - {GoPreviousMenuCommand}");
+
+                            userCommand = Console.ReadLine();
+
+                            switch (userCommand)
+                            {
+                                case FindBookByYearNumber:
+                                    FindBookByYear();
+                                    break;
+
+                                case FindBookByAuthorCommandNumber:
+                                    FindBookByAuthor();
+                                    break;
+
+                                case FindBookByNameOfBookCommandNumber:
+                                    FindBookByItsName();
+                                    break;
+
+                                case GoPreviousMenuCommandNumber:
+                                    Console.WriteLine("Нажмите любую клавишу.");
+                                    break;
+
+                                default:
+                                    Console.WriteLine("Неверная команда!");
+                                    Console.ReadKey();
+                                    break;
+                            }
+
+                            break;
+
+                        case ExitCommandNumber:
+                            isNeedWorkElse = false;
+                            break;
+
+                        default:
+                            Console.WriteLine("Неверная команда!");
+                            Console.ReadKey();
+                            break;
+                    }
+
+                    Console.ReadKey();
+                    Console.Clear();
+                }
+            }
+
+            private void AddBook()
             {
                 string nameOfBook;
                 string authorOfBook;
-                bool  isYearOfBookCorrect;
+                bool isYearOfBookCorrect;
 
                 Console.WriteLine("Введите название книги: ");
                 nameOfBook = Console.ReadLine();
@@ -53,9 +159,9 @@ namespace _6_5_BookBase
                 Console.WriteLine("Введите год издания: ");
                 isYearOfBookCorrect = int.TryParse(Console.ReadLine(), out int yearOfBook);
 
-                if (isYearOfBookCorrect & ((yearOfBook > 0 ) && (yearOfBook <= _yearNow)))
+                if (isYearOfBookCorrect & ((yearOfBook > 0) && (yearOfBook <= _yearNow)))
                 {
-                    _listBooks.Add(new Book (nameOfBook, authorOfBook, yearOfBook));
+                    _listBooks.Add(new Book(nameOfBook, authorOfBook, yearOfBook));
                     Console.WriteLine($"Книга {nameOfBook} добавлена в базу.");
                 }
                 else
@@ -64,7 +170,7 @@ namespace _6_5_BookBase
                 }
             }
 
-            private void Delete()
+            private void DeleteBook()
             {
                 string nameOfBookForDelete;
                 bool isDeleteCorrect = false;
@@ -92,90 +198,15 @@ namespace _6_5_BookBase
             {
                 Console.WriteLine("Все имеющиеся книги:\n ");
 
-                foreach(Book book in _listBooks)
+                foreach (Book book in _listBooks)
                 {
                     Console.WriteLine($"Название:{book.Name}, автор:  {book.Author}, год издания: {book.YearOfRelease}");
                 }
 
                 Console.WriteLine();
-                Console.ReadKey();
             }
 
-            public void Work()
-            {
-                const string ShowAllBooksNumber = "1";
-                const string AddBookNumber = "2";
-                const string DeleteBookNumber = "3";
-                const string FindBookByYearNumber = "4";
-                const string FindBookByAuthorCommandNumber = "5";
-                const string FindBookByNameOfBookCommandNumber = "6";
-                const string ExitCommandNumber = "7";
-
-                string ShowAllBooksCommand = "показать все книги в базе";
-                string AddBookCommand = "добавить книгу в базу";
-                string DeleteBookCommand = "удалить книгу из базы";
-                string FindBookByYearCommand = "найти книгу по году издания";
-                string FindBookByAuthorCommand = "найти книгу по автору";
-                string FindBookByNameOfBookCommand = "Найти книгу по названию";
-                string ExitCommand = "выход";
-
-                bool isNeedWorkElse = true;
-
-                string userCommand;
-
-                while (isNeedWorkElse)
-                {
-                    Console.WriteLine($"Добро пожаловать в базу книг!" +
-                        $"\n\n{ShowAllBooksNumber} - {ShowAllBooksCommand}" +
-                        $"\n{AddBookNumber} - {AddBookCommand}" +
-                        $"\n{DeleteBookNumber} - {DeleteBookCommand}" +
-                        $"\n{FindBookByYearNumber} - {FindBookByYearCommand}" +
-                        $"\n{FindBookByAuthorCommandNumber} - {FindBookByAuthorCommand}" +
-                        $"\n{FindBookByNameOfBookCommandNumber} - {FindBookByNameOfBookCommand}" +
-                        $"\n{ExitCommandNumber} - {ExitCommand}");
-                    userCommand = Console.ReadLine();
-
-                    switch (userCommand)
-                    {
-                        case ShowAllBooksNumber:
-                            ShowBooks();
-                            break;
-
-                        case AddBookNumber:
-                            Add();
-                            break;
-
-                        case DeleteBookNumber:
-                            Delete();
-                            break;
-
-                        case FindBookByYearNumber:
-                            FindByYear();
-                            break;
-
-                        case FindBookByAuthorCommandNumber:
-                            FindByAuthor();
-                            break;
-
-                        case FindBookByNameOfBookCommandNumber:
-                            FindByItsName();
-                            break;
-
-                        case ExitCommandNumber:
-                            isNeedWorkElse = false;
-                            break;
-
-                        default:
-                            Console.WriteLine("Неверная команда!");
-                            Console.ReadKey();
-                            break;
-                    }
-
-                    Console.Clear();
-                }
-            }
-
-            private void FindByYear()
+            private void FindBookByYear()
             {
                 List<Book> foundedBooks = new List<Book>();
 
@@ -194,7 +225,7 @@ namespace _6_5_BookBase
                         }
                     }
 
-                    ShowFounded(foundedBooks);
+                    ShowFoundedBooks(foundedBooks);
                 }
                 else
                 {
@@ -202,7 +233,7 @@ namespace _6_5_BookBase
                 }
             }
 
-            private void FindByAuthor()
+            private void FindBookByAuthor()
             {
                 List<Book> foundedBooks = new List<Book>();
 
@@ -219,10 +250,10 @@ namespace _6_5_BookBase
                     }
                 }
 
-                ShowFounded(foundedBooks);
+                ShowFoundedBooks(foundedBooks);
             }
 
-            private void FindByItsName()
+            private void FindBookByItsName()
             {
                 List<Book> foundedBooks = new List<Book>();
 
@@ -239,10 +270,10 @@ namespace _6_5_BookBase
                     }
                 }
 
-                ShowFounded(foundedBooks);
+                ShowFoundedBooks(foundedBooks);
             }
 
-            private void ShowFounded(List<Book> listBooks)
+            private void ShowFoundedBooks(List<Book> listBooks)
             {
                 Console.WriteLine("Все книги, что подходят по параметрам:\n ");
 
@@ -252,7 +283,6 @@ namespace _6_5_BookBase
                 }
 
                 Console.WriteLine();
-                Console.ReadKey();
             }
         }
     }
