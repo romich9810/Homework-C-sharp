@@ -43,7 +43,7 @@ namespace _6_5_BookBase
                 const string ShowAllBooksNumber = "1";
                 const string AddBookNumber = "2";
                 const string DeleteBookNumber = "3";
-                const string FindBookByParametr = "4";
+                const string FindBookByParametrNumber = "4";
                 const string ExitCommandNumber = "5";
 
                 string ShowAllBooksCommand = "показать все книги в базе";
@@ -62,7 +62,7 @@ namespace _6_5_BookBase
                         $"\n\n{ShowAllBooksNumber} - {ShowAllBooksCommand}" +
                         $"\n{AddBookNumber} - {AddBookCommand}" +
                         $"\n{DeleteBookNumber} - {DeleteBookCommand}" +
-                        $"\n{FindBookByParametr} - {FindByParametrsCommand}" +
+                        $"\n{FindBookByParametrNumber} - {FindByParametrsCommand}" +
 
                         $"\n{ExitCommandNumber} - {ExitCommand}");
                     userCommand = Console.ReadLine();
@@ -81,52 +81,8 @@ namespace _6_5_BookBase
                             DeleteBook();
                             break;
 
-                        case FindBookByParametr:
-
-                            const string FindBookByYearNumber = "1";
-                            const string FindBookByAuthorCommandNumber = "2";
-                            const string FindBookByNameOfBookCommandNumber = "3";
-                            const string GoPreviousMenuCommandNumber = "4";
-
-                            string FindBookByYearCommand = "найти книгу по году издания";
-                            string FindBookByAuthorCommand = "найти книгу по автору";
-                            string FindBookByNameOfBookCommand = "Найти книгу по названию";
-                            string GoPreviousMenuCommand = "вернуться назад в главное меню";
-
-                            Console.Clear();
-
-                            Console.WriteLine($"Выберите параметра для поиска: " +
-                                $"\n{FindBookByYearNumber} - {FindBookByYearCommand}" +
-                                $"\n{FindBookByAuthorCommandNumber} - {FindBookByAuthorCommand}" +
-                                $"\n{FindBookByNameOfBookCommandNumber} - {FindBookByNameOfBookCommand}" +
-                                $"\n{GoPreviousMenuCommandNumber} - {GoPreviousMenuCommand}");
-
-                            userCommand = Console.ReadLine();
-
-                            switch (userCommand)
-                            {
-                                case FindBookByYearNumber:
-                                    FindBookByYear();
-                                    break;
-
-                                case FindBookByAuthorCommandNumber:
-                                    FindBookByAuthor();
-                                    break;
-
-                                case FindBookByNameOfBookCommandNumber:
-                                    FindBookByItsName();
-                                    break;
-
-                                case GoPreviousMenuCommandNumber:
-                                    Console.WriteLine("Нажмите любую клавишу.");
-                                    break;
-
-                                default:
-                                    Console.WriteLine("Неверная команда!");
-                                    Console.ReadKey();
-                                    break;
-                            }
-
+                        case FindBookByParametrNumber:
+                            FindBookByParametr();
                             break;
 
                         case ExitCommandNumber:
@@ -141,6 +97,55 @@ namespace _6_5_BookBase
 
                     Console.ReadKey();
                     Console.Clear();
+                }
+            }
+
+            private void FindBookByParametr()
+            {
+                const string FindBookByYearNumber = "1";
+                const string FindBookByAuthorCommandNumber = "2";
+                const string FindBookByNameOfBookCommandNumber = "3";
+                const string GoPreviousMenuCommandNumber = "4";
+
+                string FindBookByYearCommand = "найти книгу по году издания";
+                string FindBookByAuthorCommand = "найти книгу по автору";
+                string FindBookByNameOfBookCommand = "Найти книгу по названию";
+                string GoPreviousMenuCommand = "вернуться назад в главное меню";
+
+                string userCommand;
+
+                Console.Clear();
+
+                Console.WriteLine($"Выберите параметра для поиска: " +
+                    $"\n{FindBookByYearNumber} - {FindBookByYearCommand}" +
+                    $"\n{FindBookByAuthorCommandNumber} - {FindBookByAuthorCommand}" +
+                    $"\n{FindBookByNameOfBookCommandNumber} - {FindBookByNameOfBookCommand}" +
+                    $"\n{GoPreviousMenuCommandNumber} - {GoPreviousMenuCommand}");
+
+                userCommand = Console.ReadLine();
+
+                switch (userCommand)
+                {
+                    case FindBookByYearNumber:
+                        FindBookByYear();
+                        break;
+
+                    case FindBookByAuthorCommandNumber:
+                        FindBookByAuthor();
+                        break;
+
+                    case FindBookByNameOfBookCommandNumber:
+                        FindBookByItsName();
+                        break;
+
+                    case GoPreviousMenuCommandNumber:
+                        Console.WriteLine("Нажмите любую клавишу.");
+                        break;
+
+                    default:
+                        Console.WriteLine("Неверная команда!");
+                        Console.ReadKey();
+                        break;
                 }
             }
 
