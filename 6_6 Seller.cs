@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Data.SqlTypes;
 using System.Linq;
 using System.Runtime.Remoting.Messaging;
 using System.Text;
@@ -16,30 +17,33 @@ namespace _6_6_Seller
             shop.Work();
         }
 
-        class Seller
+        abstract class Person
         {
-            private List<Item> _items = new List<Item>();
+            protected List<Item> Items = new List<Item>();
 
-            private int _money;
+            public int Money { get; protected set; }
 
-            public int Money { get { return _money; }  }
+            public virtual void ShowItems() { }
+        }
 
+        class Seller: Person
+        {
             public Seller()
             {
-                _money = 0;
-                _items = RandomItems();
+                Money = 0;
+                Items = GenerateItems();
             }
 
-            public void ShowItems()
+            public override void ShowItems()
             {
                 int position = 0;
 
                 Console.WriteLine("Вот что я могу предложить: \n");
 
-                foreach(Item item in _items)
+                foreach(Item item in Items)
                 {
                     Console.Write(++position + ") ");
-                    item.ShowDescritpionItem();
+                    item.ShowDescritpion();
                 }
 
                 Console.WriteLine();
@@ -47,19 +51,19 @@ namespace _6_6_Seller
 
             public Item SellItem(int position, int moneyUser)
             {
-                if (moneyUser == 0 | position >= _items.Count)
+                if (moneyUser == 0 | position >= Items.Count)
                 {
                     Console.WriteLine("Вы и сами не знаете, чего хотие, голубчик. (некорректная позиция либо не хватает денег)");
                     return null;
                 }
                 else
                 {
-                    Item item = _items[position];
-                    _items.RemoveAt(position);
+                    Item item = Items[position];
+                    Items.RemoveAt(position);
 
                     Console.WriteLine($"Пожалуйста! Вот ваш {item.Name}. С вас {item.Price}");
 
-                    _money += moneyUser;
+                    Money += moneyUser;
 
                     return item;
                 }
@@ -67,12 +71,12 @@ namespace _6_6_Seller
 
             public Item GiveItemForMakeChoise(int position)
             {
-                return _items[position];
+                return Items[position];
             }
 
-            private List<Item> RandomItems()
+            private List<Item> GenerateItems()
             {
-                List<Item> foodItems = new List<Item>()
+                List<Item> foods = new List<Item>()
                 { 
                     new Food(15,"банан","жёлтое вытянутое создание, пахнет вкусно", 96),
                     new Food(8,"картошка", "белорусский фрукт, овощ, хлеб, завтрак, обед, торт", 77),
@@ -80,7 +84,7 @@ namespace _6_6_Seller
                     new Food(100, "арбуз", "съешь меня и пожалеешь в дороге", 50),
                 };
 
-                List<Item> toolItems = new List<Item>()
+                List<Item> tools = new List<Item>()
                 {
                     new Tool(300,"лопата", "фитнес-тренажёр, а также твой друг на лето у бабушки", "копать грунт"),
                     new Tool(200, "ручка шариковая", "ручка - она и в Африке ручка. Хотя там перья, но это не точно", "записывать информацию"),
@@ -88,7 +92,7 @@ namespace _6_6_Seller
                     new Tool(5000, "Перфоратор \"Bosh\"", "достал? @бошь!", "сверлить стены"),
                 };
 
-                List<Item> otherItems = new List<Item>()
+                List<Item> others = new List<Item>()
                 {  
                     new OtherItem(150,"Носки чёрные летние", "защити свои ножки от грязи и ночного зноя", "выглядят объёмными и прочными"),
                     new OtherItem(500,"Книга \"Радиоаппаратура своими руками\"","старая советская книга, которую он любил больше, чем жену", "страницы книги хорошо горят, есть схема приёмника на 5 стр."),
@@ -100,28 +104,31 @@ namespace _6_6_Seller
 
                 Random random = new Random();
 
-                randomItems.Add(foodItems[random.Next(0, foodItems.Count)]);
-                randomItems.Add(toolItems[random.Next(0, toolItems.Count)]);
-                randomItems.Add(otherItems[random.Next(0, otherItems.Count)]);
+                int maxCountOfFood = foods.Count;
+                int maxCountOfTools = tools.Count;
+                int maxCountOfOthers = others.Count;
+
+                int minCountOfItems = 0;
+
+                randomItems.Add(foods[random.Next(minCountOfItems, maxCountOfFood)]);
+                randomItems.Add(tools[random.Next(minCountOfItems, maxCountOfTools)]);
+                randomItems.Add(others[random.Next(minCountOfItems, maxCountOfOthers)]);
 
                 return randomItems;
             }
         }
 
-        class User
+        class User: Person
         {
-            private List<Item> _bag = new List<Item>();
-
-            private int _money;
-            private int _wannaPosition;
-
-            public int Money { get { return _money;} }
-            public int WannaPosition { get { return _wannaPosition;} }
+            public int WannaPosition { get; private set; }
             
             public User()
             {
+                int maxMoney = 1000;
+                int minMoney = 0;
+
                 Random random = new Random();   
-                _money = random.Next(0, 1000);
+                Money = random.Next(minMoney, maxMoney);
             }
             
             public bool IsWantingPositionCorrect()
@@ -133,7 +140,7 @@ namespace _6_6_Seller
 
                 if (isPositionReadCorrect & wantPosition > 0)
                 {
-                    _wannaPosition = wantPosition - 1;
+                    WannaPosition = wantPosition - 1;
                     return true;
                 }
                 else
@@ -147,7 +154,7 @@ namespace _6_6_Seller
 
             public int GiveMoneyToSeller(Item item) 
             {
-                if (_money < item.Price)
+                if (Money < item.Price)
                 {
                     Console.WriteLine($"У меня не хватает денег на {item.Name}");
 
@@ -155,7 +162,7 @@ namespace _6_6_Seller
                 }
                 else
                 {
-                    _money -= item.Price;
+                    Money -= item.Price;
 
                     Console.WriteLine($"*Протягиваю продавцу {item.Price} за {item.Name}*");
 
@@ -165,23 +172,23 @@ namespace _6_6_Seller
 
             public void PutItemInBag(Item item)
             {
-                _bag.Add(item);
+                Items.Add(item);
                 Console.WriteLine($"{item.Name} у вас в сумке.");
             }
 
-            public void ShowMyMoney()
+            public void ShowMoney()
             {
                 Console.SetCursorPosition(50, 0);
                 Console.WriteLine($"У вас  есть {Money} ед. денег.");
                 Console.SetCursorPosition(0, 0);
             }
 
-            public void ShowMyBag()
+            public override void ShowItems()
             {
                 Console.Clear();
                 Console.WriteLine("Содержимое сумки: ");
 
-                foreach(Item item in _bag)
+                foreach(Item item in Items)
                 {
                     Console.WriteLine(item.Name); 
                 }
@@ -192,8 +199,8 @@ namespace _6_6_Seller
 
         class Shop
         {
-            Seller seller = new Seller();
-            User user = new User();
+            private Seller _seller = new Seller();
+            private User _user = new User();
 
             public void Work()
             {
@@ -222,7 +229,7 @@ namespace _6_6_Seller
                             break;
 
                         case ShowMyBagCommandNumber:
-                            user.ShowMyBag();
+                            _user.ShowItems();
                             break;
 
                         case ExitCommandNumber:
@@ -241,13 +248,13 @@ namespace _6_6_Seller
             private void TradeItem()
             {
                 Console.Clear();
-                user.ShowMyMoney();
-                seller.ShowItems();
+                _user.ShowMoney();
+                _seller.ShowItems();
 
-                if (user.IsWantingPositionCorrect())
+                if (_user.IsWantingPositionCorrect())
                 {
-                    int positionForTrade = user.WannaPosition;
-                    int moneyForSeller = user.GiveMoneyToSeller(seller.GiveItemForMakeChoise(positionForTrade));
+                    int positionForTrade = _user.WannaPosition;
+                    int moneyForSeller = _user.GiveMoneyToSeller(_seller.GiveItemForMakeChoise(positionForTrade));
 
                     if (moneyForSeller == 0)
                     {
@@ -255,8 +262,8 @@ namespace _6_6_Seller
                     }
                     else
                     {
-                        Item itemForTrade = seller.SellItem(positionForTrade, moneyForSeller);
-                        user.PutItemInBag(itemForTrade);
+                        Item itemForTrade = _seller.SellItem(positionForTrade, moneyForSeller);
+                        _user.PutItemInBag(itemForTrade);
                     }
 
                     Console.ReadKey();
@@ -266,22 +273,18 @@ namespace _6_6_Seller
 
         abstract class Item
         {
-            private int _price;
-            private string _name;
-            private string _description;
-
-            public int Price { get { return _price; } set { _price = value; } }
-            public string Name { get { return _name; } set { _name = value; } }
-            public string Description { get { return _description; } set { _description = value; } }
-
             protected Item(int price, string name, string description)
             {
-                _price = price;
-                _name = name;
-                _description = description;
+                Price = price;
+                Name = name;
+                Description = description;
             }
 
-            public virtual void ShowDescritpionItem() 
+            public int Price { get; }
+            public string Name { get; }
+            public string Description { get; }
+
+            public virtual void ShowDescritpion() 
             {
                 Console.WriteLine("Характеристики предмета: ");
                 Console.Write($"Цена: {Price},\nНаименование: {Name},\nОписание: {Description}\n");
@@ -290,18 +293,16 @@ namespace _6_6_Seller
 
         class Food : Item
         {
-            private int _callories;
-
-            public int Callories { get { return _callories; } }
-
             public Food(int price, string name, string description, int callories): base (price, name, description)
             {
-                _callories = callories;
+                Callories = callories;
             }
 
-            public  override void ShowDescritpionItem()
+            public int Callories { get; }
+
+            public  override void ShowDescritpion()
             {
-                base.ShowDescritpionItem();
+                base.ShowDescritpion();
                 Console.WriteLine($"Каллории: {Callories}");
                 Console.WriteLine();
             }
@@ -309,37 +310,33 @@ namespace _6_6_Seller
 
         class Tool : Item
         {
-            private string _purpose;
-
-            public string Purpose { get { return _purpose; } }
-
             public Tool(int price, string name, string description, string purpose) : base(price, name, description)
             {
-                _purpose = purpose;
+                Purpose = purpose;
             }
 
-            public override void ShowDescritpionItem()
+            public string Purpose { get; }
+
+            public override void ShowDescritpion()
             {
-                base.ShowDescritpionItem();
+                base.ShowDescritpion();
                 Console.WriteLine($"Предназначение: {Purpose}");
                 Console.WriteLine();
             }
         }
 
         class OtherItem : Item
-        {
-            private string _possiblyPurpose;
-            
-            public string PossiblyPurpose { get { return _possiblyPurpose; } }
-
+        {        
             public OtherItem(int price, string name, string description, string possiblyPurpose) : base (price, name, description)
             {
-                _possiblyPurpose = possiblyPurpose;
+                PossiblyPurpose = possiblyPurpose;
             }
 
-            public override void  ShowDescritpionItem()
+            public string PossiblyPurpose { get; }
+
+            public override void  ShowDescritpion()
             {
-                base.ShowDescritpionItem();
+                base.ShowDescritpion();
                 Console.WriteLine($"Возможное предназначение: {PossiblyPurpose}");
                 Console.WriteLine();
             }
