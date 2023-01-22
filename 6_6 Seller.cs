@@ -15,7 +15,9 @@ namespace _6_6_Seller
             Shop shop = new Shop();
 
             shop.Work();
-        }       
+        }
+
+       
     }
 
     abstract class Person
@@ -205,13 +207,13 @@ namespace _6_6_Seller
 
         public void Work()
         {
-            const string TradeCommand = "купить товар";
-            const string ShowMyBagCommand = "посмотреть мои купленыне предметы";
-            const string ExitCommand = "выход";
-
             const string TradeCommandNumber = "1";
             const string ShowMyBagCommandNumber = "2";
             const string ExitCommandNumber = "3";
+
+            string TradeCommand = "купить товар";
+            string ShowMyBagCommand = "посмотреть мои купленыне предметы";
+            string ExitCommand = "выход";
 
             string userCommand;
 
