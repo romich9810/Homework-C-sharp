@@ -11,7 +11,7 @@ namespace _6_7_TrainPlan
         static void Main(string[] args)
         {
             Station station = new Station();
-            station.WorkStation();
+            station.Work();
         }
     }
 
@@ -86,15 +86,15 @@ namespace _6_7_TrainPlan
     {
         private List<Destination> _destinations = new List<Destination>();
 
-        public void WorkStation()
+        public void Work()
         {
-            const string AddDestinationCommand = "добавить направление";
-            const string LetsGoDestinationCommand = "отправить направление";
-            const string ExitCommand = "выход";
-
             const string AddDestinationCommandNumber = "1";
             const string LetsGoDestinationCommandNumber = "2";
             const string ExitCommandNumber = "3";
+
+            string AddDestinationCommand = "добавить направление";
+            string LetsGoDestinationCommand = "отправить направление";
+            string ExitCommand = "выход";
 
             bool isNeedWork = true;
 
@@ -117,7 +117,7 @@ namespace _6_7_TrainPlan
                         break;
 
                     case LetsGoDestinationCommandNumber:
-                        LetsGoDestination();
+                        LetsGoTrain();
                         break;
 
                     case ExitCommandNumber:
@@ -164,21 +164,31 @@ namespace _6_7_TrainPlan
             Console.WriteLine("Маршрут добавлен.");
         }
 
-        private void LetsGoDestination()
+        private void LetsGoTrain()
         {
-            bool isDestinationGoSuccesfully;
+            bool isTrainGoSuccesfully = true;
+
+            int numberDestinationForUser = 0;
 
             Console.WriteLine("Введите номер направления");
-            isDestinationGoSuccesfully = int.TryParse(Console.ReadLine(), out int numberDestinationForUser);
 
-            if (isDestinationGoSuccesfully & _destinations.Count >= numberDestinationForUser)
+            if (_destinations.Count > 0)
+            {
+                isTrainGoSuccesfully = int.TryParse(Console.ReadLine(), out numberDestinationForUser);
+            }
+            else
+            {
+                Console.WriteLine("Направлений нет!");
+            }
+
+            if (isTrainGoSuccesfully & _destinations.Count >= numberDestinationForUser & numberDestinationForUser > 0)
             {
                 int numberDestinationReal = numberDestinationForUser - 1;
 
                 _destinations.RemoveAt(numberDestinationReal);
                 Console.WriteLine("Поезд отправлен по направлению.");
             }
-            else
+            else if(_destinations.Count> 0 & isTrainGoSuccesfully)
             {
                 Console.WriteLine("Неверный номер направления!");
             }
