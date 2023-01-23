@@ -46,14 +46,23 @@ namespace _6_9_Supermarket
 
         public List<Product> PutProductsAtBelt()
         {
-            return _commercialTrolley;
+            List<Product> productsForBelt = new List<Product>();
+
+            foreach(Product product in _commercialTrolley)
+            {
+                productsForBelt.Add(product);
+            }
+
+            _commercialTrolley = null;
+
+            return productsForBelt;
         }
 
-        public bool isMoneyEnough()
+        public bool IsMoneyEnough(List<Product> products)
         {
             int total = 0;
 
-            foreach(Product product in _commercialTrolley)
+            foreach(Product product in products)
             {
                 total += product.Price;
             }
@@ -61,31 +70,29 @@ namespace _6_9_Supermarket
             return Money >= total;
         }
 
-        public int BuyProduct(List<Product> products, int total) 
+        public void TakeProducts(List<Product> products) 
         {
-            _shoppingBag = products;
-
-            if (isMoneyEnough())
-            {
-                Money -= total;
-
-                return total;
-            }
-            else
-            {
-                return 0;
-            }
+            _shoppingBag = products;           
         }
 
-        public void LeaveProductAtCheckout(Random random) 
+        public int GiveMoneyForProducts(int total)
         {
-            int lastProduct = _commercialTrolley.Count;
+            Money += total;
+
+            return total;
+        }
+
+        public void LeaveProductAtCheckout(List<Product> products) 
+        {
+            Random random = new Random();
+
+            int lastProduct = products.Count;
 
             int positionForLeave = random.Next(0, lastProduct);
 
-            Console.WriteLine($"Клиент решил оставить {_commercialTrolley[positionForLeave].Name} на сумму {_commercialTrolley[positionForLeave].Price} рублей.");
+            Console.WriteLine($"Клиент решил оставить {products[positionForLeave].Name} на сумму {products[positionForLeave].Price} рублей.");
 
-            _commercialTrolley.RemoveAt(positionForLeave);
+            products.RemoveAt(positionForLeave);
         }
     }
 
@@ -108,7 +115,7 @@ namespace _6_9_Supermarket
             FillQueue(countClients);
         }
 
-        public int Cash { get; private set; } = 0;
+        public int Cash { get; private set; } = 0;       
 
         public void Work()
         {
@@ -119,7 +126,7 @@ namespace _6_9_Supermarket
 
             bool isNeedWork = true;
 
-            while (isNeedWork)
+            while (isNeedWork & _clienst.Count > 0)
             {
                 int countOfClient = _clienst.Count;
 
@@ -137,7 +144,6 @@ namespace _6_9_Supermarket
                 {
                     case ServeClientCommandNumber:
                         ServeClient(_clienst.Dequeue());
-                        isNeedWork = _clienst.Count > 0;
                         break;
 
                     case ExitCommandNumber:
@@ -159,7 +165,7 @@ namespace _6_9_Supermarket
             }
             else
             {
-                Console.WriteLine("Клиенты закончились.");
+                Console.WriteLine($"Клиенты закончились. Ваша выручка составила {Cash} рублей.");
             }
         }
 
@@ -182,20 +188,19 @@ namespace _6_9_Supermarket
 
             Console.WriteLine();
 
-            while (client.isMoneyEnough() == false)
-            {
-                Random random = new Random();
-
+            while (client.IsMoneyEnough(productBelt) == false)
+            {              
                 Console.WriteLine($"У клиента {client.Money} рублей, заместо {total}.");
 
-                client.LeaveProductAtCheckout(random);
+                client.LeaveProductAtCheckout(productBelt);
 
                 total = GetTotalSumForProducts(productBelt);
             }
 
             if (total > 0)
             {
-                Cash += client.BuyProduct(productBelt, total);//неправильный тотал
+                client.TakeProducts(productBelt);
+                Cash += client.GiveMoneyForProducts(total);
 
                 Console.WriteLine($"Клиент совершил покупку продуктов на {total} рублей.");
             }
