@@ -30,7 +30,7 @@ namespace _6_8_Arena
     {
         public string Name { get; protected set; }
         public string NameCLass { get; protected set; }
-        public int Healthpoint { get; protected set; } = 100;
+        public int HealthPoint { get; protected set; } = 100;
         public int Armor { get; protected set; } = 100;
         public int DamageByHand { get; protected set; }
         public int PersentOfTakeDamageByArmor { get; protected set; } 
@@ -38,14 +38,17 @@ namespace _6_8_Arena
 
         public bool IsAlive { get; protected set; } = true;
 
-        public virtual int GetAttack() { return 0; }//нужен ли ретурн ноль?
+        public virtual void Attack(Unit enemy)
+        {
+            enemy.TakeDamage(Hit());
+        }
 
         public void TakeDamage(int damage)
         {
             if (IsAlive)
             {
                 Armor -= (damage * PersentOfTakeDamageByArmor) / 100;
-                Healthpoint -= (damage * (100 - PersentOfTakeDamageByArmor)) / 100;
+                HealthPoint -= (damage * (100 - PersentOfTakeDamageByArmor)) / 100;
             }
             else
             {
@@ -57,21 +60,21 @@ namespace _6_8_Arena
                 Armor = 0;
             }
 
-            if (Healthpoint < 0)
+            if (HealthPoint < 0)
             {
                 IsAlive = false;
-                Healthpoint = 0;
+                HealthPoint = 0;
             }
         }
 
-        public void RecoverFighter()
+        public virtual void RecoverStats()
         {
-            Healthpoint = 100;
+            HealthPoint = 100;
             Armor = 100;
             ScoreOfAttacks = 0;
         }
 
-        protected int Attack()
+        protected int Hit()
         {
             Console.WriteLine($"Бьёт {Name}");
 
@@ -79,7 +82,7 @@ namespace _6_8_Arena
             return DamageByHand;
         }
 
-        protected string GetName(string[] names)
+        protected string CreateName(string[] names)
         {
             Random random = new Random();
 
@@ -90,49 +93,57 @@ namespace _6_8_Arena
 
     class Warrior : Unit
     {
-        private string[] _names = new string[] { "Вовчик мощный", "Стас потрошитель", "Ванёк острый кинжал", "Геральд из Ривии", "Ким Чен Руб", "Витёк Свежеватель" };
-
         public Warrior()
         {
-            Name = GetName(_names);
+            string[] _names = new string[] 
+            { "Вовчик мощный", "Стас потрошитель", "Ванёк острый кинжал", "Геральд из Ривии", "Ким Чен Руб", "Витёк Свежеватель" };
+
+            Name = CreateName(_names);
             PersentOfTakeDamageByArmor = 42;
             DamageByHand = 17;
 
             NameCLass = "воин";
         }
 
-        public override int GetAttack()
+        public override void Attack(Unit enemy)
         {
             int scoreForUsingUltraAttack = 3;
             int modifier = 2;
+
+            int countUltimateDamage;
 
             if (ScoreOfAttacks == scoreForUsingUltraAttack)
             {
                 Console.WriteLine($"{Name} применил ультиматив!");
 
                 ScoreOfAttacks = 0;
-                return DamageByHand * modifier;
+                countUltimateDamage =  DamageByHand * modifier;
+
+                enemy.TakeDamage(countUltimateDamage);
             }
             else 
             {
-                return Attack();
-            }                
+                base.Attack(enemy);
+            }
+
+            Console.WriteLine($"После удара:\n{enemy.Name} - {enemy.HealthPoint} хп, {enemy.Armor} брони.");
         }
     }
 
     class Archer : Unit
     {
-        private string[] _names = new string[] { "Рустемчик чОткий", "Стас попади в глаз", "Иванушка Дурачок", "Леголас", "Гномий тетевунодёр", "Пьер бер перьев" };
-
         public Archer()
         {
-            Name = GetName(_names);
+            string[] _names = new string[] 
+            { "Рустемчик чОткий", "Стас попади в глаз", "Иванушка Дурачок", "Леголас", "Гномий тетевунодёр", "Пьер бер перьев" };
+
+            Name = CreateName(_names);
             PersentOfTakeDamageByArmor = 28;
             DamageByHand = 24;
             NameCLass = "лучник";
         }
 
-        public override int GetAttack()
+        public override void Attack(Unit enemy)
         {
             Random random = new Random();
 
@@ -140,6 +151,8 @@ namespace _6_8_Arena
 
             int countForModifier = 2;
             int countForRemodifier = 1;
+
+            int countUltimateDamage;
 
             int count = random.Next(countForRemodifier, countForModifier + 1);
 
@@ -151,28 +164,32 @@ namespace _6_8_Arena
 
                 ScoreOfAttacks = 0;
 
-                return DamageByHand * modifier;
+                countUltimateDamage =  DamageByHand * modifier;
+
+                enemy.TakeDamage(countUltimateDamage);
             }
             else
             {
-                return Attack();
+                base.Attack(enemy);
             }
+
+            Console.WriteLine($"После удара:\n{enemy.Name} - {enemy.HealthPoint} хп, {enemy.Armor} брони.");
         }
     }
 
     class Magician: Unit
     {
-        private string[] _names = new string[] { "Паха повелитель Палки", "Эдуард мягкий", "Нгуен Ван Тычка", "Виктор Сяськи-Масяськи" };
-
         public Magician()
         {
-            Name = GetName(_names);
+            string[] _names = new string[] { "Паха повелитель Палки", "Эдуард мягкий", "Нгуен Ван Тычка", "Виктор Сяськи-Масяськи" };
+
+            Name = CreateName(_names);
             DamageByHand = 48;
             PersentOfTakeDamageByArmor = 7;
             NameCLass = "маг";
         }
 
-        public override int GetAttack()
+        public override void Attack(Unit enemy)
         {
             Random random = new Random();
 
@@ -192,32 +209,36 @@ namespace _6_8_Arena
 
                 ScoreOfAttacks = 0;
 
-                return valueOfUltraDamage;
+                enemy.TakeDamage(valueOfUltraDamage);
             }
             else
             {
-                return Attack();
+                base.Attack(enemy);
             }
+
+            Console.WriteLine($"После удара:\n{enemy.Name} - {enemy.HealthPoint} хп, {enemy.Armor} брони.");
         }
     }
 
     class Barbarian : Unit
     {
-        private string[] _names = new string[] { "Арнольд голый", "Финик из Ливии", "Ашот Рукум", "Групакавр" };
-
         public Barbarian()
         {
-            Name = GetName(_names);
+            string[] _names = new string[] { "Арнольд голый", "Финик из Ливии", "Ашот Рукум", "Групакавр" };
+
+            Name = CreateName(_names);
             DamageByHand = 23;
             PersentOfTakeDamageByArmor = 32;
             NameCLass = "варвар";
         }
 
-        public override int GetAttack()
+        public override void Attack(Unit enemy)
         {
             int scoreForUsingUltraAttack = 3;
 
-            int modifierDamage = DamageByHand + (DamageByHand / 4);
+            int fourthPart = 4;
+
+            int modifierDamage = DamageByHand + (DamageByHand / fourthPart);
 
             if (ScoreOfAttacks == scoreForUsingUltraAttack)
             {
@@ -225,28 +246,30 @@ namespace _6_8_Arena
 
                 ScoreOfAttacks = 0;
 
-                return modifierDamage;
+                enemy.TakeDamage(modifierDamage);
             }
             else
             {
-                return Attack();
+                base.Attack(enemy);
             }
+
+            Console.WriteLine($"После удара:\n{enemy.Name} - {enemy.HealthPoint} хп, {enemy.Armor} брони.");
         }
     }
 
     class Thief : Unit
     {
-        private string[] _names = new string[] { "Магомед Суетной", "Михаил Петрович", "Олигарх Петька", "Лил Пунк" };
-
         public Thief()
         {
-            Name = GetName(_names);
+            string[] _names = new string[] { "Магомед Суетной", "Михаил Петрович", "Олигарх Петька", "Лил Пунк" };
+
+            Name = CreateName(_names);
             DamageByHand = 13;
             PersentOfTakeDamageByArmor = 18;
             NameCLass = "вор";
         }
 
-        public override int GetAttack()
+        public override void Attack(Unit enemy)
         {
             Random random = new Random();
 
@@ -268,34 +291,35 @@ namespace _6_8_Arena
 
                 for (int i = 0; i < scoreOfComboForUltraDamage; i++)
                 {
-                    valueOfDamage += Attack();
+                    valueOfDamage += Hit();
                 }
 
                 ScoreOfAttacks = 0;
 
-                return valueOfDamage;
+                enemy.TakeDamage(valueOfDamage);
             }
             else
             {
-                return Attack();
+                base.Attack(enemy);
             }
+
+            Console.WriteLine($"После удара:\n{enemy.Name} - {enemy.HealthPoint} хп, {enemy.Armor} брони.");
         }
     }
 
     class Arena
     {
         private List<Unit> _fighters = new List<Unit>();
-
         public Arena()
         {
             _fighters.Add(new Warrior());
             _fighters.Add(new Archer());
-            _fighters.Add(new Magician());
             _fighters.Add(new Barbarian());
+            _fighters.Add(new Magician());
             _fighters.Add(new Thief());
         }
 
-    public bool AreFightersAlive()
+        public bool AreFightersAlive()
         {
             int onlyOneFighter = 1;
 
@@ -307,7 +331,7 @@ namespace _6_8_Arena
                 return false;
             }
 
-            return _fighters.Count >= 0;
+            return true;
         }
 
         public void Fight()
@@ -323,33 +347,26 @@ namespace _6_8_Arena
             int chooseOfRandom;
 
             firstFighter = ChooseFighter();
-            Console.WriteLine($"Первый боец - {firstFighter.Name}, {firstFighter.NameCLass}") ;
-            secondFighter = ChooseFighter();     
+            Console.WriteLine($"Первый боец - {firstFighter.Name}, {firstFighter.NameCLass}");
+            secondFighter = ChooseFighter();
 
-            if (firstFighter != null & secondFighter != null)                          
-            {            
-                while (firstFighter.IsAlive && secondFighter.IsAlive)
+            while (firstFighter.IsAlive && secondFighter.IsAlive)
+            {
+                chooseOfRandom = random.Next(indexFirstFighter, indexSecondFighter + 1);
+
+                if (chooseOfRandom == indexFirstFighter)
                 {
-                    chooseOfRandom = random.Next(indexFirstFighter, indexSecondFighter + 1);
-
-                    if (chooseOfRandom == indexFirstFighter)
-                    {
-                        secondFighter.TakeDamage(firstFighter.GetAttack());
-
-                        Console.WriteLine($"После удара:\n{secondFighter.Name} - {secondFighter.Healthpoint} хп, {secondFighter.Armor} брони.");
-                    }
-
-                    if (chooseOfRandom == indexSecondFighter)
-                    {
-                        firstFighter.TakeDamage(secondFighter.GetAttack());
-
-                        Console.WriteLine($"После удара:\n{firstFighter.Name} - {firstFighter.Healthpoint} хп, {firstFighter.Armor} брони.");
-                    }
+                    firstFighter.Attack(secondFighter);
                 }
+                else
+                {
+                    secondFighter.Attack(firstFighter);
+                }
+            }
 
-                ShowResultsOfFight(firstFighter, secondFighter);
-            }  
+            ShowResultsOfFight(firstFighter, secondFighter);
         }
+
         private void ShowFighters()
         {
             Console.WriteLine("Все имеющиеся бойцы:\n");
@@ -369,17 +386,17 @@ namespace _6_8_Arena
         {
             if (firstFighter.IsAlive == false && secondFighter.IsAlive == true)
             {
-                Console.WriteLine($"Победа бойца {secondFighter.Name}!\nHP - {secondFighter.Healthpoint}, броня - {secondFighter.Armor}");
+                Console.WriteLine($"Победа бойца {secondFighter.Name}!\nHP - {secondFighter.HealthPoint}, броня - {secondFighter.Armor}");
 
-                secondFighter.RecoverFighter();
+                secondFighter.RecoverStats();
                 _fighters.Add(secondFighter);
             }
 
             if (firstFighter.IsAlive == true && secondFighter.IsAlive == false)
             {
-                Console.WriteLine($"Победа бойца {firstFighter.Name}!\nHP - {firstFighter.Healthpoint}, броня - {firstFighter.Armor}");
+                Console.WriteLine($"Победа бойца {firstFighter.Name}!\nHP - {firstFighter.HealthPoint}, броня - {firstFighter.Armor}");
 
-                firstFighter.RecoverFighter();
+                firstFighter.RecoverStats();
                 _fighters.Add(firstFighter);
             }
 
@@ -403,26 +420,30 @@ namespace _6_8_Arena
 
             if (isIndexFighterCorrect  & (_fighters.Count >= indexForChooseFighter))
             {
-                fighter =  _fighters[indexForChooseFighter - 1];
+                fighter = _fighters[indexForChooseFighter - 1];
 
-                Console.WriteLine($"Выбран боец {fighter.Name}");              
+                Console.WriteLine($"Выбран боец {fighter.Name}");
 
                 _fighters.RemoveAt(indexForChooseFighter - 1);
-
-                Console.ReadKey();
-                Console.Clear();
-
-                return fighter;
             }
             else
             {
-                Console.WriteLine($"Неверный индекс бойца!");
+                Random random = new Random();
 
-                Console.ReadKey();
-                Console.Clear();
+                int indexOfRandomFighter = random.Next(0, _fighters.Count);
 
-                return null;
+                fighter = _fighters[indexOfRandomFighter];
+
+                _fighters.RemoveAt(indexOfRandomFighter);
+
+                Console.WriteLine($"Неверный индекс бойца! Будет выбран рандомный.");
+                Console.WriteLine($"Выбран боец {fighter.Name}");
             }
+
+            Console.ReadKey();
+            Console.Clear();
+
+            return fighter;
         }
     }
 }
