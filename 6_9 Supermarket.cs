@@ -16,20 +16,12 @@ namespace _6_9_Supermarket
         }
     }
 
-    enum NamesProduct
-    {
-        Морковка = 1, Пицца, Картошка, Водка, Капуста
-    }
-
     class Client
     {
         private List<Product> _commercialTrolley = new List<Product>();
-        private List<Product> _shoppingBag;
 
-        public Client(List<Product> commercialTrolley) 
+        public Client(List<Product> commercialTrolley, Random random) 
         {
-            Random random = new Random();
-
             int maxMoney = 300;
             int minMoney = 50;
 
@@ -44,7 +36,7 @@ namespace _6_9_Supermarket
 
         public int Money { get; private set; }
 
-        public List<Product> PutProductsAtBelt()
+        public List<Product> GiveProductsAtCheckout()
         {
             List<Product> productsForBelt = new List<Product>();
 
@@ -53,16 +45,14 @@ namespace _6_9_Supermarket
                 productsForBelt.Add(product);
             }
 
-            _commercialTrolley = null;
-
             return productsForBelt;
         }
 
-        public bool IsMoneyEnough(List<Product> products)
+        public bool IsMoneyEnough()
         {
             int total = 0;
 
-            foreach(Product product in products)
+            foreach(Product product in _commercialTrolley)
             {
                 total += product.Price;
             }
@@ -70,49 +60,37 @@ namespace _6_9_Supermarket
             return Money >= total;
         }
 
-        public void TakeProducts(List<Product> products) 
-        {
-            _shoppingBag = products;           
-        }
-
         public int GiveMoneyForProducts(int total)
         {
-            Money += total;
+            Money -= total;
 
             return total;
         }
 
-        public void LeaveProductAtCheckout(List<Product> products) 
+        public void LeaveProductAtCheckout() 
         {
             Random random = new Random();
 
-            int lastProduct = products.Count;
+            int lastProduct = _commercialTrolley.Count;
 
             int positionForLeave = random.Next(0, lastProduct);
 
-            Console.WriteLine($"Клиент решил оставить {products[positionForLeave].Name} на сумму {products[positionForLeave].Price} рублей.");
+            Console.WriteLine($"Клиент решил оставить {_commercialTrolley[positionForLeave].Name} на сумму {_commercialTrolley[positionForLeave].Price} рублей.");
 
-            products.RemoveAt(positionForLeave);
+            _commercialTrolley.RemoveAt(positionForLeave);
         }
     }
 
     class Market
-    {
-        private List<Product> _allProducts = new List<Product>()
-        {
-            new Product(NamesProduct.Морковка, 10),
-            new Product(NamesProduct.Пицца, 150),
-            new Product(NamesProduct.Картошка, 30),
-            new Product(NamesProduct.Водка, 100),
-            new Product(NamesProduct.Капуста, 25)
-        };
-        
-        private Queue<Client> _clienst = new Queue<Client> ();
+    {       
+        private Queue<Client> _clienst = new Queue<Client>();
 
         public Market()
         {
             int countClients = 5;
-            FillQueue(countClients);
+            int capacityOfOneCommertialTrolley = 8;
+
+            FillQueue(countClients, capacityOfOneCommertialTrolley);
         }
 
         public int Cash { get; private set; } = 0;       
@@ -171,11 +149,11 @@ namespace _6_9_Supermarket
 
         private void ServeClient(Client client)
         {
-            List<Product> productBelt;
+           List<Product> productBelt;
 
-            int total = 0;
+            int total;
 
-            productBelt = client.PutProductsAtBelt();
+            productBelt = client.GiveProductsAtCheckout();
 
             total = GetTotalSumForProducts(productBelt);
 
@@ -188,18 +166,19 @@ namespace _6_9_Supermarket
 
             Console.WriteLine();
 
-            while (client.IsMoneyEnough(productBelt) == false)
+            while (client.IsMoneyEnough() == false)
             {              
                 Console.WriteLine($"У клиента {client.Money} рублей, заместо {total}.");
 
-                client.LeaveProductAtCheckout(productBelt);
+                client.LeaveProductAtCheckout();
+
+                productBelt = client.GiveProductsAtCheckout();
 
                 total = GetTotalSumForProducts(productBelt);
             }
 
             if (total > 0)
             {
-                client.TakeProducts(productBelt);
                 Cash += client.GiveMoneyForProducts(total);
 
                 Console.WriteLine($"Клиент совершил покупку продуктов на {total} рублей.");
@@ -222,54 +201,58 @@ namespace _6_9_Supermarket
             return total;
         }
 
-        private List<Product> GiveProducts(Random random) 
+        private List<Product> GiveProducts(Random random, int capacityOfCommertialTrolley) 
         {
+            List<Product> allProducts = new List<Product>()
+            {
+                new Product("Морковка", 10),
+                new Product("Пицца", 150),
+                new Product("Картошка", 30),
+                new Product("Водка", 100),
+                new Product("Капуста", 25),
+            };
+
             List<Product> commercialTrolley = new List<Product>();
 
+            Product productForClient;
+
             int firstVariantProduct = 1;
-            int lastVariantProduct = 5;
+            int lastVariantProduct = allProducts.Count; 
 
             int minCountProducts = 1;
-            int maxCountProducts = 8;
+            int maxCountProducts = capacityOfCommertialTrolley;
 
             int countProducts = random.Next(minCountProducts, maxCountProducts);
 
-            for ( int i = 0; i < countProducts; i++)
+            for (int i = 0; i < countProducts; i++)
             {
-                NamesProduct nameProduct = (NamesProduct)random.Next(firstVariantProduct, lastVariantProduct);
-
-                foreach (Product product in _allProducts)
-                {
-                    if (product.Name == nameProduct)
-                    {
-                        commercialTrolley.Add(new Product(product.Name, product.Price));
-                    }
-                }
+                productForClient = allProducts[random.Next(firstVariantProduct, lastVariantProduct)];
+                commercialTrolley.Add(new Product(productForClient.Name, productForClient.Price));
             }
 
             return commercialTrolley;
         }
 
-        private void FillQueue(int countClient)
+        private void FillQueue(int countClient, int capacityOfCommertialTrolley)
         {
             Random random = new Random();
 
             for (int i = 0; i < countClient; i++)
             {
-                _clienst.Enqueue(new Client(GiveProducts(random)));
+                _clienst.Enqueue(new Client(GiveProducts(random, capacityOfCommertialTrolley), random));
             }
         }
     }
 
     class Product
     {
-        public Product (NamesProduct name, int price)
+        public Product (string name, int price)
         {
             Name = name;
             Price = price;
         }
 
-        public NamesProduct Name { get; }
+        public string Name { get; }
         public int Price { get; }
     }
 }
