@@ -40,7 +40,10 @@ namespace _6_8_Arena
 
         public virtual void Attack(Unit enemy)
         {
-            enemy.TakeDamage(Hit());
+            Console.WriteLine($"Бьёт {Name}");
+
+            ScoreOfAttacks++;
+            enemy.TakeDamage(DamageByHand);
         }
 
         public void TakeDamage(int damage)
@@ -74,14 +77,6 @@ namespace _6_8_Arena
             ScoreOfAttacks = 0;
         }
 
-        protected int Hit()
-        {
-            Console.WriteLine($"Бьёт {Name}");
-
-            ScoreOfAttacks++;
-            return DamageByHand;
-        }
-
         protected string CreateName(string[] names)
         {
             Random random = new Random();
@@ -95,10 +90,10 @@ namespace _6_8_Arena
     {
         public Warrior()
         {
-            string[] _names = new string[] 
-            { "Вовчик мощный", "Стас потрошитель", "Ванёк острый кинжал", "Геральд из Ривии", "Ким Чен Руб", "Витёк Свежеватель" };
+            string[] names = new string[] 
+            {"Вовчик мощный", "Стас потрошитель", "Ванёк острый кинжал", "Геральд из Ривии", "Ким Чен Руб", "Витёк Свежеватель"};
 
-            Name = CreateName(_names);
+            Name = CreateName(names);
             PersentOfTakeDamageByArmor = 42;
             DamageByHand = 17;
 
@@ -134,10 +129,10 @@ namespace _6_8_Arena
     {
         public Archer()
         {
-            string[] _names = new string[] 
+            string[] names = new string[] 
             { "Рустемчик чОткий", "Стас попади в глаз", "Иванушка Дурачок", "Леголас", "Гномий тетевунодёр", "Пьер бер перьев" };
 
-            Name = CreateName(_names);
+            Name = CreateName(names);
             PersentOfTakeDamageByArmor = 28;
             DamageByHand = 24;
             NameCLass = "лучник";
@@ -149,16 +144,17 @@ namespace _6_8_Arena
 
             int modifier = 3;
 
-            int countForModifier = 2;
-            int countForRemodifier = 1;
+            int minPercentOfProbabilty = 1;
+            int maxPercentOfProbabilty = 100;
+            int percentForUsingUltraDamage = 50;
+
+            int percentOfProbabilty = random.Next(minPercentOfProbabilty, maxPercentOfProbabilty + 1);
 
             int countUltimateDamage;
 
-            int count = random.Next(countForRemodifier, countForModifier + 1);
-
             int scoreForUsingUltraAttack = 3;
 
-            if ((count == countForModifier) & (ScoreOfAttacks == scoreForUsingUltraAttack))
+            if ((percentOfProbabilty > percentForUsingUltraDamage) & (ScoreOfAttacks == scoreForUsingUltraAttack))
             {
                 Console.WriteLine($"{Name} применил ультиматив!");
 
@@ -181,9 +177,9 @@ namespace _6_8_Arena
     {
         public Magician()
         {
-            string[] _names = new string[] { "Паха повелитель Палки", "Эдуард мягкий", "Нгуен Ван Тычка", "Виктор Сяськи-Масяськи" };
+            string[] names = new string[] { "Паха повелитель Палки", "Эдуард мягкий", "Нгуен Ван Тычка", "Виктор Сяськи-Масяськи" };
 
-            Name = CreateName(_names);
+            Name = CreateName(names);
             DamageByHand = 48;
             PersentOfTakeDamageByArmor = 7;
             NameCLass = "маг";
@@ -197,13 +193,13 @@ namespace _6_8_Arena
 
             int scoreForUsingUltraAttack = 3;
 
-            int percentMinimal = 0;
+            int percentMinimal = 1;
             int percentMaximal = 100;
             int percentOfGenerateUltraDamage = 15;
 
             int countProbabilityOfUltraAttack = random.Next(percentMinimal, percentMaximal + 1);
 
-            if ((countProbabilityOfUltraAttack <= percentOfGenerateUltraDamage) & (ScoreOfAttacks == scoreForUsingUltraAttack))
+            if ((countProbabilityOfUltraAttack < percentOfGenerateUltraDamage) & (ScoreOfAttacks == scoreForUsingUltraAttack))
             {
                 Console.WriteLine($"{Name} применил ультиматив!");
 
@@ -224,9 +220,9 @@ namespace _6_8_Arena
     {
         public Barbarian()
         {
-            string[] _names = new string[] { "Арнольд голый", "Финик из Ливии", "Ашот Рукум", "Групакавр" };
+            string[] names = new string[] { "Арнольд голый", "Финик из Ливии", "Ашот Рукум", "Групакавр" };
 
-            Name = CreateName(_names);
+            Name = CreateName(names);
             DamageByHand = 23;
             PersentOfTakeDamageByArmor = 32;
             NameCLass = "варвар";
@@ -261,9 +257,9 @@ namespace _6_8_Arena
     {
         public Thief()
         {
-            string[] _names = new string[] { "Магомед Суетной", "Михаил Петрович", "Олигарх Петька", "Лил Пунк" };
+            string[] names = new string[] { "Магомед Суетной", "Михаил Петрович", "Олигарх Петька", "Лил Пунк" };
 
-            Name = CreateName(_names);
+            Name = CreateName(names);
             DamageByHand = 13;
             PersentOfTakeDamageByArmor = 18;
             NameCLass = "вор";
@@ -277,13 +273,13 @@ namespace _6_8_Arena
 
             int scoreOfComboForUltraDamage = 5;
 
-            int percentMinimal = 0;
+            int percentMinimal = 1;
             int percentMaximal = 100;
             int percentOfGenerateUltraDamage = 25;
 
             int countProbabilityOfUltraAttack = random.Next(percentMinimal, percentMaximal + 1);
 
-            if ((countProbabilityOfUltraAttack <= percentOfGenerateUltraDamage) & (ScoreOfAttacks == scoreForUsingUltraAttack))
+            if ((countProbabilityOfUltraAttack < percentOfGenerateUltraDamage) & (ScoreOfAttacks == scoreForUsingUltraAttack))
             {
                 int valueOfDamage = 0;
 
@@ -291,7 +287,7 @@ namespace _6_8_Arena
 
                 for (int i = 0; i < scoreOfComboForUltraDamage; i++)
                 {
-                    valueOfDamage += Hit();
+                    valueOfDamage += DamageByHand;
                 }
 
                 ScoreOfAttacks = 0;
@@ -310,6 +306,7 @@ namespace _6_8_Arena
     class Arena
     {
         private List<Unit> _fighters = new List<Unit>();
+        //private List<Unit> _fighters;2-ен
         public Arena()
         {
             _fighters.Add(new Warrior());
@@ -317,6 +314,12 @@ namespace _6_8_Arena
             _fighters.Add(new Barbarian());
             _fighters.Add(new Magician());
             _fighters.Add(new Thief());
+        }
+
+        private void FillFIghters (List<Unit> fighters)
+        {
+            fighters = new List<Unit>();
+
         }
 
         public bool AreFightersAlive()
@@ -327,6 +330,12 @@ namespace _6_8_Arena
             {
                 Console.WriteLine($"Остался всего один боец! Победа!{_fighters[onlyOneFighter - 1].Name}") ;
                 Console.ReadKey();
+
+                return false;
+            }
+            else if (_fighters.Count == 0)
+            {
+                Console.WriteLine("Никто не выжил на арене. Поединок закончен.");
 
                 return false;
             }
@@ -344,22 +353,30 @@ namespace _6_8_Arena
             int indexFirstFighter = 1;
             int indexSecondFighter = 2;
 
+            int countOfJointAttack = 3;
+
             int chooseOfRandom;
 
             firstFighter = ChooseFighter();
             Console.WriteLine($"Первый боец - {firstFighter.Name}, {firstFighter.NameCLass}");
             secondFighter = ChooseFighter();
 
-            while (firstFighter.IsAlive && secondFighter.IsAlive)
+            while (firstFighter.IsAlive & secondFighter.IsAlive)
             {
-                chooseOfRandom = random.Next(indexFirstFighter, indexSecondFighter + 1);
+                chooseOfRandom = random.Next(indexFirstFighter, countOfJointAttack + 1);              
+                
 
                 if (chooseOfRandom == indexFirstFighter)
                 {
                     firstFighter.Attack(secondFighter);
                 }
+                else if (chooseOfRandom == indexSecondFighter)
+                {
+                    secondFighter.Attack(firstFighter);
+                }
                 else
                 {
+                    firstFighter.Attack(secondFighter);
                     secondFighter.Attack(firstFighter);
                 }
             }
@@ -391,16 +408,14 @@ namespace _6_8_Arena
                 secondFighter.RecoverStats();
                 _fighters.Add(secondFighter);
             }
-
-            if (firstFighter.IsAlive == true && secondFighter.IsAlive == false)
+            else if (firstFighter.IsAlive == true && secondFighter.IsAlive == false)
             {
                 Console.WriteLine($"Победа бойца {firstFighter.Name}!\nHP - {firstFighter.HealthPoint}, броня - {firstFighter.Armor}");
 
                 firstFighter.RecoverStats();
                 _fighters.Add(firstFighter);
             }
-
-            if (firstFighter.IsAlive == false && secondFighter.IsAlive == false)
+            else 
             {
                 Console.WriteLine("Ничья! Оба бойцы полегли.");
             }
