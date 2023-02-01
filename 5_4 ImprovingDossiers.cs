@@ -10,16 +10,16 @@ namespace _5_4_ImprovingDossiers
     {
         static void Main(string[] args)
         {
-            const string AddToDossier = "добавить досье";
-            const string ShowAllDossiers = "вывести все досье";
-            const string DeleteToDossier = "удалить досье";
-            const string Exit = "выход";
             const string NumberAddDossier = "1";
             const string NumberShowAllDossiers = "2";
             const string NumberDeleteDossier = "3";
             const string NumberExit = "4";
 
-            //List<string> posts = new List<string>();
+            string AddToDossier = "добавить досье";
+            string ShowAllDossiers = "вывести все досье";
+            string DeleteToDossier = "удалить досье";
+            string Exit = "выход";
+
             Dictionary<string, string> dossiers = new Dictionary<string, string>();
 
             bool isWorking = true;
@@ -28,8 +28,11 @@ namespace _5_4_ImprovingDossiers
             while (isWorking)
             {
                 Console.WriteLine("***Добро пожаловать в редактор досье!***\n\nВыберите команду: ");
-                Console.Write($"{NumberAddDossier} - {AddToDossier}\n{NumberShowAllDossiers} - {ShowAllDossiers}\n" +
-                    $"{NumberDeleteDossier} - {DeleteToDossier}\n{NumberExit} - {Exit}\n");
+                Console.Write($"{NumberAddDossier} - {AddToDossier}" +
+                    $"\n{NumberShowAllDossiers} - {ShowAllDossiers}\n" +
+                    $"{NumberDeleteDossier} - {DeleteToDossier}" +
+                    $"\n{NumberExit} - {Exit}\n");
+
                 commandFromUser = Console.ReadLine();
 
                 switch (commandFromUser)
@@ -43,7 +46,7 @@ namespace _5_4_ImprovingDossiers
                         break;
 
                     case NumberDeleteDossier:
-                        DeleteDossier(ref dossiers);
+                        DeleteDossier(dossiers);
                         break;
 
                     case NumberExit:
@@ -63,8 +66,8 @@ namespace _5_4_ImprovingDossiers
         static void AddDossier(Dictionary<string, string> dossiers)
         {
             const string NumberAddAgain = "1";
-            const string CommandAddAgain = "добавить ещё";
-            const string CommandBack = "любая клавиша - к главному меню";
+            string CommandAddAgain = "добавить ещё";
+            string CommandBack = "любая клавиша - к главному меню";
 
             string command;
             bool isNeedContune = true;
@@ -81,7 +84,15 @@ namespace _5_4_ImprovingDossiers
                 Console.WriteLine("Введите должность: ");
                 userPost = Console.ReadLine();
 
-                dossiers.Add(userName, userPost);
+                if (dossiers.ContainsKey(userName) == false)
+                {
+                    dossiers.Add(userName, userPost);
+                }
+                else
+                {
+                    Console.WriteLine($"{userName} -  уже есть в досье!");
+                    Console.ReadKey();
+                }                
 
                 Console.Clear();
                 Console.WriteLine($"Данные успешно внесены.\n{CommandBack}\n{NumberAddAgain} - {CommandAddAgain}");
@@ -107,7 +118,7 @@ namespace _5_4_ImprovingDossiers
             Console.ReadKey();
         }
 
-        static void DeleteDossier(ref Dictionary<string, string> dossiers)
+        static void DeleteDossier(Dictionary<string, string> dossiers)
         {
             string nameForDeleting;
 
