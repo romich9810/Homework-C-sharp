@@ -10,26 +10,26 @@ namespace _6_11_Aquarium
     {
         static void Main(string[] args)
         {
+            const string WaitOneYearCommandNumber = "1";
+            const string AddFishCommandNumber = "2";
+            const string PickUpFishCommandNumber = "3";
+            const string PickUpDeadFishesCommandNumber = "4";
+            const string ExitCommandNumber = "5";
+
+            string waitOneYearCommand = "подождать один год";
+            string addFishCommand = "добавить рыбку в аквариум";
+            string pickUpFishCommand = "забрать рыбку из аквариума";
+            string pickUpDeadFishesCommand = "убрать мёртвых рыбок";
+            string exitCommand = "выйти из программы";
+
+            string userCommand;
+
             Aquarium aquarium = new Aquarium();
 
             bool IsThereInterestInFishes = true;
 
             while (IsThereInterestInFishes)
             {
-                const string WaitOneYearCommandNumber = "1";
-                const string AddFishCommandNumber = "2";
-                const string PickUpFishCommandNumber = "3";
-                const string PickUpDeadFishesCommandNumber = "4";
-                const string ExitCommandNumber = "5";
-
-                string WaitOneYearCommand = "подождать один год";
-                string AddFishCommand = "добавить рыбку в аквариум";
-                string PickUpFishCommand = "забрать рыбку из аквариума";
-                string PickUpDeadFishesCommand = "убрать мёртвых рыбок";
-                string ExitCommand = "выйти из программы";
-
-                string userCommand;
-
                 if (aquarium.YearAfterBuy > 0)
                 {
                     Console.WriteLine($"Прошло {aquarium.YearAfterBuy} после покупки аквариума.") ;
@@ -37,12 +37,13 @@ namespace _6_11_Aquarium
 
                 aquarium.ShowFishes();
 
-                Console.WriteLine($"\n{WaitOneYearCommandNumber} - {WaitOneYearCommand}\n" +
-                    $"{AddFishCommandNumber} - {AddFishCommand}\n" +
-                    $"{PickUpFishCommandNumber} - {PickUpFishCommand}\n" +
-                    $"{PickUpDeadFishesCommandNumber} - {PickUpDeadFishesCommand}\n" +
-                    $"{ExitCommandNumber} - {ExitCommand}");
+                Console.WriteLine($"\n{WaitOneYearCommandNumber} - {waitOneYearCommand}\n" +
+                    $"{AddFishCommandNumber} - {addFishCommand}\n" +
+                    $"{PickUpFishCommandNumber} - {pickUpFishCommand}\n" +
+                    $"{PickUpDeadFishesCommandNumber} - {pickUpDeadFishesCommand}\n" +
+                    $"{ExitCommandNumber} - {exitCommand}");
                 Console.Write("\nВведите команду:");
+
                 userCommand = Console.ReadLine();
 
                 switch (userCommand)
@@ -79,7 +80,7 @@ namespace _6_11_Aquarium
 
         class Fish
         {
-            public Fish(string nameOfType, int age, int lifeExpentancy)
+            public Fish (string nameOfType, int age, int lifeExpentancy)
             {
                 NameOfType = nameOfType;
                 IsAlive = true; 
@@ -178,7 +179,7 @@ namespace _6_11_Aquarium
                     Console.WriteLine($"Введите среднюю продолжительность вида {nameOfType}:");
                     isLifeExpentancyCorreclty = int.TryParse(Console.ReadLine(), out int lifeExpentancy);
 
-                    if ((isAgeCorrectly & isLifeExpentancyCorreclty) )
+                    if ((isAgeCorrectly && isLifeExpentancyCorreclty) && (age > 0 && lifeExpentancy > 0))
                     {
                         _allFishes.Add(new Fish(nameOfType, age, lifeExpentancy));
                         Console.WriteLine($"{nameOfType} добавлена в аквариум.");
@@ -186,7 +187,6 @@ namespace _6_11_Aquarium
                     else
                     {
                         Console.WriteLine("Неверный возраст или средняя продолжительность жизни.");
-
                     }
                 }
             }
@@ -200,7 +200,7 @@ namespace _6_11_Aquarium
                 Console.WriteLine("\nВведите индекс рыбки:");
                 isIndexCorrect = int.TryParse(Console.ReadLine(), out int indexFish);
 
-                if (isIndexCorrect)
+                if (isIndexCorrect && indexFish > 0)
                 {
                     _allFishes.RemoveAt(indexFish - 1);
 
@@ -237,6 +237,7 @@ namespace _6_11_Aquarium
                     index++;
 
                     Console.Write($"{index}) {fish.NameOfType}, {fish.Age} лет, {fish.LifeExpentancy} лет средняя продолжительность жизни, ");
+
                     if (fish.IsAlive)
                     {
                         Console.WriteLine("жива.");
