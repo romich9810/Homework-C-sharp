@@ -25,10 +25,8 @@ namespace _6_12_AutoServise
 
         public AllDetails() { }
 
-       public DetailsName GiveOneRandomKind() // мб рандом передать в метод
+       public DetailsName GiveOneRandomKind(Random random) 
         {
-            Random random = new Random();
-
             return _kinds[random.Next(0, _kinds.Count)];
         }
 
@@ -85,16 +83,26 @@ namespace _6_12_AutoServise
                 return _balanse;
             } 
             
-            private set { } 
+            private set 
+            {
+                _balanse = value;
+            } 
         }
 
         public void Service()
         {
-            for (int i = 0; i < _clients.Count; i++)
+            int sizeOfQueue = _clients.Count;
+
+            for (int i = 0; i < sizeOfQueue; i++)
             {
                 int indexCliemt = i + 1;
 
                 Console.WriteLine($"На очереди {indexCliemt}-й из {_clients.Count} клиент.\nНажмите любую клавишу, чтобы его обслужить.");
+
+                Console.SetCursorPosition(50, 0);
+                Console.WriteLine($"Баланс: {Balance}");
+                Console.SetCursorPosition(0, 0);
+                Console.WriteLine();
 
                 Console.ReadKey();
                 Console.Clear();
@@ -104,6 +112,8 @@ namespace _6_12_AutoServise
                 Console.ReadKey();
                 Console.Clear();
             }
+
+            Console.WriteLine($"Клиенты закончились. Ваш баланс: {Balance}");
         }
 
         private void ServiceOneClient()
@@ -129,13 +139,14 @@ namespace _6_12_AutoServise
                 else
                 {
                     AllDetails allDetails = new AllDetails();
+                    Random random = new Random();
                     Detail reasonOfFail;
 
                     int moralLoss;
 
                     do
                     {
-                        reasonOfFail = new Detail(allDetails.GiveOneRandomKind());
+                        reasonOfFail = new Detail(allDetails.GiveOneRandomKind(random));
                     }
                     while (reasonOfFail.Name != detail.Name);
 
@@ -157,11 +168,13 @@ namespace _6_12_AutoServise
 
         private void Fill(int size)
         {
+            Random random = new Random();
+
             _clients = new Queue<Car>();
 
             for (int i = 0; i < size; i++)
             {
-                _clients.Enqueue(new Car());
+                _clients.Enqueue(new Car(random));
             }
         }
     }
@@ -170,11 +183,11 @@ namespace _6_12_AutoServise
     {
         private Detail _detail;
 
-        public Car()
+        public Car(Random random)
         {
             AllDetails allDetails = new AllDetails();
 
-            _detail = new Detail (allDetails.GiveOneRandomKind(), false);
+            _detail = new Detail (allDetails.GiveOneRandomKind(random), false);
         }
 
         public bool IsStartSuccsesfully() 
@@ -184,7 +197,7 @@ namespace _6_12_AutoServise
             int minPercentStart = 1;
             int maxPercentStart = 100;
 
-            int percentForFailStart = 15;
+            int percentForFailStart = 35;
 
             int percentStart = random.Next(minPercentStart, maxPercentStart + 1);
 
@@ -211,12 +224,6 @@ namespace _6_12_AutoServise
         {
             _detail = detail;
         }
-
-
-
-
-
-
     }
 
     class Detail
@@ -278,7 +285,7 @@ namespace _6_12_AutoServise
 
                 countDetail = random.Next(minCountDetail, maxCountDetail + 1);
 
-                for (int j = 0; i < countDetail; j++)
+                for (int j = 0; j < countDetail; j++)
                 {
                     _details[allKindDetails[i]].Add(new Detail(allKindDetails[i]));
                 }
