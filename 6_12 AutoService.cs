@@ -25,7 +25,7 @@ namespace _6_12_AutoServise
 
         public AllDetails() { }
 
-       public DetailsName GiveOneRandomKind(Random random) 
+        public DetailsName GiveOneRandomKind(Random random) 
         {
             return _kinds[random.Next(0, _kinds.Count)];
         }
@@ -77,7 +77,7 @@ namespace _6_12_AutoServise
             {
                 if (_balanse < 0)
                 {
-                    Console.WriteLine(" Вы влезли в кредит.");
+                    Console.Write(" Вы влезли в кредит.");
                 }
 
                 return _balanse;
@@ -97,7 +97,7 @@ namespace _6_12_AutoServise
             {
                 int indexCliemt = i + 1;
 
-                Console.WriteLine($"На очереди {indexCliemt}-й из {_clients.Count} клиент.\nНажмите любую клавишу, чтобы его обслужить.");
+                Console.WriteLine($"На очереди {indexCliemt}-й из {sizeOfQueue} клиент.\nНажмите любую клавишу, чтобы его обслужить.");
 
                 Console.SetCursorPosition(50, 0);
                 Console.WriteLine($"Баланс: {Balance}");
@@ -132,7 +132,7 @@ namespace _6_12_AutoServise
 
                     int total = priсeForWork + priсeForDetail;
 
-                    Console.WriteLine($"Дело сделано. С вас {total} рублей за всё.");
+                    Console.WriteLine($"Дело сделано. Былa заменена {detail.Name}. С вас {total} рублей за всё.");
 
                     Balance += total;
                 }
@@ -148,13 +148,13 @@ namespace _6_12_AutoServise
                     {
                         reasonOfFail = new Detail(allDetails.GiveOneRandomKind(random));
                     }
-                    while (reasonOfFail.Name != detail.Name);
+                    while (reasonOfFail.Name == detail.Name);
 
                     moralLoss = reasonOfFail.Price;
 
                     Balance -= moralLoss;
 
-                    Console.WriteLine($"Причиной поломки оказалось {reasonOfFail.Name}. {moralLoss} было выплачено клиенту в качестве морального ущерба.");
+                    Console.WriteLine($"Причиной поломки оказалось {reasonOfFail.Name} заместо {detail.Name}. {moralLoss}, стоимость {reasonOfFail.Name} было выплачено клиенту в качестве морального ущерба.");
                 }
 
             }
