@@ -26,9 +26,9 @@ namespace _6_11_Aquarium
 
             Aquarium aquarium = new Aquarium();
 
-            bool IsThereInterestInFishes = true;
+            bool isThereInterestInFishes = true;
 
-            while (IsThereInterestInFishes)
+            while (isThereInterestInFishes)
             {
                 if (aquarium.YearAfterBuy > 0)
                 {
@@ -65,7 +65,7 @@ namespace _6_11_Aquarium
                         break;
 
                     case ExitCommandNumber:
-                        IsThereInterestInFishes = false;
+                        isThereInterestInFishes = false;
                         break;
 
                     default:
@@ -155,14 +155,13 @@ namespace _6_11_Aquarium
         }
 
         public int YearAfterBuy { get; private set; }
-
         public int Capacity { get; private set; }
 
         public void AddFish()
         {
             string nameOfType;
 
-            bool isAgeCorrectly;
+            bool isAgeCorrect;
             bool isLifeExpentancyCorreclty;
 
             if (Capacity <= _allFishes.Count)
@@ -175,12 +174,12 @@ namespace _6_11_Aquarium
                 nameOfType = Console.ReadLine();
 
                 Console.WriteLine("Введите возраст рыбки:");
-                isAgeCorrectly = int.TryParse(Console.ReadLine(), out int age);
+                isAgeCorrect = int.TryParse(Console.ReadLine(), out int age);
 
                 Console.WriteLine($"Введите среднюю продолжительность вида {nameOfType}:");
                 isLifeExpentancyCorreclty = int.TryParse(Console.ReadLine(), out int lifeExpentancy);
 
-                if ((isAgeCorrectly && isLifeExpentancyCorreclty) && (age > 0 && lifeExpentancy > 0))
+                if ((isAgeCorrect && isLifeExpentancyCorreclty) && (age > 0 && lifeExpentancy > 0))
                 {
                     _allFishes.Add(new Fish(nameOfType, age, lifeExpentancy));
                     Console.WriteLine($"{nameOfType} добавлена в аквариум.");
@@ -201,7 +200,7 @@ namespace _6_11_Aquarium
             Console.WriteLine("\nВведите индекс рыбки:");
             isIndexCorrect = int.TryParse(Console.ReadLine(), out int indexFish);
 
-            if (isIndexCorrect && indexFish > 0)
+            if (isIndexCorrect && indexFish > 0 && indexFish < _allFishes.Count)
             {
                 _allFishes.RemoveAt(indexFish - 1);
 
