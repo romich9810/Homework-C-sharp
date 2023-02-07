@@ -86,10 +86,10 @@ namespace _7_1_CriminalList
 
                 if ((isPotentialWeightCorrect && potentialWeight > 0) && (isPotentialHeightCorrect && potentialHeight > 0))
                 {
-                    var needableCriminals = allCriminals.Where(criminal => criminal.isInPrison == false)
-                        .Where(criminal => criminal.Nationally == potentialNationally)
-                        .Where(criminal => criminal.IsValueIncludingInPotentialValue(criminal.Weight, potentialWeight) == true)
-                        .Where(criminal => criminal.IsValueIncludingInPotentialValue(criminal.Height, potentialHeight) == true);
+                    var needableCriminals = allCriminals.Where(criminal => (criminal.IsInPrison == false) 
+                        && (criminal.Nationally == potentialNationally)
+                        && (criminal.IsValueIncludingInPotentialValue(criminal.Weight, potentialWeight) == true)
+                        && (criminal.IsValueIncludingInPotentialValue(criminal.Height, potentialHeight) == true));
 
                     if (needableCriminals.Count() > 0)
                     {
@@ -121,7 +121,7 @@ namespace _7_1_CriminalList
                 {
                     Console.Write($"{criminal.NameLastName}, {criminal.Nationally}, {criminal.Weight} кг, {criminal.Height} см");
 
-                    if (criminal.isInPrison == false)
+                    if (criminal.IsInPrison == false)
                     {
                         Console.Write(", на свободе");
                     }
@@ -149,15 +149,7 @@ namespace _7_1_CriminalList
             int minWeight = 55;
             int maxWeight = 150;
 
-            if (persentArrest <= persentArrestReal)
-            {
-                isInPrison = true;
-            }
-            else
-            {
-                isInPrison = false;
-            }
-
+            IsInPrison = persentArrest <= persentArrestReal;
 
             Height = random.Next(minHeight, maxHeight + 1);
             Weight = random.Next(minWeight, maxWeight + 1);
@@ -167,7 +159,7 @@ namespace _7_1_CriminalList
         }
 
         public string NameLastName { get; private set; }
-        public bool isInPrison { get; private set; }
+        public bool IsInPrison { get; private set; }
         public int Weight { get; private set; }
         public int Height { get; private set; }
         public string Nationally { get; private set; }
@@ -179,14 +171,7 @@ namespace _7_1_CriminalList
 
             int difference = Math.Abs(potentialValue - value);
 
-            if (difference <= maxDifference && difference >= minDifference)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return (difference <= maxDifference) && (difference >= minDifference);           
         }
     }
 }
