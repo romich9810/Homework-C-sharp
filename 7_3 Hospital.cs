@@ -66,11 +66,11 @@ namespace _7_3_Hospital
                         break;
 
                     case SortByNameCommandNumber:
-                        SortByName();
+                        ShowSortedPatientsByNames();
                         break;
 
                     case SortByAgeCommandNumber:
-                        SortByAge();
+                        ShowSortedPatientsByAges();
                         break;
 
                     case ShowByDiseaseCommandNumber:
@@ -98,45 +98,41 @@ namespace _7_3_Hospital
             Console.WriteLine("Введите заболевание для поиска: ");
             disease = Console.ReadLine();
 
-            var patients = _patients.Where(patient => patient.Disease.ToLower() == disease.ToLower());
+            List<Patient> patients = _patients.Where(patient => patient.Disease.ToLower() == disease.ToLower()).ToList();
 
             Console.WriteLine("Все подходящие пациенты:\n");
 
-            foreach (var patient in patients)
-            {
-                Console.WriteLine($"{patient.NameLastName}, {patient.Age} - {patient.Disease}");
-            }
+            ShowPatients(patients);
         }
 
-        private void SortByAge()
+        private void ShowSortedPatientsByAges()
         {
             _patients = _patients.OrderBy(patient => patient.Age).ToList() ;
 
             Console.WriteLine("После сортировки по возрасту:\n");
 
-            foreach (Patient patient in _patients)
-            {
-                Console.WriteLine($"{patient.NameLastName}, {patient.Age} - {patient.Disease}");
-            }
+            ShowPatients(_patients);
         }
 
-        private void SortByName()
+        private void ShowSortedPatientsByNames()
         {
             _patients = _patients.OrderBy(patient => patient.NameLastName).ToList();
 
             Console.WriteLine("После сортировки по возрасту:\n");
 
-            foreach (Patient patient in _patients)
-            {
-                Console.WriteLine($"{patient.NameLastName}, {patient.Age} - {patient.Disease}");
-            }
+            ShowPatients(_patients);
         }
 
         private void ShowAllPatients()
         {
             Console.WriteLine("Все пациенты:\n");
 
-            foreach (Patient patient in _patients)
+            ShowPatients(_patients);
+        }
+
+        private void ShowPatients(List<Patient> patients)
+        {
+            foreach (Patient patient in patients)
             {
                 Console.WriteLine($"{patient.NameLastName}, {patient.Age} - {patient.Disease}");
             }
