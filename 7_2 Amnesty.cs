@@ -10,15 +10,15 @@ namespace _7_2_Amnesty
         {
             List<Prisoner> prisoners = new List<Prisoner>()
             {
-                new Prisoner("Уиллям Фрод",TypeOfCrime.Theft),
-                new Prisoner("Джа Джа Бинкс", TypeOfCrime.Rape),
-                new Prisoner("Литий Лит Натриев", TypeOfCrime.Murder),
-                new Prisoner("Джек Николс", TypeOfCrime.Anti_Goverment),
-                new Prisoner("Бильбо Кейтр", TypeOfCrime.Theft),
-                new Prisoner("Владимир Глоб", TypeOfCrime.Anti_Goverment)
+                new Prisoner("Уиллям Фрод",TypeOfCrimes.Theft),
+                new Prisoner("Джа Джа Бинкс", TypeOfCrimes.Rape),
+                new Prisoner("Литий Лит Натриев", TypeOfCrimes.Murder),
+                new Prisoner("Джек Николс", TypeOfCrimes.AntiGoverment),
+                new Prisoner("Бильбо Кейтр", TypeOfCrimes.Theft),
+                new Prisoner("Владимир Глоб", TypeOfCrimes.AntiGoverment)
             };
 
-            TypeOfCrime typeForAmnesty = TypeOfCrime.Anti_Goverment;
+            TypeOfCrimes typeForAmnesty = TypeOfCrimes.AntiGoverment;
 
             Console.WriteLine("Список заключенных до амнистии: \n");
 
@@ -27,31 +27,31 @@ namespace _7_2_Amnesty
                 Console.WriteLine($"{prisoner.NameLastName} - {prisoner.TypeOfCrime}");
             }
 
-            var prisonersAfterAmnesty = prisoners.Where(prisoner => prisoner.TypeOfCrime != typeForAmnesty);
+            prisoners = prisoners.Where(prisoner => prisoner.TypeOfCrime != typeForAmnesty).ToList();
 
             Console.WriteLine("\nПосле амнистии: \n");
 
-            foreach(var prisoner in prisonersAfterAmnesty)
+            foreach(Prisoner prisoner in prisoners)
             {
                 Console.WriteLine($"{prisoner.NameLastName} - {prisoner.TypeOfCrime}");
             }
         }
     }
 
-    enum TypeOfCrime
+    enum TypeOfCrimes
     {
-        Theft, Murder, Rape, Anti_Goverment
+        Theft, Murder, Rape, AntiGoverment
     }
 
     class Prisoner
     { 
-        public Prisoner(string nameLastName, TypeOfCrime typeOfCrime)
+        public Prisoner(string nameLastName, TypeOfCrimes typeOfCrime)
         {
             NameLastName = nameLastName;
             TypeOfCrime = typeOfCrime;
         }
 
         public string NameLastName { get; private set; }
-        public TypeOfCrime TypeOfCrime { get; private set; }
+        public TypeOfCrimes TypeOfCrime { get; private set; }
     }
 }
