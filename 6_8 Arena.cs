@@ -34,7 +34,7 @@ namespace _6_8_Arena
         public int Armor { get; protected set; } = 100;
         public int DamageByHand { get; protected set; }
         public int PersentOfTakeDamageByArmor { get; protected set; } 
-        public int ScoreOfAttacks { get; protected set; } = 0;//обнулять после боя!
+        public int ScoreOfAttacks { get; protected set; } = 0;
 
         public bool IsAlive { get; protected set; } = true;
 
@@ -50,8 +50,10 @@ namespace _6_8_Arena
         {
             if (IsAlive)
             {
-                Armor -= (damage * PersentOfTakeDamageByArmor) / 100;
-                HealthPoint -= (damage * (100 - PersentOfTakeDamageByArmor)) / 100;
+                int fullPercent = 100;
+
+                Armor -= (damage * PersentOfTakeDamageByArmor) / fullPercent;
+                HealthPoint -= (damage * (fullPercent - PersentOfTakeDamageByArmor)) / fullPercent;
             }
             else
             {
@@ -306,7 +308,6 @@ namespace _6_8_Arena
     class Arena
     {
         private List<Unit> _fighters = new List<Unit>();
-        //private List<Unit> _fighters;2-ен
         public Arena()
         {
             _fighters.Add(new Warrior());
@@ -314,12 +315,6 @@ namespace _6_8_Arena
             _fighters.Add(new Barbarian());
             _fighters.Add(new Magician());
             _fighters.Add(new Thief());
-        }
-
-        private void FillFIghters (List<Unit> fighters)
-        {
-            fighters = new List<Unit>();
-
         }
 
         public bool AreFightersAlive()
