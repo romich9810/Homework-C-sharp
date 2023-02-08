@@ -51,27 +51,9 @@ namespace _7_4_PlayersTop
     {
         public Player(string name, int power, int level)
         {
-            int minimalValue = 1;
-
             Name = name;
-
-            if (power < 0)
-            {
-                Power = minimalValue;
-            }
-            else
-            {
-                Power = power;
-            }
-
-            if (level < 0)
-            {
-                Level = minimalValue;
-            }
-            else
-            {
-                Level = level;
-            }
+            Power = power;
+            Level = level;
         }
 
         public string Name { get; private set; }
