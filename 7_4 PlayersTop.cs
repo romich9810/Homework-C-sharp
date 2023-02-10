@@ -36,13 +36,13 @@ namespace _7_4_PlayersTop
             Console.WriteLine($"\nТоп {sizeOfTop} игроков по уровню:\n");
 
             ShowPlayers(playerTopLevel);
+        }
 
-            void ShowPlayers(List<Player> players)
+        static void ShowPlayers(List<Player> players)
+        {
+            foreach (Player player in players)
             {
-                foreach (Player player in players)
-                {
-                    Console.WriteLine($"{player.Name}, {player.Power} силы, {player.Level} уровень");
-                }
+                Console.WriteLine($"{player.Name}, {player.Power} силы, {player.Level} уровень");
             }
         }
     }
