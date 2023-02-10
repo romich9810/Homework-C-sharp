@@ -10,48 +10,50 @@ namespace _7_2_Amnesty
         {
             List<Prisoner> prisoners = new List<Prisoner>()
             {
-                new Prisoner("Уиллям Фрод",TypeOfCrimes.Theft),
-                new Prisoner("Джа Джа Бинкс", TypeOfCrimes.Rape),
-                new Prisoner("Литий Лит Натриев", TypeOfCrimes.Murder),
-                new Prisoner("Джек Николс", TypeOfCrimes.AntiGoverment),
-                new Prisoner("Бильбо Кейтр", TypeOfCrimes.Theft),
-                new Prisoner("Владимир Глоб", TypeOfCrimes.AntiGoverment)
+                new Prisoner("Уиллям Фрод",TypesOfCrimes.Theft),
+                new Prisoner("Джа Джа Бинкс", TypesOfCrimes.Rape),
+                new Prisoner("Литий Лит Натриев", TypesOfCrimes.Murder),
+                new Prisoner("Джек Николс", TypesOfCrimes.AntiGoverment),
+                new Prisoner("Бильбо Кейтр", TypesOfCrimes.Theft),
+                new Prisoner("Владимир Глоб", TypesOfCrimes.AntiGoverment)
             };
 
-            TypeOfCrimes typeForAmnesty = TypeOfCrimes.AntiGoverment;
+            TypesOfCrimes typeForAmnesty = TypesOfCrimes.AntiGoverment;
 
             Console.WriteLine("Список заключенных до амнистии: \n");
 
-            foreach (Prisoner prisoner in prisoners)
-            {
-                Console.WriteLine($"{prisoner.NameLastName} - {prisoner.TypeOfCrime}");
-            }
+            ShowPrisoners(prisoners);
 
             prisoners = prisoners.Where(prisoner => prisoner.TypeOfCrime != typeForAmnesty).ToList();
 
             Console.WriteLine("\nПосле амнистии: \n");
 
-            foreach(Prisoner prisoner in prisoners)
+            ShowPrisoners(prisoners);
+        }
+
+        static void ShowPrisoners(List<Prisoner> prisoners)
+        {
+            foreach (Prisoner prisoner in prisoners)
             {
                 Console.WriteLine($"{prisoner.NameLastName} - {prisoner.TypeOfCrime}");
             }
         }
     }
 
-    enum TypeOfCrimes
+    enum TypesOfCrimes
     {
         Theft, Murder, Rape, AntiGoverment
     }
 
     class Prisoner
     { 
-        public Prisoner(string nameLastName, TypeOfCrimes typeOfCrime)
+        public Prisoner(string nameLastName, TypesOfCrimes typeOfCrime)
         {
             NameLastName = nameLastName;
             TypeOfCrime = typeOfCrime;
         }
 
         public string NameLastName { get; private set; }
-        public TypeOfCrimes TypeOfCrime { get; private set; }
+        public TypesOfCrimes TypeOfCrime { get; private set; }
     }
 }
