@@ -1,8 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace _6_11_Aquarium
 {
@@ -79,6 +76,15 @@ namespace _6_11_Aquarium
         }
     }
 
+    static class UserUtils
+    {
+        private static Random _random = new Random();
+        static public int GiveRandoNumber(int firstNumber, int secondNumber)
+        {
+            return _random.Next(firstNumber, secondNumber);
+        }
+    }
+
     class Fish
     {
         public Fish(string nameOfType, int age, int lifeExpentancy)
@@ -94,7 +100,7 @@ namespace _6_11_Aquarium
         public int LifeExpentancy { get; private set; }
         public bool IsAlive { get; private set; }
 
-        public void GrowOld(Random random)
+        public void GrowOld()
         {
             int minimalPercentOtherFactors = 5;
 
@@ -106,23 +112,23 @@ namespace _6_11_Aquarium
                 {
                     int percentOtherFactors = minimalPercentOtherFactors * (Age - LifeExpentancy);
 
-                    InteractWithMicrobes(percentOtherFactors, random);
+                    InteractWithMicrobes(percentOtherFactors);
                 }
                 else
                 {
-                    InteractWithMicrobes(0, random);
+                    InteractWithMicrobes(0);
                 }
             }
         }
 
-        private void InteractWithMicrobes(int percentOfInfluenceOtherFactors, Random random)
+        private void InteractWithMicrobes(int percentOfInfluenceOtherFactors)
         {
             int minPercentOfProbabilty = 1;
             int maxPercentOfProbabilty = 100;
 
-            int percentOfInfection = 15;
+            int percentOfInfection = 5;
 
-            int percentOfProbabilty = random.Next(minPercentOfProbabilty, maxPercentOfProbabilty + 1);
+            int percentOfProbabilty = UserUtils.GiveRandoNumber(minPercentOfProbabilty, maxPercentOfProbabilty + 1);
 
             if ((percentOfProbabilty < percentOfInfection + percentOfInfluenceOtherFactors) & IsAlive)
             {
@@ -200,7 +206,7 @@ namespace _6_11_Aquarium
             Console.WriteLine("\nВведите индекс рыбки:");
             isIndexCorrect = int.TryParse(Console.ReadLine(), out int indexFish);
 
-            if (isIndexCorrect && indexFish > 0 && indexFish < _allFishes.Count)
+            if (isIndexCorrect && indexFish > 0 && indexFish <= _allFishes.Count)
             {
                 _allFishes.RemoveAt(indexFish - 1);
 
@@ -251,13 +257,11 @@ namespace _6_11_Aquarium
 
         public void GrowOld()
         {
-            Random random = new Random();
-
             YearAfterBuy++;
 
             foreach (Fish fish in _allFishes)
             {
-                fish.GrowOld(random);
+                fish.GrowOld();
             }
         }
     }
