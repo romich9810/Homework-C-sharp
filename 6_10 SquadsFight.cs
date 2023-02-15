@@ -41,14 +41,9 @@ namespace _6_10_SquadsFight
 
         public void Attack(Unit enemy)
         {
-            enemy.TakeDamage(Damage);
-
             Console.WriteLine($"{Role} атакует {enemy.Role} на {Damage} урона.");
 
-            if (enemy.IsAlive == false)
-            {
-                Console.WriteLine($"{enemy.Role} погиб");
-            }
+            enemy.TakeDamage(Damage);
         }
 
         public void RecoveryHealthPoint()
@@ -81,11 +76,11 @@ namespace _6_10_SquadsFight
                     HealthPoint = maxCountOfHealthPoint;
                 }
 
-                Console.WriteLine($"Так, немного подлатали. Теперь у меня {HealthPoint} хп.");
+                Console.WriteLine($"{Role}: Так, немного подлатали. Теперь у меня {HealthPoint} хп.");
             }
             else
             {
-                Console.WriteLine($"Не удалось подлечить. Травмы несоизмеримы с жизнью. Нынешнее здоровье  - {HealthPoint}");
+                Console.WriteLine($"Не удалось подлечить. Травмы несоизмеримы с жизнью. Нынешнее здоровье {Role}  - {HealthPoint}");
             }
         }
     }
@@ -329,7 +324,24 @@ namespace _6_10_SquadsFight
             Console.WriteLine();
         }
 
-        public void Heal(Unit solder)
+        public void HealComrades(List<Unit> potentialWounded)
+        {
+            if (IsAlive)
+            {
+                Console.WriteLine($"{Role} осмотрел {potentialWounded.Count} бойцов:");
+
+                foreach (Unit unit in potentialWounded)
+                {
+                    Heal(unit);
+                }
+            }
+            else
+            {
+                Console.WriteLine($"{Role} погиб и не может оказать помощь.");
+            }
+        }
+
+        private void Heal(Unit solder)
         {
             int triggerPointForHealing = 75;
 
@@ -417,18 +429,7 @@ namespace _6_10_SquadsFight
 
             int countAliveSolders = GiveCountAliveSolders();
 
-            if (IsCommandAlive() && countAliveSolders > countForDefeatWithComander)
-            {
-                return true;
-            }
-            else if (countAliveSolders > countForDefeatWithoutComander)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return (IsCommandAlive() && (countAliveSolders > countForDefeatWithComander)) || (countAliveSolders > countForDefeatWithoutComander);
         }
 
         public bool IsCommandAlive()
@@ -542,19 +543,7 @@ namespace _6_10_SquadsFight
 
                 potentialWounded = GiveRandomSolders(random);
 
-                if (medic.IsAlive)
-                {
-                    Console.WriteLine($"{medic.Role} осмотрел {potentialWounded.Count} бойцов:");
-
-                    foreach (Unit unit in potentialWounded)
-                    {
-                        medic.Heal(unit);
-                    }
-                }
-                else
-                {
-                    Console.WriteLine($"{medic.Role} погиб и не может оказать помощь.");
-                }
+                medic.HealComrades(potentialWounded);
             }
         }
 
@@ -719,3 +708,4 @@ namespace _6_10_SquadsFight
         }
     }
 }
+
